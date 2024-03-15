@@ -5,7 +5,8 @@
   sku                      = "Basic"
 }
 resource "azurerm_role_assignment" "example" {
+  depends_on = [azurerm_linux_web_app.example]
   scope                = azurerm_container_registry.example.id
   role_definition_name = "AcrPull"
-  principal_id         = azurerm_linux_web_app.example.identity[0].principal_id
+  principal_id         =  azurerm_linux_web_app.example.identity.0.principal_id
 }
