@@ -1,4 +1,5 @@
 ﻿resource "azurerm_postgresql_server" "example" {
+  depends_on = [azurerm_resource_group.project_engineers]
   name                = "socialplatforms"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
@@ -15,6 +16,7 @@
 
 # Create PostgreSQL Database
 resource "azurerm_postgresql_database" "example" {
+  depends_on = [azurerm_postgresql_server.example]
   name                = "socialplatformdb"
   resource_group_name = azurerm_resource_group.project_engineers.name
   server_name         = azurerm_postgresql_server.example.name

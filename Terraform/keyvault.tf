@@ -1,5 +1,6 @@
 ﻿
 resource "azurerm_key_vault" "example" {
+  depends_on = [azurerm_resource_group.project_engineers]
   name                        = "socialplatformkv"
   location                    = azurerm_resource_group.project_engineers.location
   resource_group_name         = azurerm_resource_group.project_engineers.name
