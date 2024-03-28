@@ -1,6 +1,6 @@
 ﻿
 resource "azurerm_key_vault" "example" {
-  name                        = "example-keyvault"
+  name                        = "socialplatformkv"
   location                    = azurerm_resource_group.project_engineers.location
   resource_group_name         = azurerm_resource_group.project_engineers.name
   enabled_for_disk_encryption = true

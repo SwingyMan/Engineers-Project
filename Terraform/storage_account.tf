@@ -1,5 +1,5 @@
 ﻿resource "azurerm_storage_account" "example" {
-  name                     = "projectsa"
+  name                     = "socialplatformsa"
   resource_group_name      = azurerm_resource_group.project_engineers.name
   location                 = azurerm_resource_group.project_engineers.location
   account_tier             = "Standard"

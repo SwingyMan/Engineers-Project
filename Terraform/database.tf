@@ -1,12 +1,12 @@
 ﻿resource "azurerm_postgresql_server" "example" {
-  name                = "example-postgres-server"
+  name                = "socialplatforms"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
   sku_name            = "B_Gen5_1"
   version             = "11"
   ssl_enforcement_enabled = true
-  administrator_login          = "<your_admin_name>"
-  administrator_login_password = "<your_admin_password>"
+  administrator_login          = "marcin"
+  administrator_login_password = var.password
 
     storage_mb            = 5120  # 5GB
     backup_retention_days = 7
@@ -15,7 +15,7 @@
 
 # Create PostgreSQL Database
 resource "azurerm_postgresql_database" "example" {
-  name                = "example-postgres-db"
+  name                = "socialplatformdb"
   resource_group_name = azurerm_resource_group.project_engineers.name
   server_name         = azurerm_postgresql_server.example.name
   charset             = "UTF8"
