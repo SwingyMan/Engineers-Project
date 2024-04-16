@@ -4,7 +4,7 @@
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
   os_type = "Linux"
-  sku_name = "B1"
+  sku_name = "F1"
 }
 
 resource "azurerm_linux_web_app" "example" {
@@ -16,7 +16,11 @@ resource "azurerm_linux_web_app" "example" {
   identity {
     type = "SystemAssigned"
   }
-
+  connection_string {
+    name  = "Database"
+    type  = "PostgreSQL"
+    value = "Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password=${var.password}"
+  }
   site_config {  
     application_stack {
     docker_image_name = "socialplatformacr.azurecr.io/engineers_project.server:latest"

@@ -5,6 +5,7 @@
   resource_group_name = azurerm_resource_group.project_engineers.name
   sku_name            = "B_Standard_B1ms"
   version             = "11"
+  zone = "1"
   administrator_login          = "marcin"
   administrator_password = var.password
 
