@@ -4,6 +4,7 @@
   resource_group_name      = azurerm_resource_group.project_engineers.name
   location                 = azurerm_resource_group.project_engineers.location
   sku                      = "Basic"
+  admin_enabled = true
 }
 resource "azurerm_role_assignment" "example" {
   depends_on = [azurerm_linux_web_app.example,azurerm_container_registry.example]
