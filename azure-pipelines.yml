@@ -27,5 +27,5 @@ stages:
         repository: 'engineers_project.server'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        tags: '$(tag)'
+        tags: 'latest'
 
