@@ -1,8 +1,8 @@
-﻿variable "region" {
-  type = string
+variable "region" {
+  type    = string
   default = "westeurope"
 }
 variable "password" {
-  type = string
+  type      = string
   sensitive = true
 }
