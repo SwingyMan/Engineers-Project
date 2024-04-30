@@ -3,7 +3,7 @@ resource "azurerm_cognitive_account" "example" {
   name                = "socialplatformqa"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
-  sku_name            = "S"
+  sku_name            = "F0"
   kind                = "TextAnalytics"
 }
 resource "azurerm_cognitive_account" "moderator" {
@@ -11,7 +11,7 @@ resource "azurerm_cognitive_account" "moderator" {
   name                = "socialplatformmd"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
-  sku_name            = "S"
+  sku_name            = "F0"
   kind                = "ContentModerator"
 }
 resource "azurerm_cognitive_account" "translator" {
@@ -19,6 +19,6 @@ resource "azurerm_cognitive_account" "translator" {
   name                = "socialplatformtr"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
-  sku_name            = "S"
+  sku_name            = "F0"
   kind                = "TextTranslation"
 }
