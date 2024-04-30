@@ -1,6 +1,18 @@
+using Azure.Identity;
+using Domain.Services;
+using Infrastructure.Hubs;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Configuration.AddAzureKeyVault(
+    new Uri(builder.Configuration["KeyVaultConfiguration:KeyVaultURL"]),
+    new DefaultAzureCredential()
+    );
+
+
+builder.Services.AddSignalR().AddAzureSignalR();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,8 +27,8 @@ app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -26,5 +38,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
