@@ -20,3 +20,15 @@ resource "azurerm_storage_container" "images" {
   storage_account_name  = azurerm_storage_account.example.name
   container_access_type = "container"
 }
+resource "azurerm_storage_container" "gifs" {
+  depends_on            = [azurerm_storage_account.example]
+  name                  = "gifs"
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = "container"
+}
+resource "azurerm_storage_container" "videos" {
+  depends_on            = [azurerm_storage_account.example]
+  name                  = "videos"
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = "container"
+}

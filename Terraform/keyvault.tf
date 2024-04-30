@@ -9,3 +9,28 @@ resource "azurerm_key_vault" "example" {
   sku_name                    = "standard"
   enable_rbac_authorization   = true
 }
+resource "azurerm_key_vault_secret" "storage" {
+  key_vault_id = azurerm_key_vault.example.id
+  name         = "storagekey"
+  value        = azurerm_storage_account.example.primary_access_key
+}
+resource "azurerm_key_vault_secret" "signalr" {
+  key_vault_id = azurerm_key_vault.example.id
+  name         = "signalrkey"
+  value        = azurerm_signalr_service.example.primary_access_key
+}
+resource "azurerm_key_vault_secret" "email" {
+  key_vault_id = azurerm_key_vault.example.id
+  name         = "emailkey"
+  value        = azurerm_communication_service.example.primary_key
+}
+resource "azurerm_key_vault_secret" "db" {
+  key_vault_id = azurerm_key_vault.example.id
+  name         = "dbkey"
+  value        = var.password
+}
+resource "azurerm_key_vault_secret" "ai" {
+  key_vault_id = azurerm_key_vault.example.id
+  name         = "aikey"
+  value        = azurerm_cognitive_account.example.primary_access_key
+}
