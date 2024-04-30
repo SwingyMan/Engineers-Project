@@ -34,12 +34,12 @@ resource "azurerm_key_vault_secret" "ai" {
   name         = "aikey"
   value        = azurerm_cognitive_account.example.primary_access_key
 }
-resource "azurerm_key_vault_secret" "ai" {
+resource "azurerm_key_vault_secret" "translator" {
   key_vault_id = azurerm_key_vault.example.id
   name         = "translatorkey"
   value        = azurerm_cognitive_account.translator.primary_access_key
 }
-resource "azurerm_key_vault_secret" "ai" {
+resource "azurerm_key_vault_secret" "moderator" {
   key_vault_id = azurerm_key_vault.example.id
   name         = "moderatorkey"
   value        = azurerm_cognitive_account.moderator.primary_access_key
