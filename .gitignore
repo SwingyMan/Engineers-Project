@@ -1,2 +1,16 @@
 ﻿/.idea/
 /.vs
+/Application/obj
+/Application/bin
+/Application.Tests/obj
+/Application.Tests/bin
+/Domain/obj
+/Domain.Tests/obj
+/Domain.Tests/bin
+/Domain/bin
+/Infrastructure/obj
+/Infrastructure/bin
+/Infrastructure.Tests/bin
+/Infrastructure.Tests/obj
+/Engineers_Project.Server/obj
+/Engineers_Project.Server/bin
