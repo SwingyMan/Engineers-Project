@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using System.Collections.Generic;
+
+namespace Domain.Entities;
 
 public class Group
 {
@@ -8,6 +10,6 @@ public class Group
     public string ImageLink { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public ICollection<GroupUser> GroupUsers { get; set; }
+    public IEnumerable<GroupUser>? GroupUsers { get; set; }
     public ICollection<GroupPost> GroupPosts { get; set; }
 }

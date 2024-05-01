@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
@@ -14,7 +15,7 @@ public class Post
 
     [ForeignKey("UserId")]
     public User User { get; set; }
-    public ICollection<GroupPost> GroupPosts { get; set; }
+    public IEnumerable<GroupPost>? GroupPosts { get; set; }
     //public BoardPost BoardPost { get; set; }
     public ICollection<PostsTag> PostsTags { get; set; }
 }
