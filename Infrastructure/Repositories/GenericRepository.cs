@@ -1,14 +1,15 @@
 ﻿using Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Infrastructure.Persistence;
 
 namespace Infrastructure.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
-    private readonly Context.Context _context;
+    private readonly SocialPlatformDbContext _context;
 
-    public GenericRepository(Context.Context context)
+    public GenericRepository(SocialPlatformDbContext context)
     {
         _context = context;
     }

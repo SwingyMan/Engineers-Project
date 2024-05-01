@@ -1,15 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
 public class GroupUser
 {
+    [Key]
     public int Id { get; set; }
     public int UserId { get; set; }
     public int GroupId { get; set; }
 
-    [ForeignKey("UserId")]
     public User User { get; set; }
-    [ForeignKey("GroupId")]
     public Group Group { get; set; }
 }

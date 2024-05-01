@@ -5,9 +5,12 @@ using System.Data;
 
 namespace Infrastructure.Persistence;
 
-internal class SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> dbContextOptions)
-    : IdentityDbContext<User>(dbContextOptions)
+public class SocialPlatformDbContext : DbContext
 {
+    public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
+        : base(options)
+    {
+    }
     public DbSet<Group> Groups { get; set; }
     public DbSet<GroupUser> GroupUsers { get; set; }
     public DbSet<Post> Posts { get; set; }
@@ -19,7 +22,7 @@ internal class SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext>
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<ChatUser> ChatUsers { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
