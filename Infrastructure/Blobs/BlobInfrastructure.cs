@@ -13,9 +13,9 @@ public class BlobInfrastructure : IBlobInfrastructure
         _blobServiceClient = blobServiceClient;
     }
 
-    public async Task addBlob(IFormFile file, Guid guid)
+    public async Task addBlob(IFormFile file, Guid guid,string container)
     {
-        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient("images");
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(container);
         BlobClient blobClient = containerClient.GetBlobClient(guid.ToString());
         using (var stream = file.OpenReadStream())
         {
@@ -23,10 +23,10 @@ public class BlobInfrastructure : IBlobInfrastructure
         }
     }
 
-    public async Task<BlobDownloadInfo> getBlob(Guid guid)
+    public async Task<BlobDownloadInfo> getBlob(Guid guid,string container,string extension)
     {
-        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient("tasks");
-        BlobClient blobClient = containerClient.GetBlobClient(guid + ".zip");
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(container);
+        BlobClient blobClient = containerClient.GetBlobClient(guid + extension);
         if (!await blobClient.ExistsAsync())
             return null;
 
@@ -34,10 +34,10 @@ public class BlobInfrastructure : IBlobInfrastructure
         return response;
     }
 
-    public async Task deleteBlob(Guid guid)
+    public async Task deleteBlob(Guid guid,string container,string extension)
     {
-        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient("tasks");
-        BlobClient blobClient = containerClient.GetBlobClient(guid + ".zip");
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(container);
+        BlobClient blobClient = containerClient.GetBlobClient(guid + extension);
         await blobClient.DeleteIfExistsAsync();
     }
 }

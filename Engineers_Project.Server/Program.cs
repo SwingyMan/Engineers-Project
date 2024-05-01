@@ -1,19 +1,11 @@
 using Azure.Identity;
-using Domain.Services;
+using Infrastructure;
 using Infrastructure.Hubs;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddAzureKeyVault(
-    new Uri(builder.Configuration["KeyVaultConfiguration:KeyVaultURL"]),
-    new DefaultAzureCredential()
-    );
-
-
-builder.Services.AddSignalR().AddAzureSignalR();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
-
+builder.Services.InfrastructureService();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
