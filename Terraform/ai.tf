@@ -12,7 +12,7 @@ resource "azurerm_cognitive_account" "moderator" {
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
   sku_name            = "F0"
-  kind                = "ContentModerator"
+  kind                = "ContentSafety"
 }
 resource "azurerm_cognitive_account" "translator" {
   depends_on          = [azurerm_resource_group.project_engineers]
