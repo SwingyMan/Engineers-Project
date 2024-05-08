@@ -6,9 +6,9 @@ namespace Domain.Entities
     public class ChatMessage
     {
         [Key]
-        public int Id { get; set; }
-        public int ChatId { get; set; }
-        public int MessageId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ChatId { get; set; }
+        public Guid MessageId { get; set; }
 
         public GroupChat GroupChat { get; set; }
         public Message Message { get; set; }

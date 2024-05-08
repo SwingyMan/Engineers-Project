@@ -6,9 +6,9 @@ namespace Domain.Entities;
 public class GroupPost
 {
     [Key]
-    public int Id { get; set; }
-    public int GroupId { get; set; }
-    public int PostId { get; set; }
+    public Guid Id { get; set; }
+    public Guid GroupId { get; set; }
+    public Guid PostId { get; set; }
 
     public Group Group { get; set; }
     public Post Post { get; set; }

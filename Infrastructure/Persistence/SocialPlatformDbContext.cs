@@ -11,96 +11,84 @@ public class SocialPlatformDbContext : DbContext
         : base(options)
     {
     }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<GroupUser> GroupUsers { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<GroupPost> GroupPosts { get; set; }
-    //public DbSet<BoardPost> BoardPosts { get; set; }
     public DbSet<Tag> Tags { get; set; }
-    public DbSet<PostsTag> PostsTags { get; set; }
-    public DbSet<GroupChat> GroupChats { get; set; }
-    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<PostsTag> PostTags { get; set; }
+    public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<ChatUser> ChatUsers { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
 
 
-        // User & GroupUser
-        modelBuilder.Entity<GroupUser>()
-            .HasKey(gu => new { gu.UserId, gu.GroupId });
+        // User and Role relationship
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Role)
+            .WithMany(r => r.Users)
+            .HasForeignKey(u => u.RoleId);
+
+        // GroupUser relationships
         modelBuilder.Entity<GroupUser>()
             .HasOne(gu => gu.User)
             .WithMany(u => u.GroupUsers)
             .HasForeignKey(gu => gu.UserId);
+
         modelBuilder.Entity<GroupUser>()
             .HasOne(gu => gu.Group)
             .WithMany(g => g.GroupUsers)
             .HasForeignKey(gu => gu.GroupId);
 
-        // Group & GroupPost 
-        modelBuilder.Entity<GroupPost>()
-            .HasKey(gp => new { gp.GroupId, gp.PostId });
+        // GroupPost relationships
         modelBuilder.Entity<GroupPost>()
             .HasOne(gp => gp.Group)
             .WithMany(g => g.GroupPosts)
             .HasForeignKey(gp => gp.GroupId);
+
         modelBuilder.Entity<GroupPost>()
             .HasOne(gp => gp.Post)
             .WithMany(p => p.GroupPosts)
             .HasForeignKey(gp => gp.PostId);
 
-        // User & Post 
-        modelBuilder.Entity<Post>()
-            .HasOne<User>()
-            .WithMany(u => u.Posts)
-            .HasForeignKey(p => p.UserId);
-
-        /*// Post & BoardPost  
-        modelBuilder.Entity<BoardPost>()
-            .HasOne(bp => bp.Post)
-            .WithOne(p => p.BoardPost) // ??
-            .HasForeignKey<BoardPost>(bp => bp.PostsId);*/
-
-        // Post & PostsTag 
-        modelBuilder.Entity<PostsTag>()
-            .HasKey(pt => new { pt.PostId, pt.TagId });
+        // PostTag relationships
         modelBuilder.Entity<PostsTag>()
             .HasOne(pt => pt.Post)
             .WithMany(p => p.PostsTags)
             .HasForeignKey(pt => pt.PostId);
+
         modelBuilder.Entity<PostsTag>()
             .HasOne(pt => pt.Tag)
             .WithMany(t => t.PostsTags)
             .HasForeignKey(pt => pt.TagId);
 
-        // GroupChat & ChatMessage 
-        modelBuilder.Entity<ChatMessage>()
-            .HasKey(cm => new { cm.ChatId, cm.MessageId });
-        modelBuilder.Entity<ChatMessage>()
-            .HasOne(cm => cm.GroupChat)
-            .WithMany(gc => gc.ChatMessages)
-            .HasForeignKey(cm => cm.ChatId);
-        modelBuilder.Entity<ChatMessage>()
-            .HasOne(cm => cm.Message)
-            .WithOne()
-            .HasForeignKey<ChatMessage>(cm => cm.MessageId);
+        // ChatUser relationships
+        modelBuilder.Entity<ChatUser>() //
+        .HasOne(cu => cu.User)
+        .WithMany(u => u.ChatUsers)
+        .HasForeignKey(cu => cu.UserId);
 
-        // User & ChatUser 
         modelBuilder.Entity<ChatUser>()
-            .HasKey(cu => new { cu.FirstUserId, cu.SecondUserId });
+            .HasOne(cu => cu.Chat)
+            .WithMany(c => c.ChatUsers)
+            .HasForeignKey(cu => cu.ChatId);
+
         modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.FirstUser)
+            .HasOne(cu => cu.Message)
             .WithMany()
-            .HasForeignKey(cu => cu.FirstUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.SecondUser)
-            .WithMany()
-            .HasForeignKey(cu => cu.SecondUserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(cu => cu.MessageId);
+
+        // Message relationships
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.User)
+            .WithMany(u => u.Messages)
+            .HasForeignKey(m => m.UserId);
     }
 }
