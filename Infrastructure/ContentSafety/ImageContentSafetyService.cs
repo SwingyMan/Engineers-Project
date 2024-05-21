@@ -7,13 +7,13 @@ namespace Infrastructure.ContentSafety
 {
     public class ImageContentSafetyService
     {
+        private readonly ContentSafetyClient _contentSafetyClient;
+        public ImageContentSafetyService(ContentSafetyClient contentSafetyClient)
+        {
+            _contentSafetyClient = contentSafetyClient;
+        }
         public Response<AnalyzeImageResult> AnalyzeImage(string imagePath)
         {
-            var keyvault = new SecretClient(new Uri("https://socialplatformkv.vault.azure.net/"), new DefaultAzureCredential());
-            string endpoint = "https://westeurope.api.cognitive.microsoft.com/";
-            string key = keyvault.GetSecret("storagekey").Value.Value;
-            ContentSafetyClient client = new ContentSafetyClient(new Uri(endpoint), new AzureKeyCredential(key));
-
             ContentSafetyImageData image = new ContentSafetyImageData(BinaryData.FromBytes(File.ReadAllBytes(imagePath)));
 
             var request = new AnalyzeImageOptions(image);
@@ -21,7 +21,7 @@ namespace Infrastructure.ContentSafety
             Response<AnalyzeImageResult> response;
             try
             {
-                response = client.AnalyzeImage(request);
+                response = _contentSafetyClient.AnalyzeImage(request);
             }
             catch (RequestFailedException ex)
             {

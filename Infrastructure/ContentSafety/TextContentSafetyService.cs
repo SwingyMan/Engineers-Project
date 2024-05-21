@@ -7,19 +7,20 @@ namespace Infrastructure.ContentSafety
 {
     public class TextContentSafetyService
     {
+        private readonly ContentSafetyClient _contentSafetyClient;
+
+        public TextContentSafetyService(ContentSafetyClient contentSafetyClient)
+        {
+            _contentSafetyClient = contentSafetyClient;
+        }
         public Response<AnalyzeTextResult> AnalyzeText(string text)
         {
-            var keyvault = new SecretClient(new Uri("https://socialplatformkv.vault.azure.net/"), new DefaultAzureCredential());
-            string endpoint = "https://westeurope.api.cognitive.microsoft.com/";
-            string key = keyvault.GetSecret("storagekey").Value.Value;
-            ContentSafetyClient client = new ContentSafetyClient(new Uri(endpoint), new AzureKeyCredential(key));
-
             var request = new AnalyzeTextOptions(text);
 
             Response<AnalyzeTextResult> response;
             try
             {
-                response = client.AnalyzeText(request);
+                response = _contentSafetyClient.AnalyzeText(request);
             }
             catch (RequestFailedException ex)
             {
