@@ -11,7 +11,7 @@ namespace Infrastructure.Repositories;
 internal class PostsRepository(SocialPlatformDbContext _context) : IPostsRepository
 {
 
-    public async Task<Post> GetPostByIdAsync(int postId)
+    public async Task<Post> GetPostByIdAsync(Guid postId)
     {
         return await _context.Set<Post>().FindAsync(postId);
     }
@@ -21,7 +21,7 @@ internal class PostsRepository(SocialPlatformDbContext _context) : IPostsReposit
         return await _context.Set<Post>().ToListAsync();
     }
 
-    public async Task<IEnumerable<Post>> GetPostsByUserIdAsync(int userId)
+    public async Task<IEnumerable<Post>> GetPostsByUserIdAsync(Guid userId)
     {
         return await _context.Set<Post>()
             .Where(p => p.UserId == userId)
@@ -47,7 +47,7 @@ internal class PostsRepository(SocialPlatformDbContext _context) : IPostsReposit
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeletePostAsync(int postId)
+    public async Task DeletePostAsync(Guid postId)
     {
         var post = await _context.Set<Post>().FindAsync(postId);
         if (post != null)

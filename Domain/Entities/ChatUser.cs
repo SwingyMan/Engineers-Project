@@ -6,10 +6,13 @@ namespace Domain.Entities;
 public class ChatUser
 {
     [Key]
-    public int Id { get; set; }
-    public int FirstUserId { get; set; }
-    public int SecondUserId { get; set; }
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }//
+    public Guid ChatId { get; set; }
+    public Guid MessageId { get; set; }
 
-    public User FirstUser { get; set; }
-    public User SecondUser { get; set; }
+
+    public User User { get; set; }//
+    public Chat Chat { get; set; }
+    public Message Message { get; set; }
 }

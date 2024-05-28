@@ -22,11 +22,11 @@ namespace Infrastructure
                 clientbuilder.AddBlobServiceClient(new Uri("https://socialplatformsa.blob.core.windows.net/"), new StorageSharedKeyCredential("socialplatformsa", keyvault.GetSecret("storagekey").Value.Value));
             }
             );
-            serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>opt.UseNpgsql($"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}"));
+            serviceCollection.AddDbContext<SocialPlatformDbContext>(opt => opt.UseNpgsql($"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}"));
             serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             serviceCollection.AddScoped(typeof(IBlobInfrastructure), typeof(BlobInfrastructure));
 
-            serviceCollection.AddAzureClients(x=>
+            serviceCollection.AddAzureClients(x =>
             {
                 x.AddEmailClient($"endpoint=https://socialplatformcs.europe.communication.azure.com/;accesskey={keyvault.GetSecret("emailkey").Value.Value}");
             });
