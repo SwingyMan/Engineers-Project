@@ -1,7 +1,9 @@
-﻿using Azure.Identity;
+﻿using Azure;
+using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Storage;
 using Infrastructure.Blobs;
+using Infrastructure.ContentSafety;
 using Infrastructure.IRepositories;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -20,6 +22,8 @@ namespace Infrastructure
             serviceCollection.AddAzureClients(clientbuilder =>
             {
                 clientbuilder.AddBlobServiceClient(new Uri("https://socialplatformsa.blob.core.windows.net/"), new StorageSharedKeyCredential("socialplatformsa", keyvault.GetSecret("storagekey").Value.Value));
+                clientbuilder.AddSecretClient(new Uri("https://socialplatformkv.vault.azure.net/"));
+                clientbuilder.AddContentSafetyClient(new Uri("https://westeurope.api.cognitive.microsoft.com/"),new AzureKeyCredential(keyvault.GetSecret("moderatorkey").Value.Value));
             }
             );
             serviceCollection.AddDbContext<SocialPlatformDbContext>(opt => opt.UseNpgsql($"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}"));
@@ -32,7 +36,7 @@ namespace Infrastructure
             });
             serviceCollection.AddSignalR().AddAzureSignalR($"Endpoint=https://socialplatformsr.service.signalr.net;AccessKey={keyvault.GetSecret("signalrkey").Value.Value};Version=1.0;");
             serviceCollection.AddScoped<IEmailSender, EmailSender>();
-
+            serviceCollection.AddTransient<TextContentSafetyService>();
         }
     }
 }
