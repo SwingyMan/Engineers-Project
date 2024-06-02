@@ -1,58 +1,52 @@
-import {useEffect, useState} from 'react';
-import './App.css';
-
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
-
+import { Login } from "./components/Login/Login"
+import { MessageBox } from "./components/MessageBox/MessageBox"
+var now :number
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
-
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a
-            href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em>
-        </p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-            </thead>
-            <tbody>
-            {forecasts.map(forecast =>
-                <tr key={forecast.date}>
-                    <td>{forecast.date}</td>
-                    <td>{forecast.temperatureC}</td>
-                    <td>{forecast.temperatureF}</td>
-                    <td>{forecast.summary}</td>
-                </tr>
-            )}
-            </tbody>
-        </table>;
-
-    return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
-
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
+  now = Date.now()
+  return (
+    <>
+     <Login/>
+     <MessageBox/> 
+    </>
+  )
 }
+export function TimeElapsed(timestamp:number):string {
+      let diff       
+      let elapsedS =~~((now -timestamp)/1000);
+      if(elapsedS>=60){
 
-export default App;
+        let elapsedM = ~~(elapsedS)/60;
+
+          if(elapsedM>=60){
+
+            let elapsedH = ~~(elapsedM)/60; 
+
+            if(elapsedH>=24){
+
+              let elapsedD = elapsedH/24
+              
+              if(elapsedD>=7){
+                diff = "not implemented yet"
+              }
+              else{
+                diff=`${elapsedD} dni temu`
+              }
+            }
+            else{
+              diff = `${elapsedH} godz. temu`
+            }
+          }
+          else{
+            diff= `${elapsedM} min. temu`
+          }
+      }
+      else{
+        diff="teraz"
+      }
+      
+  console.log()
+
+  
+    return diff
+}
+export default App

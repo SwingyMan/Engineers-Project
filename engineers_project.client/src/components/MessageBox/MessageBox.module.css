@@ -1,0 +1,34 @@
+@import '/src/styles/colors.css';
+
+.MessageBox{
+    padding:1em;
+    background-color: var(--darkGrey);
+    margin: 1em;
+    border-radius: 10px;
+    border: 1px solid var(--grey);
+    align-items: flex-start;
+}
+
+.MessageBox .header div{
+    display: flex;
+    flex-direction: column;
+    text-align:left;
+    
+
+}
+.MessageBox .image{
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+
+.MessageBox .header{
+    display: flex;
+    flex-direction: row;
+}
+.MessageBox hr{
+border: 1px solid var(--grey);
+}
+.MessageBox .date{
+    font-size: small;
+}
