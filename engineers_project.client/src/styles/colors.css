@@ -1,0 +1,8 @@
+:root{
+    --green: rgb(197, 248, 42);
+    --white: rgb(255, 255, 255);
+    --light-border:rgba(255, 255, 255, 0.5);
+    --grey: rgb(51, 51, 51);
+    --darkGrey: rgb(31, 31, 31);
+    --offBlack: rgb(20, 20, 20);
+}
