@@ -1,7 +1,5 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace Infrastructure.Persistence;
 
@@ -69,9 +67,9 @@ public class SocialPlatformDbContext : DbContext
 
         // ChatUser relationships
         modelBuilder.Entity<ChatUser>() //
-        .HasOne(cu => cu.User)
-        .WithMany(u => u.ChatUsers)
-        .HasForeignKey(cu => cu.UserId);
+            .HasOne(cu => cu.User)
+            .WithMany(u => u.ChatUsers)
+            .HasForeignKey(cu => cu.UserId);
 
         modelBuilder.Entity<ChatUser>()
             .HasOne(cu => cu.Chat)

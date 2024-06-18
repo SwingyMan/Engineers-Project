@@ -1,5 +1,4 @@
-﻿
-using Application.Queries;
+﻿using Application.Queries;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence;
@@ -19,6 +18,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
         _context = context;
         _mediator = mediator;
     }
+
     public async Task<JwtToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var mappedEntity = _mapper.Map<User>(request.UserRegisterDto);
@@ -27,11 +27,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
         {
             var entity = await _context.AddAsync(mappedEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id, entity.Entity.Role.Name);
+            return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id,
+                entity.Entity.Role.Name);
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 }

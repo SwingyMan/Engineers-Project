@@ -1,18 +1,19 @@
-﻿using AutoMapper;
+﻿using Application.Commands;
+using Application.Queries;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Queries;
-using Application.Commands;
 
 namespace Engineers_Project.Server.Controllers;
 
 [ApiController]
 [GenericRestControllerNameConvention]
 [Route("[controller]")]
-public class GenericController<T, TRequest, TResponse> : ControllerBase where T : class where TRequest : class where TResponse : class
+public class GenericController<T, TRequest, TResponse> : ControllerBase
+    where T : class where TRequest : class where TResponse : class
 {
-    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
 
     public GenericController(IMediator mediator, IMapper mapper)
     {

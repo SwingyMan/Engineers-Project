@@ -8,5 +8,6 @@ public class EmailQuery : IRequest<bool>
     {
         Email = email;
     }
+
     public string Email { get; set; }
 }

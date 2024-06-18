@@ -10,5 +10,6 @@ public class RegisterCommand : IRequest<JwtToken>
     {
         UserRegisterDto = userRegisterDto;
     }
+
     public UserRegisterDTO UserRegisterDto { get; set; }
 }

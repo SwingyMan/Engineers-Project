@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Entities;
+﻿namespace Domain.Entities;
 
 public class JwtToken
 {
@@ -7,6 +6,6 @@ public class JwtToken
     {
         Token = token;
     }
-    public string Token { get; set; }
 
+    public string Token { get; set; }
 }

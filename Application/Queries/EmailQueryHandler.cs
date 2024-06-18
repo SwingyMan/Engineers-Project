@@ -1,27 +1,19 @@
-﻿
-
+﻿using Infrastructure.IRepositories;
 using MediatR;
 
 namespace Application.Queries;
 
 public class EmailQueryHandler : IRequestHandler<EmailQuery, bool>
 {
-    private readonly Context _context;
+    private readonly IUserRepository _userRepository;
 
-    public EmailQueryHandler(Context context)
+    public EmailQueryHandler(IUserRepository userRepository)
     {
-        _context = context;
+        _userRepository = userRepository;
     }
+
     public async Task<bool> Handle(EmailQuery request, CancellationToken cancellationToken)
     {
-        var query = await _context.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
-        if (query)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return await _userRepository.CheckEmail(request.Email);
     }
 }

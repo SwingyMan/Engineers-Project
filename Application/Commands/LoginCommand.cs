@@ -10,5 +10,6 @@ public class LoginCommand : IRequest<JwtToken>
     {
         UserLoginDto = userLoginDto;
     }
+
     public UserLoginDTO UserLoginDto { get; set; }
 }

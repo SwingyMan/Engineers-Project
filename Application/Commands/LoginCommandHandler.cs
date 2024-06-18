@@ -10,11 +10,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
 {
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
+
     public LoginCommandHandler(SocialPlatformDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
+
     public async Task<JwtToken> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<User>(request.UserLoginDto);
@@ -22,12 +24,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
             x.Email == user.Email);
         var password_check = BCrypt.Net.BCrypt.Verify(request.UserLoginDto.Password, query.Password);
         if (password_check)
-        {
             return query.CreateToken(query.Username, query.Email, query.Id, query.Role.Name);
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 }

@@ -8,5 +8,6 @@ public class GenericDeleteCommand<T> : IRequest
     {
         Id = guid;
     }
+
     public Guid Id { get; set; }
 }
