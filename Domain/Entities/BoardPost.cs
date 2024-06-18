@@ -9,6 +9,5 @@ public class BoardPost
     public int Id { get; set; }
     public int PostsId { get; set; }
     public string Availability { get; set; }
-
     public Post Post { get; set; }
 }
