@@ -8,33 +8,55 @@ namespace Engineers_Project.Server.Controllers;
 
 [ApiController]
 [GenericRestControllerNameConvention]
-[Route("[controller]")]
-public class GenericController<T, TRequest, TResponse> : ControllerBase
-    where T : class where TRequest : class where TResponse : class
+[Route("/api/v1/[controller]/[action]")]
+public class GenericController<T,D> : ControllerBase
+    where T : class
 {
-    private readonly IMapper _mapper;
     private readonly IMediator _mediator;
 
-    public GenericController(IMediator mediator, IMapper mapper)
+    public GenericController(IMediator mediator)
     {
         _mediator = mediator;
-        _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<ActionResult<TResponse>> Get(Guid key)
+    public async Task<IActionResult> Get(Guid key)
     {
         var query = new GenericGetByIdQuery<T>(key);
         var result = await _mediator.Send(query);
         if (result == null) return NotFound();
-        return _mapper.Map<T, TResponse>(result);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<TResponse>> Create(TRequest request)
+    public async Task<IActionResult> Create(GenericAddCommand<T,D> genericAddCommand)
     {
-        var command = new GenericAddCommand<TRequest, TResponse>(request);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(genericAddCommand);
         return Ok(result);
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<T,D> genericUpdateCommand)
+    {
+        return Ok(await _mediator.Send(genericUpdateCommand));
+    }
+
+    /// <summary>
+    ///     Deletes a post.
+    /// </summary>
+    /// <param name="id">Post Guid</param>
+    /// <response code="200">If the post was found.</response>
+    /// <response code="404">If the post was not found.</response>
+    // DELETE api/posts/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _mediator.Send(new GenericDeleteCommand<T>(id));
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<T> query)
+    {
+        return Ok(await _mediator.Send(query));
     }
 }
