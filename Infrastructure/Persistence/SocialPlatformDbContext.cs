@@ -28,8 +28,6 @@ public class SocialPlatformDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-
-
         // User and Role relationship
         modelBuilder.Entity<User>()
             .HasOne(u => u.Role)

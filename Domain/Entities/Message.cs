@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Domain.Entities;
 
@@ -9,5 +10,6 @@ public class Message
     public string Content { get; set; }
     public DateTime CreationDate { get; set; }
     public Guid UserId { get; set; }
+    [JsonIgnore]
     public User User { get; set; }
 }

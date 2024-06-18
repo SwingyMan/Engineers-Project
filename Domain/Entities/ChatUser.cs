@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Domain.Entities;
 
@@ -11,8 +12,10 @@ public class ChatUser
     public Guid ChatId { get; set; }
     public Guid MessageId { get; set; }
 
-
+    [JsonIgnore]
     public User User { get; set; }//
+    [JsonIgnore]
     public Chat Chat { get; set; }
+    [JsonIgnore]
     public Message Message { get; set; }
 }
