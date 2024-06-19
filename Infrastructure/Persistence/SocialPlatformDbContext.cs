@@ -5,6 +5,10 @@ namespace Infrastructure.Persistence;
 
 public class SocialPlatformDbContext : DbContext
 {
+    public SocialPlatformDbContext()
+    {
+        
+    }
     public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
         : base(options)
     {

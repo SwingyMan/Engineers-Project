@@ -13,14 +13,10 @@ public static class ApplicationService
     {
         serviceCollection.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationService).Assembly));
-        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<UserRegisterDTO, User>, User>),
-            typeof(GenericAddCommandHandler<UserRegisterDTO, User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<User>, IEnumerable<User>>),
             typeof(GenericGetAllQueryHandler<User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<User>, User>),
             typeof(GenericGetByIdQueryHandler<User>));
-        serviceCollection.AddTransient(typeof(IRequestHandler<GenericUpdateCommand<UserRegisterDTO, User>, User>),
-            typeof(GenericUpdateCommandHandler<UserRegisterDTO, User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<User>>),
             typeof(GenericDeleteCommandHandler<User>));
 

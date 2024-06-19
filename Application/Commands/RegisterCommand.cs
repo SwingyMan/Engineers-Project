@@ -6,10 +6,10 @@ namespace Application.Commands;
 
 public class RegisterCommand : IRequest<JwtToken>
 {
-    public RegisterCommand(UserRegisterDTO userRegisterDto)
+    public RegisterCommand(UserDTO userRegisterDto)
     {
         UserRegisterDto = userRegisterDto;
     }
 
-    public UserRegisterDTO UserRegisterDto { get; set; }
+    public UserDTO UserRegisterDto { get; set; }
 }
