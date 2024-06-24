@@ -1,10 +1,11 @@
+import styles from "../MessageBox/MessageBox.module.css"
 
  export function ImageDiv(props: { width: number; url: string | undefined; }){
+    console.log(props.url)
     return<>
-            <div className="image" > 
+            <div className={styles.image} > 
             <svg aria-hidden="true" width={props.width} height={props.width}>
-            <mask id=":circ:">
-                
+            <mask id=":circ:">                
             <circle cx={props.width/2} cy={props.width/2} r={props.width/2} fill="white" ></circle>
             </mask>
             <g mask="url(#:circ:)">

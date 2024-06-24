@@ -21,7 +21,7 @@ export function Login(){
     }
     }
     return<>
-    <dialog open>
+    <dialog >
     <div id={styles.LoginForm}>
 
         <svg aria-hidden="true" width={size} height={size}>
