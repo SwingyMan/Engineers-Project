@@ -1,0 +1,22 @@
+#topNavBar{
+    position: absolute;
+    background-color: blue;
+    height: 50px;
+    width: 100%;
+display: flex;
+}
+#Logo{
+    margin: 5px;
+}
+#Logo image{
+    height: 40px;
+    width: 40px;
+}
+#SearchBar{display: flex;
+    background-color: aquamarine;
+    height: 40px;
+    width: 30%;
+    z-index: 3;
+    border-radius: 30px;
+    margin: 5px;
+}
