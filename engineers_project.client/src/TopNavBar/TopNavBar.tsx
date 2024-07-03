@@ -6,7 +6,7 @@ export function TopNavBar(){
         <div id={styles.Logo}>
             <img height={40} width={40} src="src/assets/logo-politechnika.png"/>
         </div>
-        <div id={styles.SearchBar}></div>
+        <div id={styles.SearchBar}>asdvasfa</div>
     </div>
     
     

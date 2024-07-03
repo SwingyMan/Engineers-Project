@@ -18,5 +18,6 @@ display: flex;
     width: 30%;
     z-index: 3;
     border-radius: 30px;
-    margin: 5px;
+    margin: 5px auto;
+    box-sizing: border-box;
 }
