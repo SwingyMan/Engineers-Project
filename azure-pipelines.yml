@@ -12,6 +12,20 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
+- stage: Test
+  displayName: Tests
+  jobs:
+  - job: Test
+    displayName: test
+    steps:
+      - task: MicrosoftSecurityDevOps@1
+        displayName: 'Microsoft Security DevOps'
+        inputs:
+          artifactName: 'CodeAnalysisLogs'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: 'results.sarif'
+          ArtifactName: 'CodeAnalysisLogs'
 - stage: Build
   displayName: Build image
   jobs:
