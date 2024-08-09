@@ -14,6 +14,16 @@ resource "azurerm_linux_web_app" "example" {
   resource_group_name = azurerm_resource_group.project_engineers.name
   service_plan_id     = azurerm_service_plan.example.id
   https_only          = true
+  logs {
+    detailed_error_messages = false
+    failed_request_tracing = false
+    http_logs {
+      file_system {
+        retention_in_days = 0
+        retention_in_mb   = 35
+      }
+    }
+  }
   app_settings = {
     DOCKER_ENABLE_CI                                = true
     APPINSIGHTS_INSTRUMENTATIONKEY                  = "18be8143-9f21-4bf3-958f-0643ca4cfd33"
@@ -34,8 +44,7 @@ resource "azurerm_linux_web_app" "example" {
   }
   virtual_network_subnet_id = azurerm_subnet.snet2.id
   identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.example.id]
+    type         = "SystemAssigned"
   }
   connection_string {
     name  = "Database"
@@ -60,7 +69,7 @@ resource "azurerm_linux_web_app" "example" {
       priority   = 101
     }
     application_stack {
-      docker_image_name = "engineers_project.server:14"
+      docker_image_name = "engineers_project.server:latest"
       # Replace <ACR_LOGIN_SERVER> with your ACR's login server URL
 
     }
