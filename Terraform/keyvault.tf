@@ -8,55 +8,62 @@ resource "azurerm_key_vault" "example" {
   tenant_id                   = var.tenant
   sku_name                    = "standard"
   enable_rbac_authorization   = true
-# public_network_access_enabled = false
+  # public_network_access_enabled = false
   purge_protection_enabled = true
-  
+
 }
 resource "azurerm_key_vault_secret" "storage" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "storagekey"
-  value        = azurerm_storage_account.example.primary_access_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "storagekey"
+  value           = azurerm_storage_account.example.primary_access_key
   expiration_date = "2025-03-02T15:04:05Z"
 }
 resource "azurerm_key_vault_secret" "signalr" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "signalrkey"
-  value        = azurerm_signalr_service.example.primary_access_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "signalrkey"
+  value           = azurerm_signalr_service.example.primary_access_key
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
 resource "azurerm_key_vault_secret" "email" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "emailkey"
-  value        = azurerm_communication_service.example.primary_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "emailkey"
+  value           = azurerm_communication_service.example.primary_key
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
 resource "azurerm_key_vault_secret" "db" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "dbkey"
-  value        = var.password
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "dbkey"
+  value           = var.password
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
 resource "azurerm_key_vault_secret" "ai" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "aikey"
-  value        = azurerm_cognitive_account.example.primary_access_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "aikey"
+  value           = azurerm_cognitive_account.example.primary_access_key
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
 resource "azurerm_key_vault_secret" "translator" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "translatorkey"
-  value        = azurerm_cognitive_account.translator.primary_access_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "translatorkey"
+  value           = azurerm_cognitive_account.translator.primary_access_key
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
 resource "azurerm_key_vault_secret" "moderator" {
-  key_vault_id = azurerm_key_vault.example.id
-  name         = "moderatorkey"
-  value        = azurerm_cognitive_account.moderator.primary_access_key
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "moderatorkey"
+  value           = azurerm_cognitive_account.moderator.primary_access_key
+  expiration_date = "2025-03-02T15:04:05Z"
+
+}
+resource "azurerm_key_vault_secret" "app_insights" {
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "insightskey"
+  value           = azurerm_application_insights.example.connection_string
   expiration_date = "2025-03-02T15:04:05Z"
 
 }

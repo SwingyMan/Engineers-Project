@@ -37,7 +37,8 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IBlobInfrastructure), typeof(BlobInfrastructure));
         serviceCollection.AddScoped(typeof(IUserRepository), typeof(UserRepository));
         serviceCollection.AddScoped(typeof(IPostsRepository), typeof(PostsRepository));
-
+        serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=keyvault.GetSecret("insightskey").Value.Value);
+        serviceCollection.AddServiceProfiler();
         serviceCollection.AddAzureClients(x =>
         {
             x.AddEmailClient(

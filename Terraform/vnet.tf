@@ -1,4 +1,4 @@
-﻿resource "azurerm_virtual_network" "vnet" {
+resource "azurerm_virtual_network" "vnet" {
   name                = "socialplatformvnet"
   location            = azurerm_resource_group.project_engineers.location
   resource_group_name = azurerm_resource_group.project_engineers.name
@@ -20,7 +20,7 @@ resource "azurerm_subnet" "snet2" {
 
     service_delegation {
       name    = "Microsoft.Web/serverFarms"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
 }
@@ -60,8 +60,8 @@ resource "azurerm_private_endpoint" "sa" {
   resource_group_name = azurerm_resource_group.project_engineers.name
   subnet_id           = azurerm_subnet.snet.id
   private_service_connection {
-    is_manual_connection = false
-    name                 = "pe-sa"
+    is_manual_connection           = false
+    name                           = "pe-sa"
     private_connection_resource_id = azurerm_storage_account.example.id
     subresource_names              = ["blob"]
   }
@@ -86,19 +86,19 @@ resource "azurerm_private_endpoint" "db" {
     private_dns_zone_ids = [azurerm_private_dns_zone.db.id]
   }
 }
-  resource "azurerm_private_endpoint" "kv" {
-    location            = azurerm_resource_group.project_engineers.location
-    name                = "pe-kv"
-    resource_group_name = azurerm_resource_group.project_engineers.name
-    subnet_id           = azurerm_subnet.snet.id
-    private_service_connection {
-      is_manual_connection           = false
-      name                           = "pe-kv"
-      private_connection_resource_id = azurerm_key_vault.example.id
-      subresource_names              = ["vault"]
-    }
-    private_dns_zone_group {
-      name                 = "dns-kv"
-      private_dns_zone_ids = [azurerm_private_dns_zone.kv.id]
-    }
+resource "azurerm_private_endpoint" "kv" {
+  location            = azurerm_resource_group.project_engineers.location
+  name                = "pe-kv"
+  resource_group_name = azurerm_resource_group.project_engineers.name
+  subnet_id           = azurerm_subnet.snet.id
+  private_service_connection {
+    is_manual_connection           = false
+    name                           = "pe-kv"
+    private_connection_resource_id = azurerm_key_vault.example.id
+    subresource_names              = ["vault"]
   }
+  private_dns_zone_group {
+    name                 = "dns-kv"
+    private_dns_zone_ids = [azurerm_private_dns_zone.kv.id]
+  }
+}

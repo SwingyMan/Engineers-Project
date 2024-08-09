@@ -9,9 +9,9 @@ resource "azurerm_postgresql_flexible_server" "example" {
   administrator_login    = "marcin"
   administrator_password = var.password
 
-  storage_mb                   = 32768 # 5GB
-  backup_retention_days        = 7
-  geo_redundant_backup_enabled = false
+  storage_mb                    = 32768 # 5GB
+  backup_retention_days         = 7
+  geo_redundant_backup_enabled  = false
   public_network_access_enabled = false
 }
 

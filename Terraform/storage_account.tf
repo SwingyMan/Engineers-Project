@@ -1,14 +1,14 @@
 resource "azurerm_storage_account" "example" {
-  depends_on               = [azurerm_resource_group.project_engineers]
-  name                     = "socialplatformsa"
-  resource_group_name      = azurerm_resource_group.project_engineers.name
-  location                 = azurerm_resource_group.project_engineers.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  depends_on                      = [azurerm_resource_group.project_engineers]
+  name                            = "socialplatformsa"
+  resource_group_name             = azurerm_resource_group.project_engineers.name
+  location                        = azurerm_resource_group.project_engineers.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
- # shared_access_key_enabled = false
+  # shared_access_key_enabled = false
   min_tls_version = "TLS1_2"
- # public_network_access_enabled = false
+  # public_network_access_enabled = false
   queue_properties {
     logging {
       delete                = true
@@ -23,10 +23,10 @@ resource "azurerm_storage_account" "example" {
       days = 7
     }
   }
-  sas_policy { 
+  sas_policy {
     expiration_period = "90.00:00:00"
     expiration_action = "Log"
-}
+  }
 }
 
 resource "azurerm_storage_container" "images" {

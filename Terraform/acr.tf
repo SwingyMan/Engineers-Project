@@ -3,6 +3,6 @@ resource "azurerm_container_registry" "example" {
   name                = "socialplatformacr"
   resource_group_name = azurerm_resource_group.project_engineers.name
   location            = azurerm_resource_group.project_engineers.location
-  sku                 = "Basic"
+  sku                 = "Standard"
   admin_enabled       = true
 }
