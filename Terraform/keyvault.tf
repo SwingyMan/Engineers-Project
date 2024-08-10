@@ -10,6 +10,11 @@ resource "azurerm_key_vault" "example" {
   enable_rbac_authorization   = true
   # public_network_access_enabled = false
   purge_protection_enabled = true
+  network_acls {
+    bypass         = "AzureServices"
+    default_action = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.snet2.id]
+  }
 
 }
 resource "azurerm_key_vault_secret" "storage" {

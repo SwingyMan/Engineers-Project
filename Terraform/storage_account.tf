@@ -9,6 +9,11 @@ resource "azurerm_storage_account" "example" {
   # shared_access_key_enabled = false
   min_tls_version = "TLS1_2"
   # public_network_access_enabled = false
+  network_rules {
+    bypass         = ["AzureServices"]
+    default_action = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.snet2.id]
+  }
   queue_properties {
     logging {
       delete                = true
