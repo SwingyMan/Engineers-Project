@@ -28,3 +28,8 @@ resource "azurerm_role_assignment" "translator" {
   scope        = azurerm_cognitive_account.translator.id
   role_definition_name = "Cognitive Services User"
 }
+resource "azurerm_role_assignment" "signalr" {
+  principal_id = azurerm_linux_web_app.example.identity[0].principal_id
+  scope        = azurerm_signalr_service.example.id
+  role_definition_name = "SignalR App Server"
+}

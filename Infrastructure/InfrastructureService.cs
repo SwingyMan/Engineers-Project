@@ -1,9 +1,5 @@
-﻿using Azure;
-using Azure.Communication.Email;
-using Azure.Core;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Azure.Storage;
 using Domain.Interfaces;
 using Infrastructure.Blobs;
 using Infrastructure.ContentSafety;
@@ -11,6 +7,7 @@ using Infrastructure.IRepositories;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +23,6 @@ public static class InfrastructureService
             new DefaultAzureCredential());
         var dbkey = $"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}";
         var insightskey = keyvault.GetSecret("insightskey").Value.Value;
-       var signalrkey = $"Endpoint=https://socialplatformsr.service.signalr.net;AccessKey={keyvault.GetSecret("signalrkey").Value.Value};Version=1.0;";
         serviceCollection.AddAzureClients(clientbuilder =>
             {
                 clientbuilder.AddBlobServiceClient(new Uri("https://socialplatformsa.blob.core.windows.net/"));
@@ -38,10 +34,7 @@ public static class InfrastructureService
                 clientbuilder.UseCredential(new DefaultAzureCredential());
             }
         );
-        serviceCollection.AddSerilog((services, lc) => lc
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console());
+
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
         serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -51,8 +44,19 @@ public static class InfrastructureService
         serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
         serviceCollection.AddServiceProfiler();
         serviceCollection.AddSignalR()
-            .AddAzureSignalR(signalrkey);
+            .AddAzureSignalR(x =>
+            {
+                x.Endpoints =
+                [
+                    new ServiceEndpoint(new Uri("https://socialplatformsr.service.signalr.net"),
+                        new DefaultAzureCredential())
+                ];
+            });
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddTransient<TextContentSafetyService>();
+                serviceCollection.AddSerilog((services, lc) => lc
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+            .WriteTo.Console());
     }
 }
