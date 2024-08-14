@@ -13,3 +13,18 @@ resource "azurerm_role_assignment" "acr" {
   scope                = azurerm_container_registry.example.id
   role_definition_name = "AcrPull"
 }
+resource "azurerm_role_assignment" "content" {
+  principal_id = azurerm_linux_web_app.example.identity[0].principal_id
+  scope        = azurerm_cognitive_account.example.id
+  role_definition_name = "Cognitive Services User"
+}
+resource "azurerm_role_assignment" "moderator" {
+  principal_id = azurerm_linux_web_app.example.identity[0].principal_id
+  scope        = azurerm_cognitive_account.moderator.id
+  role_definition_name = "Cognitive Services User"
+}
+resource "azurerm_role_assignment" "translator" {
+  principal_id = azurerm_linux_web_app.example.identity[0].principal_id
+  scope        = azurerm_cognitive_account.translator.id
+  role_definition_name = "Cognitive Services User"
+}

@@ -17,5 +17,5 @@ resource "azurerm_subnet" "snet2" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
-  service_endpoints = ["Microsoft.KeyVault","Microsoft.Storage"]
+  service_endpoints = ["Microsoft.KeyVault","Microsoft.Storage","Microsoft.CognitiveServices"]
 }
