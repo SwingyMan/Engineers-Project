@@ -7,7 +7,7 @@ resource "azurerm_postgresql_flexible_server" "example" {
   version                = "15"
   zone                   = "1"
   administrator_login    = "marcin"
-  administrator_password = var.password
+  administrator_password = data.azurerm_key_vault_secret.db.value
 
   storage_mb                    = 32768 # 5GB
   backup_retention_days         = 7

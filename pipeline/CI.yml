@@ -1,0 +1,22 @@
+﻿trigger:
+  - none
+
+resources:
+  - repo: self
+stages:
+  - stage: Test
+    displayName: Tests
+    jobs:
+      - job: Test
+        displayName: test
+        pool:
+          name: Default
+        steps:
+          - task: MicrosoftSecurityDevOps@1
+            displayName: 'Microsoft Security DevOps'
+            inputs:
+              artifactName: 'CodeAnalysisLogs'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: $(Build.ArtifactStagingDirectory)
+              ArtifactName: 'CodeAnalysisLogs'

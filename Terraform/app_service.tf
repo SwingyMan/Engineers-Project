@@ -49,13 +49,14 @@ resource "azurerm_linux_web_app" "example" {
   connection_string {
     name  = "Database"
     type  = "PostgreSQL"
-    value = "Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password=${var.password}"
+    value = "Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password=${data.azurerm_key_vault_secret.db.value}"
   }
   site_config {
     ftps_state                    = "FtpsOnly"
     always_on                     = false
     ip_restriction_default_action = "Deny"
     http2_enabled                 = true
+    health_check_path = "/health"
     ip_restriction {
       action     = "Allow"
       ip_address = "103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,104.16.0.0/13,104.24.0.0/14,108.162.192.0/18,131.0.72.0/22,141.101.64.0/18"
@@ -74,4 +75,5 @@ resource "azurerm_linux_web_app" "example" {
 
     }
   }
+  
 }

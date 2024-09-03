@@ -11,10 +11,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Now configure Autofac as the DI container
 builder.Services.AddApplicationService();
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
+app.MapHealthChecks("/health");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

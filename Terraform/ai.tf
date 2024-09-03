@@ -13,6 +13,9 @@ resource "azurerm_cognitive_account" "example" {
       subnet_id = azurerm_subnet.snet2.id
     }
   }
+  lifecycle {
+    ignore_changes = [network_acls[0].ip_rules]
+  }
 }
 resource "azurerm_cognitive_account" "moderator" {
   depends_on          = [azurerm_resource_group.project_engineers]
@@ -29,6 +32,9 @@ resource "azurerm_cognitive_account" "moderator" {
       subnet_id = azurerm_subnet.snet2.id
     }
   }
+  lifecycle {
+    ignore_changes = [network_acls[0].ip_rules]
+  }
 }
 resource "azurerm_cognitive_account" "translator" {
   depends_on          = [azurerm_resource_group.project_engineers]
@@ -44,5 +50,8 @@ resource "azurerm_cognitive_account" "translator" {
     virtual_network_rules {
       subnet_id = azurerm_subnet.snet2.id
     }
+  }
+  lifecycle {
+    ignore_changes = [network_acls[0].ip_rules]
   }
 }

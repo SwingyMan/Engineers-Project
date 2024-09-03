@@ -6,13 +6,20 @@ resource "azurerm_storage_account" "example" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
-  # shared_access_key_enabled = false
+  shared_access_key_enabled = false
+  default_to_oauth_authentication = true
   min_tls_version = "TLS1_2"
   # public_network_access_enabled = false
   network_rules {
     bypass         = ["AzureServices"]
     default_action = "Deny"
     virtual_network_subnet_ids = [azurerm_subnet.snet2.id]
+  }
+  lifecycle {
+    ignore_changes = [network_rules[0].ip_rules]
+  }
+  identity {
+    type = "SystemAssigned"
   }
   queue_properties {
     logging {
@@ -34,6 +41,13 @@ resource "azurerm_storage_account" "example" {
   }
 }
 
+
+resource "azurerm_storage_account_customer_managed_key" "ok_cmk" {
+  depends_on = [azurerm_role_assignment.kv-key]
+  storage_account_id = azurerm_storage_account.example.id
+  key_vault_id       = azurerm_key_vault.example.id
+  key_name           = azurerm_key_vault_key.storage.name
+}
 resource "azurerm_storage_container" "images" {
   depends_on            = [azurerm_storage_account.example]
   name                  = "images"

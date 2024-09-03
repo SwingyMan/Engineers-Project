@@ -33,3 +33,8 @@ resource "azurerm_role_assignment" "signalr" {
   scope        = azurerm_signalr_service.example.id
   role_definition_name = "SignalR App Server"
 }
+resource "azurerm_role_assignment" "kv-key" {
+  principal_id         = azurerm_storage_account.example.identity[0].principal_id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  scope                = azurerm_key_vault_key.storage.resource_versionless_id
+}
