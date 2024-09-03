@@ -32,6 +32,7 @@ resource "azurerm_key_vault_key" "storage" {
     "verify",
     "wrapKey",
   ]
+  expiration_date = "2025-03-02T15:04:05Z"
 }
 
 resource "azurerm_key_vault_secret" "signalr" {

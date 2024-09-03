@@ -16,7 +16,7 @@ resource "azurerm_storage_account" "example" {
     virtual_network_subnet_ids = [azurerm_subnet.snet2.id]
   }
   lifecycle {
-    ignore_changes = [network_rules[0].ip_rules]
+    ignore_changes = [network_rules[0].ip_rules,customer_managed_key]
   }
   identity {
     type = "SystemAssigned"
