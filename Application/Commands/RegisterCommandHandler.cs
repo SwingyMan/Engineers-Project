@@ -1,8 +1,10 @@
 ﻿using Application.Queries;
 using AutoMapper;
+using BCrypt.Net;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands;
 
@@ -22,11 +24,30 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
     public async Task<JwtToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var mappedEntity = _mapper.Map<User>(request.UserRegisterDto);
-        var test = await _mediator.Send(new EmailQuery(request.UserRegisterDto.Email));
-        if (test == false)
+        var emailExists = await _mediator.Send(new EmailQuery(request.UserRegisterDto.Email));
+
+        mappedEntity.IpOfRegistry = "0.0.0.0";
+
+        if (!emailExists)
         {
+
+            mappedEntity.Password = BCrypt.Net.BCrypt.HashPassword(request.UserRegisterDto.Password);
+
+            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "USER", cancellationToken);
+
+            if (userRole == null)
+            {
+                userRole = new Role { Name = "USER" };
+                await _context.Roles.AddAsync(userRole, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
+            mappedEntity.RoleId = userRole.Id;
+            mappedEntity.Role = userRole;
+
             var entity = await _context.AddAsync(mappedEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
             return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id,
                 entity.Entity.Role.Name);
         }
