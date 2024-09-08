@@ -22,7 +22,8 @@ public class UserController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] UserRegisterDTO userDto)
     {
-        var token = await _mediator.Send(new RegisterCommand(userDto));
+        var ipAddress = HttpContext.Connection.RemoteIpAddress;
+        var token = await _mediator.Send(new RegisterCommand(userDto, ipAddress));
         if (token is null)
             return NotFound();
         return Ok(token);

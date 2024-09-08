@@ -4,6 +4,7 @@ using BCrypt.Net;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands;
@@ -26,10 +27,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
         var mappedEntity = _mapper.Map<User>(request.UserRegisterDto);
         var emailExists = await _mediator.Send(new EmailQuery(request.UserRegisterDto.Email));
 
-        mappedEntity.IpOfRegistry = "0.0.0.0";
+        //mappedEntity.IpOfRegistry = request.HttpContext.Connection.RemoteIpAddress;
 
         if (!emailExists)
         {
+            mappedEntity.IpOfRegistry = request.IpAddress.ToString();
 
             mappedEntity.Password = BCrypt.Net.BCrypt.HashPassword(request.UserRegisterDto.Password);
 
