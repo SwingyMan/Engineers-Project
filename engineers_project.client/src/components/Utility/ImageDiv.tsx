@@ -1,7 +1,6 @@
 import styles from "../MessageBox/MessageBox.module.css"
 
  export function ImageDiv(props: { width: number; url: string | undefined; }){
-    console.log(props.url)
     return<>
             <div className={styles.image} > 
             <svg aria-hidden="true" width={props.width} height={props.width}>

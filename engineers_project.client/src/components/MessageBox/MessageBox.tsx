@@ -1,9 +1,9 @@
 
-import { TimeElapsed } from "../../App"
 import { Comments } from "../Comments/Comments"
 import { ImageDiv } from "../Utility/ImageDiv"
 import styles from "../MessageBox/MessageBox.module.css"
 import { Post } from "./PostClass"
+import { TimeElapsed } from "../../Utility/TimeElapsed"
 
 
 export function MessageBox(props: { postInfo: Post}){
