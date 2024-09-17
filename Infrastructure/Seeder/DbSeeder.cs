@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Azure.Security.KeyVault.Secrets;
+using Domain.Entities;
 using Infrastructure.Persistence;
 
 namespace Infrastructure.Seeder;
@@ -6,9 +7,10 @@ namespace Infrastructure.Seeder;
 public class DbSeeder
 {
     private readonly SocialPlatformDbContext _dbContext;
-
-    public DbSeeder(SocialPlatformDbContext dbContext)
+    private readonly SecretClient _secretClient;
+    public DbSeeder(SocialPlatformDbContext dbContext,SecretClient secretClient)
     {
+        _secretClient = secretClient;
         _dbContext = dbContext;
     }
 
@@ -65,7 +67,7 @@ public class DbSeeder
                     Id = Guid.NewGuid(),
                     Username = "admin",
                     Email = "admin@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                    Password = BCrypt.Net.BCrypt.HashPassword(_secretClient.GetSecret("adminpassword").Value.Value),
                     RoleId = adminRole.Id,
                     CreatedAt = DateTime.UtcNow,
                     IpOfRegistry = "127.0.0.1"
@@ -75,7 +77,7 @@ public class DbSeeder
                     Id = Guid.NewGuid(),
                     Username = "user",
                     Email = "user@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("user123"),
+                    Password = BCrypt.Net.BCrypt.HashPassword(_secretClient.GetSecret("userpassword").Value.Value),
                     RoleId = userRole.Id,
                     CreatedAt = DateTime.UtcNow,
                     IpOfRegistry = "127.0.0.1"

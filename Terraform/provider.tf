@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.114.0"
     }
+    random = {
+      source = "hashicorp/random"
+      version = "3.6.3"
+    }
   }
   cloud {
 
@@ -14,6 +18,7 @@ terraform {
     }
   }
 }
+provider "random" {}
 provider "azurerm" {
   features {}
   storage_use_azuread = true
