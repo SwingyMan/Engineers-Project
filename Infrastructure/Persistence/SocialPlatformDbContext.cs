@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Seeder;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
@@ -7,7 +8,7 @@ public class SocialPlatformDbContext : DbContext
 {
     public SocialPlatformDbContext()
     {
-        
+
     }
     public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
         : base(options)
