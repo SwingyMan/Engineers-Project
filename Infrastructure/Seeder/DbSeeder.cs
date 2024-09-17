@@ -15,6 +15,7 @@ public class DbSeeder
     public void Seed()
     {
         SeedRoles();
+        SeedUsers();
     }
 
     public void SeedRoles()
