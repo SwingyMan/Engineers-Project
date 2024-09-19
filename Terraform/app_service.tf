@@ -49,7 +49,7 @@ resource "azurerm_linux_web_app" "example" {
   connection_string {
     name  = "Database"
     type  = "PostgreSQL"
-    value = "Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password=${data.azurerm_key_vault_secret.db.value}"
+    value = "Host=${azurerm_postgresql_flexible_server.example.name}.postgres.database.azure.com;Database=${azurerm_postgresql_flexible_server_database.example.name};Username=marcin;Password=${azurerm_key_vault_secret.db.value}"
   }
   site_config {
     ftps_state                    = "FtpsOnly"

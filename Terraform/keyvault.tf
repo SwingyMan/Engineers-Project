@@ -42,16 +42,31 @@ resource "azurerm_key_vault_secret" "signalr" {
   expiration_date = "2025-03-02T15:04:05Z"
 
 }
-data "azurerm_key_vault_secret" "db" {
+resource "azurerm_key_vault_secret" "db" {
   key_vault_id    = azurerm_key_vault.example.id
   name            = "dbkey"
-
+  value           = random_password.db_password.result
+  expiration_date = "2025-03-02T15:04:05Z"
 }
 
 resource "azurerm_key_vault_secret" "app_insights" {
   key_vault_id    = azurerm_key_vault.example.id
   name            = "insightskey"
   value           = azurerm_application_insights.example.connection_string
+  expiration_date = "2025-03-02T15:04:05Z"
+
+}
+resource "azurerm_key_vault_secret" "admin_password" {
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "adminpassword"
+  value           = random_password.admin_password.result
+  expiration_date = "2025-03-02T15:04:05Z"
+
+}
+resource "azurerm_key_vault_secret" "user_password" {
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "userpassword"
+  value           = random_password.admin_password.result
   expiration_date = "2025-03-02T15:04:05Z"
 
 }

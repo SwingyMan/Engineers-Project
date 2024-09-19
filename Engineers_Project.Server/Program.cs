@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Infrastructure.Hubs;
+using Infrastructure.Seeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 // Now configure Autofac as the DI container
 builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
+builder.Services.AddTransient<DbSeeder>();
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -28,6 +30,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seeder
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+    seeder.Seed();
+}
 
 app.MapFallbackToFile("/index.html");
 app.MapHub<ChatHub>("/chat");
