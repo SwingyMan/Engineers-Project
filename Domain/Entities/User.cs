@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Domain.Entities;
@@ -27,6 +28,8 @@ public class User
     [JsonIgnore] public ICollection<Message> Messages { get; set; }
 
     [JsonIgnore] public ICollection<ChatUser> ChatUsers { get; set; }
+
+
 
 
     public JwtToken CreateToken(string username, string email, Guid id, string role)

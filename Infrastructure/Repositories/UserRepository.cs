@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     public async Task<bool> CheckEmail(string email)
     {
         var entity = await _context.Users.Where(x => x.Email == email).ToListAsync();
-        if (entity.Count == 0) return true;
-        return false;
+        if (entity.Count == 0) return false;
+        return true;
     }
 }
