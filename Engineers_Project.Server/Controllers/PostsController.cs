@@ -1,23 +1,25 @@
-﻿using Domain.Entities;
-using Domain.Interfaces;
+﻿using Application.Commands;
+using Application.DTOs;
+using Application.Queries;
+using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v1/[controller]/[action]")]
 [ApiController]
 public class PostsController : ControllerBase
 {
+    private readonly IMediator _mediator;
 
-    private readonly IPostsRepository _postsRepository;
-
-    public PostsController(IPostsRepository postsRepository)
+    public PostsController(IMediator mediator)
     {
-        _postsRepository = postsRepository;
+        _mediator = mediator;
     }
 
     /// <summary>
-    /// Retrieves a post by its Guid.
+    ///     Retrieves a post by its Guid.
     /// </summary>
     /// <param name="id">Post Guid</param>
     /// <returns>The retrieved post, if found.</returns>
@@ -27,40 +29,38 @@ public class PostsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        Post post = await _postsRepository.GetPostByIdAsync(id);
-        if (post == null)
-        {
-            return NotFound();
-        }
-        // TODO convert to DTO
-        return Ok();
+        var post = await _mediator.Send(new GenericGetByIdQuery<Post>(id));
+        if (post == null) return NotFound();
+        return Ok(post);
     }
 
     /// <summary>
-    /// Creates a post.
+    ///     Creates a post.
     /// </summary>
-    /// <param name="post">Post DTO</param>
+    /// <param name="genericAddCommand">Post DTO</param>
     /// <returns>The updated post.</returns>
     // POST api/posts/5
     [HttpPost]
-    public void Post([FromBody] string post)
+    public async Task<IActionResult> Post([FromBody] GenericAddCommand<PostDTO, Post> genericAddCommand)
     {
+        return Ok(await _mediator.Send(genericAddCommand));
     }
 
     /// <summary>
-    /// Updates a post.
+    ///     Updates a post.
     /// </summary>
     /// <param name="id">Post Guid</param>
     /// <param name="post">Updated post DTO</param>
     /// <returns>The updated post.</returns>
     // PUT api/posts/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string post)
+    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
     {
+        return Ok(await _mediator.Send(genericUpdateCommand));
     }
 
     /// <summary>
-    /// Deletes a post.
+    ///     Deletes a post.
     /// </summary>
     /// <param name="id">Post Guid</param>
     /// <response code="200">If the post was found.</response>
@@ -69,12 +69,13 @@ public class PostsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        Post post = await _postsRepository.GetPostByIdAsync(id);
-        if (post == null)
-        {
-            return NotFound();
-        }
-        await _postsRepository.DeletePostAsync(id);
+        await _mediator.Send(new GenericDeleteCommand<Post>(id));
         return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<Post> query)
+    {
+        return Ok(await _mediator.Send(query));
     }
 }

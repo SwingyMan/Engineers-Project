@@ -12,13 +12,13 @@
     <ItemGroup>
         <PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
         <PackageReference Include="coverlet.collector" Version="6.0.0" />
-        <PackageReference Include="Lamar" Version="13.0.4" />
-        <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="13.0.4" />
         <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="12.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="Moq" Version="4.20.70" />
         <PackageReference Include="NUnit" Version="3.14.0" />
         <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="xunit.extensibility.core" Version="2.8.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,15 +26,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="obj\**" />
+        <Compile Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="obj\**" />
+        <EmbeddedResource Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="obj\**" />
+        <None Remove="obj\**" />
     </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Application\Application.csproj"/>
+	</ItemGroup>
 
 </Project>
