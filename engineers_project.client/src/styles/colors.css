@@ -1,8 +1,10 @@
 :root{
     --green: rgb(197, 248, 42);
-    --white: rgb(255, 255, 255);
+    --white: #f8f9fa;
     --light-border:rgba(255, 255, 255, 0.5);
-    --grey: rgb(51, 51, 51);
+    --grey: #6c757d;
     --darkGrey: rgb(31, 31, 31);
-    --offBlack: rgb(20, 20, 20);
+    --offBlack: #141414;
+    
+    --blue: #003C7D;
 }

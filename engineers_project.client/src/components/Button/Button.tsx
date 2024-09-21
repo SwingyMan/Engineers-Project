@@ -14,6 +14,7 @@ const StyledButton = styled.button`
   line-height: 1em;
   font-weight: bold;
   cursor: pointer;
+  color: inherit;
 `;
 export function Button({value,onClick}:{value:string,onClick:Function}) {
   return <StyledButton onClick={()=>onClick()}>{value}</StyledButton>;
