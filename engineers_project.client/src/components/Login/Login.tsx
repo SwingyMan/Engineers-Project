@@ -10,7 +10,7 @@ const LoginDiv = styled.div`
   flex-direction: column;
   border-radius: 50px;
   border: 1px solid white;
-  margin-top: 20%;
+  margin-top: 10vh;
   padding: 10px;
   gap: 10px;
   color: var(--white);

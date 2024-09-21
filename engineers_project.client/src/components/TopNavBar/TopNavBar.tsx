@@ -3,7 +3,7 @@ import styles from "../TopNavBar/TopNavBar.module.css";
 
 const StyledTopBar = styled.div`
 
-  background-color: blue;
+  background-color: var(--blue);
   height: 50px;
   width: 100%;
   display: flex;

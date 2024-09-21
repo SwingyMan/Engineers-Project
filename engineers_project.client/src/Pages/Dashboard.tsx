@@ -18,14 +18,12 @@ export default function Dashboard() {
       <>
         <TopNavBar />
         <div>
-
-        <MessageBox
-          postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
+          <MessageBox
+            postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
           />
-        <MessageBox postInfo={post} />
-          </div>
+          <MessageBox postInfo={post} />
+        </div>
       </>
-      <h1>nie</h1>
       <div style={{ display: "flex" }}>
         <Outlet />
       </div>
