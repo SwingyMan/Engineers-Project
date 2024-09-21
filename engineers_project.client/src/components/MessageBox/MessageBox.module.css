@@ -2,7 +2,7 @@
 
 .MessageBox{
     padding:1em;
-    background-color: var(--darkGrey);
+    background-color: dodgerblue;
     margin: 1em;
     border-radius: 10px;
     border: 1px solid var(--grey);

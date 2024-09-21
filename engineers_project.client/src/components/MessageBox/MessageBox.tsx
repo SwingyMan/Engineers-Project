@@ -9,7 +9,7 @@ import { TimeElapsed } from "../../Utility/TimeElapsed"
 export function MessageBox(props: { postInfo: Post}){
     
     return<>
-    <div className={styles.MessageBox}>
+    <div className={styles.MessageBox} style={{marginTop:'60px'}}>
         <div className={styles.header}>     
             <ImageDiv  width={40} url={props.postInfo.img}/>
             <div>

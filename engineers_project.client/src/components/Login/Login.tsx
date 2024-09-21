@@ -36,11 +36,11 @@ export function Login() {
 		Password: '',
 	});
   const [Login, setLogin] = useState("Login");
-  const [Message, setMessage] = useState("Don't have an account");
+  const [Message, setMessage] = useState("Don't have an account?");
   const [otherAction, setOtherAction] = useState("Register");
   let size = 120;
   function update() {
-    let msg = ["Don't have an account", "Already have an account"];
+    let msg = ["Don't have an account?", "Already have an account"];
     if (Message == msg[0]) {
       setLogin("Register");
       setOtherAction("Login");
@@ -77,12 +77,12 @@ const handleSubmitEvent = (e: { preventDefault: () => void }) => {
               x="0"
               y="0"
               height={"100%"}
-              href={"src/assets/logo-politechnika.png"}
+              href={"src/assets/polsl.png"}
               width={"100%"}
             />
           </svg>
           <h1>{Login}</h1>
-          <form
+          <form style={{textAlign:'center'}}
             onSubmit={handleSubmitEvent}
           >
             <InputWraper>
@@ -103,7 +103,7 @@ const handleSubmitEvent = (e: { preventDefault: () => void }) => {
                 placeholder="Password" onChange={handleInput}
               />
             </InputWraper>
-
+            
             <Button onClick={() => {}} value={Login} />
           </form>
           <div>{Message}</div>
