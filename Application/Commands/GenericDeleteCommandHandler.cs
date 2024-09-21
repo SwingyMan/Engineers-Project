@@ -11,6 +11,7 @@ public class GenericDeleteCommandHandler<T> : IRequestHandler<GenericDeleteComma
     {
         _genericRepository = genericRepository;
     }
+
     public async Task Handle(GenericDeleteCommand<T> request, CancellationToken cancellationToken)
     {
         await _genericRepository.Delete(request.Id);

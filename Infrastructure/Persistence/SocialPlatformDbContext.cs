@@ -1,12 +1,15 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Infrastructure.Seeder;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace Infrastructure.Persistence;
 
 public class SocialPlatformDbContext : DbContext
 {
+    public SocialPlatformDbContext()
+    {
+
+    }
     public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
         : base(options)
     {
@@ -27,8 +30,6 @@ public class SocialPlatformDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-
 
         // User and Role relationship
         modelBuilder.Entity<User>()
@@ -71,9 +72,9 @@ public class SocialPlatformDbContext : DbContext
 
         // ChatUser relationships
         modelBuilder.Entity<ChatUser>() //
-        .HasOne(cu => cu.User)
-        .WithMany(u => u.ChatUsers)
-        .HasForeignKey(cu => cu.UserId);
+            .HasOne(cu => cu.User)
+            .WithMany(u => u.ChatUsers)
+            .HasForeignKey(cu => cu.UserId);
 
         modelBuilder.Entity<ChatUser>()
             .HasOne(cu => cu.Chat)

@@ -1,7 +1,6 @@
 ﻿using Infrastructure.IRepositories;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -13,14 +12,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         _context = context;
     }
-    public async Task<IEnumerable<T>> GetAll(int page, int limit, params Expression<Func<T, object>>[] includeProperties)
+
+    public async Task<IEnumerable<T>> GetAll()
     {
-        var queries = _context.Set<T>();
-        foreach (var VARIABLE in includeProperties)
-        {
-            queries.Include(VARIABLE);
-        }
-        return await queries.ToListAsync();
+        return await _context.Set<T>().ToListAsync();
     }
 
     public async Task<T> GetByID(Guid guid)

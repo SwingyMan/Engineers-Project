@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-internal class PostsRepository(SocialPlatformDbContext _context) : IPostsRepository
+public class PostsRepository(SocialPlatformDbContext _context) : IPostsRepository
 {
-
     public async Task<Post> GetPostByIdAsync(Guid postId)
     {
         return await _context.Set<Post>().FindAsync(postId);

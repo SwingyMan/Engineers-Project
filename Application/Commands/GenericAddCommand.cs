@@ -8,5 +8,6 @@ public class GenericAddCommand<T, D> : IRequest<D>
     {
         this.entity = entity;
     }
+
     public T entity { get; set; }
 }

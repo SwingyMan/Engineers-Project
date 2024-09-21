@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Domain.Entities;
 
 public class BoardPost
 {
-    [Key]
-    public int Id { get; set; }
+    [Key] public int Id { get; set; }
+
     public int PostsId { get; set; }
     public string Availability { get; set; }
 
-    public Post Post { get; set; }
+    [JsonIgnore] public Post Post { get; set; }
 }
