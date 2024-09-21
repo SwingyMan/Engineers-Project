@@ -31,8 +31,7 @@ public class PostsController : ControllerBase
     {
         var post = await _mediator.Send(new GenericGetByIdQuery<Post>(id));
         if (post == null) return NotFound();
-        // TODO convert to DTO
-        return Ok();
+        return Ok(post);
     }
 
     /// <summary>
