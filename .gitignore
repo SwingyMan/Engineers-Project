@@ -14,3 +14,5 @@
 /Infrastructure.Tests/obj
 /Engineers_Project.Server/obj
 /Engineers_Project.Server/bin
+/Application.Tests/Application.Tests.csproj.orig
+*.orig
