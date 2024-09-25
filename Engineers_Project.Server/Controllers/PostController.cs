@@ -9,11 +9,11 @@ namespace Engineers_Project.Server.Controllers;
 
 [Route("api/v1/[controller]/[action]")]
 [ApiController]
-public class PostsController : ControllerBase
+public class PostController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PostsController(IMediator mediator)
+    public PostController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -25,14 +25,13 @@ public class PostsController : ControllerBase
     /// <returns>The retrieved post, if found.</returns>
     /// <response code="200">Returns the post if found.</response>
     /// <response code="404">If the post is not found.</response>
-    // GET api/posts/5
+    // GET api/post/get/5
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
         var post = await _mediator.Send(new GenericGetByIdQuery<Post>(id));
         if (post == null) return NotFound();
-        // TODO convert to DTO
-        return Ok();
+        return Ok(post);
     }
 
     /// <summary>
@@ -40,7 +39,7 @@ public class PostsController : ControllerBase
     /// </summary>
     /// <param name="genericAddCommand">Post DTO</param>
     /// <returns>The updated post.</returns>
-    // POST api/posts/5
+    // POST api/post/post
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] GenericAddCommand<PostDTO, Post> genericAddCommand)
     {
@@ -50,10 +49,9 @@ public class PostsController : ControllerBase
     /// <summary>
     ///     Updates a post.
     /// </summary>
-    /// <param name="id">Post Guid</param>
-    /// <param name="post">Updated post DTO</param>
+    /// <param name="genericUpdateCommand">Update command</param>
     /// <returns>The updated post.</returns>
-    // PUT api/posts/5
+    // PUT api/post/put
     [HttpPut("{id}")]
     public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
     {
@@ -66,7 +64,7 @@ public class PostsController : ControllerBase
     /// <param name="id">Post Guid</param>
     /// <response code="200">If the post was found.</response>
     /// <response code="404">If the post was not found.</response>
-    // DELETE api/posts/5
+    // DELETE api/post/delete/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -74,6 +72,12 @@ public class PostsController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    ///     Retrieves all posts.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns>All tags</returns>
+    // POST api/post/getall
     [HttpPost]
     public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<Post> query)
     {
