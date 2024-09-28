@@ -22,6 +22,7 @@ export default function Dashboard() {
             postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
           />
           <MessageBox postInfo={post} />
+          <MessageBox postInfo={post} /><MessageBox postInfo={post} />
         </div>
       </>
       <div style={{ display: "flex" }}>

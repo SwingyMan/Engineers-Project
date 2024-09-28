@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledButton = styled.button`
   //Login only temp
   border-radius: 10px;
-  background-color: #3b3b3b;
+  background-color: rgba(0, 0, 0, 0.5);
   width: 40%;
   border: 1px solid var(--light-border);
   text-align: center;

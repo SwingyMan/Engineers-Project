@@ -2,10 +2,11 @@
 
 .MessageBox{
     padding:1em;
-    background-color: var(--darkGrey);
+    background-color: rgba(96, 133, 175, 0.8);
+    /* background-color: #406d9e; */
     margin: 1em;
     border-radius: 10px;
-    border: 1px solid var(--grey);
+    border: 1px solid var(--darkGrey);
     align-items: flex-start;
 }
 
@@ -26,7 +27,7 @@
     flex-direction: row;
 }
 .MessageBox hr{
-border: 1px solid var(--grey);
+border: 1px solid var(--darkGrey);
 }
 .MessageBox .date{
     font-size: small;

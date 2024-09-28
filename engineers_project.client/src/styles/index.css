@@ -7,7 +7,9 @@
   height: 100vh;
   width: 100vw;
   display: flex;
-  background-color: var(--grey);
+  /* background-color: #3b3b3b;  */
+  background: rgb(2,0,36);
+background: linear-gradient(135deg, rgba(2,0,36,1) 0%, #003c7d 80%, rgba(64, 109, 158,1) 100%);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

@@ -9,7 +9,7 @@ const LoginDiv = styled.div`
   align-items: center;
   flex-direction: column;
   border-radius: 50px;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   margin-top: 10vh;
   padding: 10px;
   gap: 10px;
@@ -35,7 +35,7 @@ const InputWraper = styled.div`
   margin: 5px;
   border: 1px solid var(--light-border);
   border-radius: 10px;
-  background-color: #3b3b3b;
+  background-color: var(--whiteTransparent10);
 `;
 const StyledInput = styled.input`
   height: 100%;
