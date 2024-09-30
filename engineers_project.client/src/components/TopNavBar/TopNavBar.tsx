@@ -1,44 +1,38 @@
-import { MdSearch } from "react-icons/md";
 import { styled } from "styled-components";
+import { SearchBar } from "../SearchBar/SearchBar";
 
 const StyledTopBar = styled.div`
   background-color: var(--blue);
   height: 50px;
   width: 100%;
   display: flex;
+  justify-content:center;
 `;
 const Logo = styled.div`
   margin: 5px;
+  position: absolute;
+  left:0;
   & > {
     width: 40px;
     height: 40px;
   }
 `;
-const SearchBar = styled.div`
-  display: flex;
-  background-color: rgba(234, 245, 241, 0.295);
-  height: 40px;
-  width: 30%;
-  z-index: 3;
-  border-radius: 30px;
-  margin: 5px auto;
-  box-sizing: border-box;
-  color: white;
-  align-items: center;
-  padding-left:5px;
-`;
-const Input = styled.input`
-  background-color: transparent;
-  width: 100%;
-  border: 0;
-  color: inherit;
-  &:focus-visible {
-    outline: none;
-  }
-  &::placeholder{
-    color: inherit;
-  }
-`;
+const table = [
+  {"id": "1", "value": "Apple"},
+  {"id": "2", "value": "Banana"},
+  {"id": "3", "value": "Cherry"},
+  {"id": "4", "value": "Date"},
+  {"id": "5", "value": "Elderberry"},
+  {"id": "6", "value": "Fig"},
+  {"id": "7", "value": "Grape"},
+  {"id": "8", "value": "Honeydew"},
+  {"id": "9", "value": "Kiwi"},
+  {"id": "10", "value": "Lemon"}
+]
+function filter(searchInput:string){
+  return(table.filter(r=> r.value.includes(searchInput)))
+
+}
 export function TopNavBar() {
   return (
     <>
@@ -46,10 +40,7 @@ export function TopNavBar() {
         <Logo>
           <img height={40} width={40} src="src/assets/logo-politechnika.png" />
         </Logo>
-        <SearchBar>
-          <MdSearch size={32} />
-          <Input spellCheck={false} placeholder="Szukaj"/>
-        </SearchBar>
+        <SearchBar searchFunction={filter}/>
       </StyledTopBar>
     </>
   );

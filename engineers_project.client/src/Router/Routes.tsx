@@ -4,6 +4,8 @@ import ErrorPage from "../Pages/ErrorPage";
 import { LoginPage } from "../Pages/LoginPage";
 import PrivateRoute from "./PrivateRoute";
 
+//dorobić więcej jak jedną stronę
+
 export const router = createBrowserRouter([
   {
     path: "/",

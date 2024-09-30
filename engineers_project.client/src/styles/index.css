@@ -1,15 +1,16 @@
-*{
+* {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
 }
+
 #root {
   height: 100vh;
   width: 100vw;
   display: flex;
   /* background-color: #3b3b3b;  */
-  background: rgb(2,0,36);
-background: linear-gradient(135deg, rgba(2,0,36,1) 0%, #003c7d 80%, rgba(64, 109, 158,1) 100%);
+  background: rgb(2, 0, 36);
+  background: linear-gradient(135deg, rgba(2, 0, 36, 1) 0%, #003c7d 80%, rgba(64, 109, 158, 1) 100%);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -20,4 +21,12 @@ background: linear-gradient(135deg, rgba(2,0,36,1) 0%, #003c7d 80%, rgba(64, 109
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  /*
+   zrobić css do scrolla?
+  
+    prawdopodobnie nawet więcej niż jeden
+  */
+  &>::-webkit-scrollbar {
+    width: 0;
+  }
 }
