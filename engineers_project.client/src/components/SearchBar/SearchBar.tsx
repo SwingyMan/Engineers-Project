@@ -9,12 +9,12 @@ const StyledSearchBar = styled.div`
   font-size: 16px;
   z-index: 1;
 `
-const SearchInput = styled.div<{active:boolean}>`
+const SearchInput = styled.div<{active:string}>`
   display: flex;
   background-color: rgb(69, 114, 159);
   height: 40px;
-  border-radius: ${(props)=>props.active?"20px":"20px 20px 0px 0px"};
-  margin: ${(props)=>props.active?"5px auto":"5px auto 0px auto"};
+  border-radius: ${(props)=>props.active=="true"?"20px":"20px 20px 0px 0px"};
+  margin: ${(props)=>props.active=="true"?"5px auto":"5px auto 0px auto"};
   box-sizing: border-box;
   color: white;
   align-items: center;
@@ -70,7 +70,7 @@ export function SearchBar({ searchFunction }: searchBar) {
   }, [searchValue]);
   return (
     <StyledSearchBar>
-      <SearchInput active={searchValue.length==0}>
+      <SearchInput active={(searchValue.length==0).toString()}>
         <MdSearch size={32} />
         <StyledInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
       </SearchInput>

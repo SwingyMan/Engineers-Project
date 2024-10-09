@@ -1,8 +1,12 @@
-import styles from "../MessageBox/MessageBox.module.css"
-
+import styled from "styled-components";
+const StyledImage = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+`
  export function ImageDiv(props: { width: number; url: string | undefined; }){
     return<>
-            <div className={styles.image} > 
+            <StyledImage> 
             <svg aria-hidden="true" width={props.width} height={props.width}>
             <mask id=":circ:">                
             <circle cx={props.width/2} cy={props.width/2} r={props.width/2} fill="white" ></circle>
@@ -13,6 +17,6 @@ import styles from "../MessageBox/MessageBox.module.css"
                 <circle stroke="grba(0,0,0,0.05)" fill="none" cx={props.width/2} cy={props.width/2} r={props.width/2} ></circle>
             </g>
             </svg>
-            </div>  
+            </StyledImage>  
     </>
 }

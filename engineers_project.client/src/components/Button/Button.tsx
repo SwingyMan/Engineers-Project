@@ -4,7 +4,7 @@ const StyledButton = styled.button`
   //Login only temp
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.5);
-  width: 40%;
+  width: fit-content;
   border: 1px solid var(--light-border);
   text-align: center;
   height: 3em;

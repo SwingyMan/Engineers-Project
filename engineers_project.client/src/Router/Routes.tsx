@@ -3,6 +3,7 @@ import Dashboard from "../Pages/Dashboard";
 import ErrorPage from "../Pages/ErrorPage";
 import { LoginPage } from "../Pages/LoginPage";
 import PrivateRoute from "./PrivateRoute";
+import { FeedPage } from "../Pages/FeedPage";
 
 //dorobić więcej jak jedną stronę
 
@@ -14,6 +15,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element:(
+          <PrivateRoute>
+            <FeedPage/>
+          </PrivateRoute>
+        ),
         errorElement: (
           <PrivateRoute>
             <ErrorPage />
@@ -21,6 +27,13 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/post"
+
+  },
+  { path:"/profile"},
+  { path:"/group"
   },
   {
     path: "/login",
