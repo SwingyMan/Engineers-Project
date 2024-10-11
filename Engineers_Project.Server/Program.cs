@@ -4,6 +4,7 @@ using Infrastructure.Hubs;
 using Infrastructure.Seeder;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<DbSeeder>();
+
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();

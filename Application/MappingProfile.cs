@@ -11,8 +11,6 @@ public class MappingProfile : Profile
         CreateMap<UserDTO, User>();
         CreateMap<UserLoginDTO, User>();
         CreateMap<UserRegisterDTO, User>();
-        CreateMap<TagDTO, Tag>();
-        CreateMap<PostsTagDTO, PostsTag>();
         CreateMap<PostDTO, Post>();
         CreateMap<MessageDTO, Message>();
         CreateMap<GroupUserDTO, GroupUser>();
