@@ -19,6 +19,10 @@ public class User
     public DateTime CreatedAt { get; set; }
     public string IpOfRegistry { get; set; }
 
+
+    public Guid? ActivationToken { get; set; }
+    public bool IsActivated { get; set; } = false;
+
     [JsonIgnore] public Role Role { get; set; }
 
     [JsonIgnore] public ICollection<GroupUser> GroupUsers { get; set; }
