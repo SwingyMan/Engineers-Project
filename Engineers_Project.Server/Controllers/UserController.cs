@@ -63,4 +63,19 @@ public class UserController : Controller
         await _mediator.Send(new GenericDeleteCommand<User>(guid));
         return Ok();
     }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> ActivateAccount([FromQuery] Guid token)
+    {
+        var result = await _mediator.Send(new ActivateAccountCommand(token));
+        if (result)
+        {
+            return Ok("Account activated successfully.");
+        }
+        else
+        {
+            return BadRequest("Invalid or expired activation link.");
+        }
+    }
 }
