@@ -9,77 +9,78 @@ namespace Engineers_Project.Server.Controllers;
 
 [Route("api/v1/[controller]/[action]")]
 [ApiController]
-public class GroupPostController : ControllerBase
+public class GroupUserController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public GroupPostController(IMediator mediator)
+    public GroupUserController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     /// <summary>
-    ///     Retrieves a groupPost by its Guid.
+    ///     Retrieves a groupUser by its Guid.
     /// </summary>
-    /// <param name="id">GroupPost Guid</param>
-    /// <returns>The retrieved post, if found.</returns>
-    /// <response code="200">Returns the groupPost if found.</response>
-    /// <response code="404">If the groupPost is not found.</response>
-    // GET api/groupPost/get/5
+    /// <param name="id">groupUser Guid</param>
+    /// <returns>The retrieved groupUser, if found.</returns>
+    /// <response code="200">Returns the groupUser if found.</response>
+    /// <response code="404">If the GrougroupUserpUser is not found.</response>
+    // GET api/groupUser/get/5
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var post = await _mediator.Send(new GenericGetByIdQuery<GroupPost>(id));
-        if (post == null) return NotFound();
-        return Ok(post);
+        var groupUser = await _mediator.Send(new GenericGetByIdQuery<GroupUser>(id));
+        if (groupUser == null) return NotFound();
+        return Ok(groupUser);
     }
 
     /// <summary>
-    ///     Creates a groupPost.
+    ///     Creates a groupUser.
     /// </summary>
-    /// <param name="genericAddCommand">GroupPost DTO</param>
-    /// <returns>The updated post.</returns>
-    // POST api/groupPost/post
+    /// <param name="genericAddCommand">GroupUser DTO</param>
+    /// <returns>The updated groupUser.</returns>
+    // POST api/groupUser/post
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GenericAddCommand<GroupPostDTO, GroupPost> genericAddCommand)
+    public async Task<IActionResult> Post([FromBody] GenericAddCommand<GroupUserDTO, GroupUser> genericAddCommand)
     {
         return Ok(await _mediator.Send(genericAddCommand));
     }
 
     /// <summary>
-    ///     Updates a groupPost.
+    ///     Updates a groupUser.
     /// </summary>
     /// <param name="genericUpdateCommand">Update command</param>
-    /// <returns>The updated groupPost.</returns>
-    // PUT api/groupPost/put
+    /// <returns>The updated groupUser.</returns>
+    // PUT api/groupUser/put
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<GroupPostDTO, GroupPost> genericUpdateCommand)
+    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<GroupUserDTO, GroupUser> genericUpdateCommand)
     {
         return Ok(await _mediator.Send(genericUpdateCommand));
     }
 
     /// <summary>
-    ///     Deletes a groupPost.
+    ///     Deletes a groupUser.
     /// </summary>
-    /// <param name="id">GroupPost Guid</param>
-    /// <response code="200">If the groupPost was found.</response>
-    /// <response code="404">If the groupPost was not found.</response>
-    // DELETE api/groupPost/delete/5
+    /// <param name="id">GroupUser Guid</param>
+    /// <response code="200">If the groupUser was found.</response>
+    /// <response code="404">If the groupUser was not found.</response>
+    // DELETE api/groupUser/delete/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _mediator.Send(new GenericDeleteCommand<GroupPost>(id));
+        // TODO : Check if user is a member of the group and is the creator of the post
+        await _mediator.Send(new GenericDeleteCommand<GroupUser>(id));
         return Ok();
     }
 
     /// <summary>
-    ///     Retrieves all groupPosts.
+    ///     Retrieves all groupUsers.
     /// </summary>
     /// <param name="query"></param>
-    /// <returns>All groupPosts</returns>
-    // POST api/groupPost/getall
+    /// <returns>All groupUsers</returns>
+    // POST api/groupUser/getall
     [HttpPost]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupPost> query)
+    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupUser> query)
     {
         return Ok(await _mediator.Send(query));
     }

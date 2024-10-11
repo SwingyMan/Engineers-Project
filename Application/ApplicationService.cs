@@ -12,7 +12,9 @@ public static class ApplicationService
     public static void AddApplicationService(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationService).Assembly));
+
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<User>, IEnumerable<User>>),
             typeof(GenericGetAllQueryHandler<User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<User>, User>),
