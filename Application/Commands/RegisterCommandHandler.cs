@@ -67,13 +67,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
 
     private async Task SendActivationEmail(User user)
     {
-        var activationLink = $"https://localhost/api/v1/User/ActivateAccount?token={user.ActivationToken}";
+        var activationLink = $"https://localhost:7290/api/v1/User/ActivateAccount?token={user.ActivationToken}";
         var emailBody = $"<html><body>" +
                         $"<p>Hello {user.Username},</p>" +
                         $"<p>Please activate your account by clicking the link below:</p>" +
                         $"<p><a href=\"{activationLink}\">Activate Account</a></p>" +
-                        $"<p>This link will expire in 24 hours.</p>" +
-                        $"<p>Thank you!</p>" +
                         $"</body></html>";
 
         await _emailSender.SendEmailAsync(user.Email, "Account Activation", emailBody);
