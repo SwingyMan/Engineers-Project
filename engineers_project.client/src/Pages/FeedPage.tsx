@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { MessageBox } from "../components/MessageBox/MessageBox";
 import { Post } from "../components/MessageBox/PostClass";
 import { ChatBox } from "../components/RightNavBar/ChatBox";
+import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 
 let post = new Post(
     "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
@@ -25,10 +26,7 @@ const StyledPage = styled.div`
     display: flex;
     overflow: auto;
   `
-const ChatFeed = styled.div`
-    overflow-y: scroll;
-    width: 20%;
-`
+
 export function FeedPage() {
     return (
         <StyledPage>
@@ -41,7 +39,8 @@ export function FeedPage() {
                 <MessageBox postInfo={post} /><MessageBox postInfo={post} />
             </PostFeed>
             <ChatFeed>
-            <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" Date={ Date.now().toString()}/>
+            <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" ActivityDate={ Date.now()}/>
+            <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" ActivityDate={ Date.now()}/>
             </ChatFeed>
         </StyledPage>
     )
