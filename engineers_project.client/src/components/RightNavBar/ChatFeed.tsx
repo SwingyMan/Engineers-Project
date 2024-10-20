@@ -8,7 +8,7 @@ const StyledChatFeed = styled.div`
   padding-right: 5px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+
 `;
 export function ChatFeed({children}:Children) {
   return (<StyledChatFeed>

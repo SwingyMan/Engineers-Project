@@ -5,6 +5,7 @@
     --grey: #6c757d;
     --darkGrey: rgb(31, 31, 31);
     --offBlack: #141414;
-    --whiteTransparent10:rgba(248, 249, 250, 0.2);
+    --whiteTransparent20:rgba(248, 249, 250, 0.2);
+    --whiteTransparent90:rgba(248, 249, 250, 0.9);
     --blue: #003C7D;
 }
