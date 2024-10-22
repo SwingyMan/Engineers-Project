@@ -35,7 +35,7 @@ const InputWraper = styled.div`
   margin: 5px;
   border: 1px solid var(--light-border);
   border-radius: 10px;
-  background-color: var(--whiteTransparent10);
+  background-color: var(--whiteTransparent20);
 `;
 const StyledInput = styled.input`
   height: 100%;
