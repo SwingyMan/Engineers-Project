@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { MessageBox } from "../components/MessageBox/MessageBox";
 import { Post } from "../components/MessageBox/PostClass";
 import { ChatBox } from "../components/RightNavBar/ChatBox";
+import { Message } from "../components/Chat/Message";
 
 let post = new Post(
     "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
@@ -33,12 +34,16 @@ export function FeedPage() {
     return (
         <StyledPage>
             <PostFeed>
-                <MessageBox
-                    postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
-                />
-                <MessageBox postInfo={post} />
-                <MessageBox postInfo={post} /><MessageBox postInfo={post} />
-                <MessageBox postInfo={post} /><MessageBox postInfo={post} />
+                <Message date={Date.now()} send={1} message="qwefasdfasdfadsfasdfasdf" sender="qwerty"/>
+                <Message date={Date.now()} send={0} message="qwefasdfasdfadsfasdfasdf" sender="ytrewq"/>
+                <Message date={Date.now()} send={1} message="qwefasdfasdfadsfasdfasdf" sender="qwerty"/>
+
+                {/* <MessageBox 
+                    // postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
+                // />*/}
+                {/* <MessageBox postInfo={post} /> */}
+                {/* <MessageBox postInfo={post} /><MessageBox postInfo={post} /> */}
+                {/* <MessageBox postInfo={post} /><MessageBox postInfo={post} /> */}
             </PostFeed>
             <ChatFeed>
             <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" Date={ Date.now().toString()}/>
