@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.Queries;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
@@ -80,6 +81,7 @@ public class GroupUserController : ControllerBase
     /// <returns>All groupUsers</returns>
     // POST api/groupUser/getall
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupUser> query)
     {
         return Ok(await _mediator.Send(query));

@@ -40,12 +40,14 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<User> getQuery)
     {
         return Ok(await _mediator.Send(getQuery));
     }
 
     [HttpGet]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetById(Guid guid)
     {
         return Ok(await _mediator.Send(new GenericGetByIdQuery<User>(guid)));
