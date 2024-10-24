@@ -3,10 +3,12 @@ using Application.DTOs;
 using Application.Queries;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
 
+[Authorize(Policy = "ChatMemberOrAdmin")]
 [Route("api/v1/[controller]/[action]")]
 [ApiController]
 public class ChatController : ControllerBase
@@ -24,6 +26,7 @@ public class ChatController : ControllerBase
     /// <param name="id">Chat Guid</param>
     /// <returns>The retrieved Chat, if found.</returns>
     [HttpGet("{id}")]
+
     public async Task<IActionResult> Get(Guid id)
     {
         var chat = await _mediator.Send(new GenericGetByIdQuery<ChatDTO>(id));
@@ -69,7 +72,7 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="query"></param>
     /// <returns>All Chats</returns>
-    [HttpPost]
+    [HttpGet]
     public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<ChatDTO> query)
     {
         return Ok(await _mediator.Send(query));

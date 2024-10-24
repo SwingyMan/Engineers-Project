@@ -4,9 +4,11 @@ using Application.Queries;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Engineers_Project.Server.Controllers;
 
+[Authorize(Policy = "ChatMessageMemberOrAdmin")]
 [Route("api/v1/[controller]/[action]")]
 [ApiController]
 public class ChatMessageController : ControllerBase
