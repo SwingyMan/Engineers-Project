@@ -66,24 +66,7 @@ builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<DbSeeder>();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "Test.com",
-        ValidAudience = "Test.com",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisismySecretKey213213123213231123123123124325758346456436245621345124321414124214421421421"))
-    };
-});
+
 
 var app = builder.Build();
 app.UseDefaultFiles();

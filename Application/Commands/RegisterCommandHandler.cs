@@ -1,5 +1,7 @@
 ﻿using Application.Queries;
 using AutoMapper;
+using Azure.Security.KeyVault.Keys;
+using Azure.Security.KeyVault.Secrets;
 using BCrypt.Net;
 using Domain.Entities;
 using Infrastructure.Persistence;
@@ -14,12 +16,13 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
-
-    public RegisterCommandHandler(SocialPlatformDbContext context, IMapper mapper, IMediator mediator)
+    private readonly KeyClient _keyClient;
+    public RegisterCommandHandler(SocialPlatformDbContext context, IMapper mapper, IMediator mediator,KeyClient keyClient)
     {
         _mapper = mapper;
         _context = context;
         _mediator = mediator;
+        _keyClient = keyClient;
     }
 
     public async Task<JwtToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -51,7 +54,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
             await _context.SaveChangesAsync(cancellationToken);
 
             return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id,
-                entity.Entity.Role.Name);
+                entity.Entity.Role.Name,_keyClient.GetKey("jwtkey").Value.ToString());
         }
 
         return null;
