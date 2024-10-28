@@ -19,6 +19,8 @@ public static class ApplicationService
             typeof(GenericGetAllQueryHandler<User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<User>, User>),
             typeof(GenericGetByIdQueryHandler<User>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericUpdateCommand<UserDTO, User>, User>),
+            typeof(GenericUpdateCommandHandler<UserDTO, User>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<User>>),
             typeof(GenericDeleteCommandHandler<User>));
 
