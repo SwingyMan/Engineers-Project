@@ -14,7 +14,7 @@ public class User
 
     public string Username { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
+    [JsonIgnore] public string Password { get; set; }
     public Guid RoleId { get; set; }
     public DateTime CreatedAt { get; set; }
     public string IpOfRegistry { get; set; }
