@@ -28,6 +28,7 @@ public class RoleController : ControllerBase
     /// <response code="404">If the role is not found.</response>
     // GET api/role/get/5
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> Get(Guid id)
     {
         var role = await _mediator.Send(new GenericGetByIdQuery<Role>(id));
@@ -42,6 +43,7 @@ public class RoleController : ControllerBase
     /// <returns>The updated role.</returns>
     // POST api/role/role
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Post([FromBody] GenericAddCommand<RoleDTO, Role> genericAddCommand)
     {
         return Ok(await _mediator.Send(genericAddCommand));
@@ -54,6 +56,7 @@ public class RoleController : ControllerBase
     /// <returns>The updated role.</returns>
     // PUT api/role/put
     [HttpPut("{id}")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<RoleDTO, Role> genericUpdateCommand)
     {
         return Ok(await _mediator.Send(genericUpdateCommand));
@@ -67,6 +70,7 @@ public class RoleController : ControllerBase
     /// <response code="404">If the role was not found.</response>
     // DELETE api/role/delete/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _mediator.Send(new GenericDeleteCommand<Role>(id));

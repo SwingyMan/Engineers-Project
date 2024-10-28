@@ -42,6 +42,7 @@ public class PostController : ControllerBase
     /// <returns>The updated post.</returns>
     // POST api/post/post
     [HttpPost]
+    [Authorize(Roles="USER")]
     public async Task<IActionResult> Post([FromBody] GenericAddCommand<PostDTO, Post> genericAddCommand)
     {
         return Ok(await _mediator.Send(genericAddCommand));
@@ -54,8 +55,10 @@ public class PostController : ControllerBase
     /// <returns>The updated post.</returns>
     // PUT api/post/put
     [HttpPut("{id}")]
+    //[Authorize(Roles = "USER")] 
     public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
     {
+        var x = Request.HttpContext;
         return Ok(await _mediator.Send(genericUpdateCommand));
     }
 
