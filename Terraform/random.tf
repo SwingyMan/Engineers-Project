@@ -7,3 +7,6 @@ resource "random_password" "admin_password" {
 resource "random_password" "user_password" {
   length = 10
 }
+resource "random_password" "jwt_password" {
+  length = 50
+}

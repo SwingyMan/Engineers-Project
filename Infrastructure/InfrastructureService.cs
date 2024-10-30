@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -23,9 +24,9 @@ public static class InfrastructureService
 {
     public static void AddInfrastructureService(this IServiceCollection serviceCollection)
     {
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
         var keyvault = new SecretClient(new Uri("https://socialplatformkv.vault.azure.net/"),
             new DefaultAzureCredential());
-        var key = new KeyClient(new Uri("https://socialplatformkv.vault.azure.net/"),new DefaultAzureCredential());
         var dbkey = $"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}";
         var insightskey = keyvault.GetSecret("insightskey").Value.Value;
         serviceCollection.AddAzureClients(clientbuilder =>
@@ -42,8 +43,6 @@ public static class InfrastructureService
         
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
-        serviceCollection.AddSingleton<KeyClient>(sp => new KeyClient(new Uri("https://socialplatformkv.vault.azure.net/"),
-            new DefaultAzureCredential()));
         serviceCollection.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,7 +58,7 @@ public static class InfrastructureService
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "Test.com",
                     ValidAudience = "Test.com",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.GetKey("jwtkey").Value.ToString()))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwtkey"]))
                 };
             });
         serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

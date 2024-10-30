@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Domain.Entities;
@@ -34,8 +35,9 @@ public class User
 
 
 
-    public JwtToken CreateToken(string username, string email, Guid id, string role, string jwtKey)
+    public JwtToken CreateToken(string username, string email, Guid id, string role)
     {
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
         var claims = new[]
         {
             new Claim("username", username),
@@ -43,8 +45,7 @@ public class User
             new Claim("id", id.ToString()),
             new Claim("role", role)
         };
-
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         var jwtSecurityToken = new JwtSecurityToken(
