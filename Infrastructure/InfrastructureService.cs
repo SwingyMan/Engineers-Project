@@ -1,4 +1,6 @@
-﻿using Azure.Identity;
+﻿using System.Text;
+using Azure.Identity;
+using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
 using Domain.Interfaces;
 using Infrastructure.Blobs;
@@ -6,11 +8,13 @@ using Infrastructure.ContentSafety;
 using Infrastructure.IRepositories;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 namespace Infrastructure;
@@ -21,6 +25,7 @@ public static class InfrastructureService
     {
         var keyvault = new SecretClient(new Uri("https://socialplatformkv.vault.azure.net/"),
             new DefaultAzureCredential());
+        var key = new KeyClient(new Uri("https://socialplatformkv.vault.azure.net/"),new DefaultAzureCredential());
         var dbkey = $"Host=socialplatformser.postgres.database.azure.com;Database=socialplatformdb;Username=marcin;Password={keyvault.GetSecret("dbkey").Value.Value}";
         var insightskey = keyvault.GetSecret("insightskey").Value.Value;
         serviceCollection.AddAzureClients(clientbuilder =>
@@ -34,9 +39,29 @@ public static class InfrastructureService
                 clientbuilder.UseCredential(new DefaultAzureCredential());
             }
         );
-
+        
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
+        serviceCollection.AddSingleton<KeyClient>(sp => new KeyClient(new Uri("https://socialplatformkv.vault.azure.net/"),
+            new DefaultAzureCredential()));
+        serviceCollection.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "Test.com",
+                    ValidAudience = "Test.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.GetKey("jwtkey").Value.ToString()))
+                };
+            });
         serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         serviceCollection.AddScoped(typeof(IBlobInfrastructure), typeof(BlobInfrastructure));
         serviceCollection.AddScoped(typeof(IUserRepository), typeof(UserRepository));
