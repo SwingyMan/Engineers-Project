@@ -24,8 +24,12 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<User>>),
             typeof(GenericDeleteCommandHandler<User>));
 
-        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<PostDTO, Post>, Post>),
-            typeof(GenericAddCommandHandler<PostDTO, Post>));
+        //serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<PostDTO, Post>, Post>),
+        //    typeof(GenericAddCommandHandler<PostDTO, Post>));
+
+        serviceCollection.AddTransient(typeof(IRequestHandler<AddPostCommand, Post>),
+            typeof(AddPostCommandHandler));
+
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<Post>, IEnumerable<Post>>),
             typeof(GenericGetAllQueryHandler<Post>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Post>, Post>),

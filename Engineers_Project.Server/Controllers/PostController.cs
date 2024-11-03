@@ -5,6 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Engineers_Project.Server.Controllers;
 
@@ -38,14 +39,24 @@ public class PostController : ControllerBase
     /// <summary>
     ///     Creates a post.
     /// </summary>
-    /// <param name="genericAddCommand">Post DTO</param>
+    /// <param name="addPostCommand">Post DTO</param>
     /// <returns>The updated post.</returns>
     // POST api/post/post
     [HttpPost]
     [Authorize(Roles="USER")]
-    public async Task<IActionResult> Post([FromBody] GenericAddCommand<PostDTO, Post> genericAddCommand)
+    public async Task<IActionResult> Post([FromBody] AddPostCommand addPostCommand)
     {
-        return Ok(await _mediator.Send(genericAddCommand));
+        var userIdClaim = User.FindFirst("id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized();
+        }
+
+        Guid userId = Guid.Parse(userIdClaim.Value);
+
+        // Create a new command with the user ID
+        var commandWithUserId = new AddPostCommand(addPostCommand.entity, userId);
+        return Ok(await _mediator.Send(commandWithUserId));
     }
 
     /// <summary>
