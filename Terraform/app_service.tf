@@ -26,6 +26,7 @@ resource "azurerm_linux_web_app" "example" {
     }
   }
   app_settings = {
+    "JwtKey" = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.example.name};SecretName=${azurerm_key_vault_secret.jwt_password.name})"
     DOCKER_ENABLE_CI                                = true
     APPINSIGHTS_INSTRUMENTATIONKEY                  = "18be8143-9f21-4bf3-958f-0643ca4cfd33"
     APPINSIGHTS_PROFILERFEATURE_VERSION             = "1.0.0"

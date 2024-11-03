@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.Queries;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
@@ -75,12 +76,12 @@ public class PostController : ControllerBase
     /// <summary>
     ///     Retrieves all posts.
     /// </summary>
-    /// <param name="query"></param>
     /// <returns>All tags</returns>
-    // POST api/post/getall
-    [HttpPost]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<Post> query)
+    // GET api/post/getall
+    [HttpGet]
+    [Authorize(Roles="ADMIN")]
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));
     }
 }

@@ -66,7 +66,14 @@ resource "azurerm_key_vault_secret" "admin_password" {
 resource "azurerm_key_vault_secret" "user_password" {
   key_vault_id    = azurerm_key_vault.example.id
   name            = "userpassword"
-  value           = random_password.admin_password.result
+  value           = random_password.user_password.result
+  expiration_date = "2025-03-02T15:04:05Z"
+
+}
+resource "azurerm_key_vault_secret" "jwt_password" {
+  key_vault_id    = azurerm_key_vault.example.id
+  name            = "jwtsecret"
+  value           = random_password.jwt_password.result
   expiration_date = "2025-03-02T15:04:05Z"
 
 }

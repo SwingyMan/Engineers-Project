@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure.Security.KeyVault.Keys;
+using Azure.Security.KeyVault.Secrets;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using MediatR;
@@ -10,7 +12,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
 {
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
-
     public LoginCommandHandler(SocialPlatformDbContext context, IMapper mapper)
     {
         _context = context;
