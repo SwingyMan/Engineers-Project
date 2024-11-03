@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.Queries;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,15 +48,27 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize]
     public async Task<IActionResult> GetById(Guid guid)
     {
         return Ok(await _mediator.Send(new GenericGetByIdQuery<User>(guid)));
     }
 
     [HttpPatch]
-    public async Task<IActionResult> UpdateByID([FromBody] GenericUpdateCommand<UserRegisterDTO, User> genericUpdateCommand)
+    public async Task<IActionResult> UpdateByID([FromBody] GenericUpdateCommand<UserDTO, User> genericUpdateCommand)
     {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        if (userId != genericUpdateCommand.id)
+        {
+            return Forbid("Users can only update their own information.");
+        }
+
         return Ok(await _mediator.Send(genericUpdateCommand));
     }
 
