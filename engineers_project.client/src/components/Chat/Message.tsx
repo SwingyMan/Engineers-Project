@@ -1,7 +1,5 @@
 import styled from "styled-components";
-
 const StyledMessageBox = styled.div<{ send: number }>`
-   // background-color: ${(props) => props.send == 1 ? "red" : "blue"};
  display: flex;
  flex-direction: ${(props) => props.send == 1 ? "row-reverse" : "row "};
 
@@ -35,11 +33,11 @@ export function Message({ date, message, send, sender }: MessageInterface) {
     return (
         <StyledMessageBox send={send}>
             <MessageWraper send={send}>
-            {sender}
-            <StyledMessage send={send}>
-                {message}
-            </StyledMessage>
-            {date}
+                {sender}
+                <StyledMessage send={send}>
+                    {message}
+                </StyledMessage>
+                {date}
             </MessageWraper>
         </StyledMessageBox>
     );
