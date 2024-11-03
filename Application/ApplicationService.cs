@@ -1,8 +1,12 @@
-﻿using Application.Commands;
+﻿using Application.Authorization.Handlers;
+using Application.Authorization.Requirements;
+using Application.Commands;
 using Application.DTOs;
 using Application.Queries;
+using Autofac.Core;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -32,5 +36,18 @@ public static class ApplicationService
             typeof(GenericUpdateCommandHandler<PostDTO, Post>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Post>>),
             typeof(GenericDeleteCommandHandler<Post>));
+
+        serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
+        serviceCollection.AddAuthorization(options =>
+        {
+            options.AddPolicy("ChatMemberOrAdmin", policy =>
+            {
+                policy.Requirements.Add(new ChatMemberRequirement());
+            });
+            options.AddPolicy("ChatMessageMemberOrAdmin", policy =>
+            {
+                policy.Requirements.Add(new ChatMessageMemberRequirement());
+            });
+        });
     }
 }
