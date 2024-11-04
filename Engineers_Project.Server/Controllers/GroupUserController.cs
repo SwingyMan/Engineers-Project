@@ -82,8 +82,8 @@ public class GroupUserController : ControllerBase
     // POST api/groupUser/getall
     [HttpPost]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupUser> query)
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await _mediator.Send(new GenericGetAllQuery<GroupUser>()));
     }
 }

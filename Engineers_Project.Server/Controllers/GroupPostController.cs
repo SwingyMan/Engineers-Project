@@ -70,8 +70,8 @@ public class GroupPostController : ControllerBase
     /// <param name="query"></param>
     /// <returns>All GroupPosts</returns>
     [HttpPost]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupPostDTO> query)
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await _mediator.Send(new GenericGetAllQuery<GroupPost>()));
     }
 }

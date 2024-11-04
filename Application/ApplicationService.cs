@@ -33,7 +33,7 @@ public static class ApplicationService
 
         //role
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<RoleDTO,Role>,Role>),
-            typeof(AddPostCommandHandler));
+            typeof(GenericAddCommandHandler<RoleDTO,Role>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<Role>, IEnumerable<Role>>),
             typeof(GenericGetAllQueryHandler<Role>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Role>, Role>),
@@ -44,7 +44,7 @@ public static class ApplicationService
             typeof(GenericDeleteCommandHandler<Role>));
         //message
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<MessageDTO,Message>,Message>),
-            typeof(AddPostCommandHandler));
+            typeof(GenericAddCommandHandler<MessageDTO,Message>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<Message>, IEnumerable<Message>>),
             typeof(GenericGetAllQueryHandler<Message>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Message>, Message>),
@@ -55,7 +55,7 @@ public static class ApplicationService
             typeof(GenericDeleteCommandHandler<Message>));
         //groupuser
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<GroupUserDTO,GroupUser>,GroupUser>),
-            typeof(AddPostCommandHandler));
+            typeof(GenericAddCommandHandler<GroupUserDTO,GroupUser>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<GroupUser>, IEnumerable<GroupUser>>),
             typeof(GenericGetAllQueryHandler<GroupUser>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<GroupUser>, GroupUser>),
@@ -66,7 +66,7 @@ public static class ApplicationService
             typeof(GenericDeleteCommandHandler<GroupUser>));
         //grouppost
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<GroupPostDTO,GroupPost>,GroupPost>),
-            typeof(AddPostCommandHandler));
+            typeof(GenericAddCommandHandler<GroupPostDTO,GroupPost>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<GroupPost>, IEnumerable<GroupPost>>),
             typeof(GenericGetAllQueryHandler<GroupPost>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<GroupPost>, GroupPost>),
@@ -77,7 +77,7 @@ public static class ApplicationService
             typeof(GenericDeleteCommandHandler<GroupPost>));
         //group
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<GroupDTO,Group>,Group>),
-            typeof(AddPostCommandHandler));
+            typeof(GenericAddCommandHandler<GroupDTO,Group>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<Group>, IEnumerable<Group>>),
             typeof(GenericGetAllQueryHandler<Group>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Group>, Group>),
