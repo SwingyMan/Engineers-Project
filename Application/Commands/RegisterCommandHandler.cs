@@ -1,5 +1,6 @@
 ﻿using Application.Queries;
 using AutoMapper;
+using Azure.Core;
 using BCrypt.Net;
 using Domain.Entities;
 using Infrastructure.Persistence;
@@ -52,11 +53,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
             // Account Activation stuff
             mappedEntity.ActivationToken = Guid.NewGuid();
             mappedEntity.IsActivated = false;
-
+            mappedEntity.CreatedAt = DateTime.UtcNow;
             var entity = await _context.AddAsync(mappedEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            await SendActivationEmail(mappedEntity);
+            await SendActivationEmail(mappedEntity,request.Host);
 
             return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id,
                 entity.Entity.Role.Name);
@@ -65,9 +66,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
         return null;
     }
 
-    private async Task SendActivationEmail(User user)
+    private async Task SendActivationEmail(User user,string host)
     {
-        var activationLink = $"https://localhost:7290/api/v1/User/ActivateAccount?token={user.ActivationToken}";
+        var activationLink = $"https://{host}/api/v1/User/ActivateAccount?token={user.ActivationToken}";
         var emailBody = $"<html><body>" +
                         $"<p>Hello {user.Username},</p>" +
                         $"<p>Please activate your account by clicking the link below:</p>" +
