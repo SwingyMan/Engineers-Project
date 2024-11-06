@@ -3,21 +3,21 @@ import { createPost, deletePost, editPost, fetchPosts } from "../services/posts.
 
 export const usePosts = () => {
 
-    const QueryKey = ['Post']
+    const QueryKey = ['post']
     const queryClient = useQueryClient();
     const PostQuery = () => {
         return useQuery({ queryKey: QueryKey, queryFn: fetchPosts })
     }
     const { isError, isFetched, data, error, isPending } = PostQuery()
     const handleAddPost = useMutation({
-        mutationFn: async (newPost) => {
+        mutationFn: async (newPost:Partial<PostDTO>) => {
             await createPost(newPost)
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey })
         //onError
     })
     const handleEditPost = useMutation({
-        mutationFn: async (editedPost) => {
+        mutationFn: async (editedPost:Partial<PostDTO>) => {
             await editPost(editedPost)
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey })

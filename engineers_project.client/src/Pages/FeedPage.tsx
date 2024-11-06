@@ -1,18 +1,18 @@
 import styled from "styled-components";
 import { MessageBox } from "../components/MessageBox/MessageBox";
-import { Post } from "../components/MessageBox/PostClass";
+
 import { ChatBox } from "../components/RightNavBar/ChatBox";
 import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 import { Message } from "../components/Chat/Message";
 
-let post = new Post(
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
-    "John Doe",
-    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes",
-    Date.now(),
-    "src/assets/john-doe.jpg",
-    2
-);
+const post:PostDTO = {
+    content:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
+    name:"John Doe",
+    profileLink:"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes",
+    dateOfCreation:Date.now(),
+    img:"src/assets/john-doe.jpg",
+    commentCount:2
+};
 //POSTY nowy komponent?
 
 const PostFeed = styled.div`
@@ -33,7 +33,7 @@ export function FeedPage() {
         <StyledPage>
             <PostFeed>
                 <MessageBox
-                    postInfo={new Post("a", "a", "a", 1, "src/assets/john-doe.jpg", 1)}
+                    postInfo={post}
                 />
                 <MessageBox postInfo={post} />
                 <MessageBox postInfo={post} /><MessageBox postInfo={post} />
