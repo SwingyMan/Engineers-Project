@@ -84,7 +84,7 @@ namespace Infrastructure.Blobs.Tests
                 .ReturnsAsync(Response.FromValue(mockBlobDownloadInfo.Object, null));
 
             // Act
-            var result = await _blobInfrastructure.getBlob(guid, container, extension);
+            var result = await _blobInfrastructure.getBlob(guid+extension, container);
 
             // Assert
             result.Should().NotBeNull();
@@ -106,7 +106,7 @@ namespace Infrastructure.Blobs.Tests
                 .ReturnsAsync(Response.FromValue(false, null));
 
             // Act
-            var result = await _blobInfrastructure.getBlob(guid, container, extension);
+            var result = await _blobInfrastructure.getBlob(guid+extension, container);
 
             // Assert
             result.Should().BeNull();
@@ -128,7 +128,7 @@ namespace Infrastructure.Blobs.Tests
                 .ReturnsAsync(Response.FromValue(true, null));
 
             // Act
-            await _blobInfrastructure.deleteBlob(guid, container, extension);
+            await _blobInfrastructure.deleteBlob(guid+extension, container);
 
             // Assert
             _mockBlobContainerClient.Verify(x => x.GetBlobClient(guid + extension), Times.Once);

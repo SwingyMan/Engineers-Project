@@ -23,9 +23,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
         var user = _mapper.Map<User>(request.UserLoginDto);
         var query = await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x =>
             x.Email == user.Email);
+        if (query is null)
+            return null;
         var password_check = BCrypt.Net.BCrypt.Verify(request.UserLoginDto.Password, query.Password);
 
-        if (!user.IsActivated)
+        if (!query.IsActivated)
             return null;
 
         if (password_check)

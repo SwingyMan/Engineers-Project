@@ -70,8 +70,8 @@ public class GroupController : ControllerBase
     /// <param name="query"></param>
     /// <returns>All Groups</returns>
     [HttpPost]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<GroupDTO> query)
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await _mediator.Send(new GenericGetAllQuery<Group>()));
     }
 }

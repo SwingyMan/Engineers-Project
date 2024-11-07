@@ -16,17 +16,15 @@ public class BlobInfrastructure : IBlobInfrastructure
     public async Task addBlob(IFormFile file, Guid guid, string container)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(container);
-        var blobClient = containerClient.GetBlobClient(guid.ToString());
-        using (var stream = file.OpenReadStream())
-        {
+        var blobClient = containerClient.GetBlobClient($"{guid.ToString()}{Path.GetExtension(file.FileName)}");
+        var stream = file.OpenReadStream();
             await blobClient.UploadAsync(stream, true);
-        }
     }
 
-    public async Task<BlobDownloadInfo> getBlob(Guid guid, string container, string extension)
+    public async Task<BlobDownloadInfo> getBlob(string name, string container)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(container);
-        var blobClient = containerClient.GetBlobClient(guid + extension);
+        var blobClient = containerClient.GetBlobClient(name);
         if (!await blobClient.ExistsAsync())
             return null;
 
@@ -34,10 +32,10 @@ public class BlobInfrastructure : IBlobInfrastructure
         return response;
     }
 
-    public async Task deleteBlob(Guid guid, string container, string extension)
+    public async Task deleteBlob(string name, string container)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(container);
-        var blobClient = containerClient.GetBlobClient(guid + extension);
+        var blobClient = containerClient.GetBlobClient(name);
         await blobClient.DeleteIfExistsAsync();
     }
 }

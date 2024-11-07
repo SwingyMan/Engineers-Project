@@ -19,5 +19,8 @@ public class MappingProfile : Profile
         CreateMap<ChatUserDTO, ChatUser>();
         CreateMap<ChatMessageDTO, ChatMessage>();
         CreateMap<ChatDTO, Chat>();
+        CreateMap<AttachmentDTO, Attachments>()
+            .ForMember(x=>x.Id,opt=>opt.MapFrom(src=>Guid.NewGuid()))
+            .ForMember(x=>x.Type,opt=>opt.MapFrom(src=>src.FileType));
     }
 }
