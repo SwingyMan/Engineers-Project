@@ -6,6 +6,6 @@ namespace Infrastructure.Blobs;
 public interface IBlobInfrastructure
 {
     public Task addBlob(IFormFile file, Guid guid, string container);
-    public Task<BlobDownloadInfo> getBlob(Guid guid, string container, string extension);
-    public Task deleteBlob(Guid guid, string container, string extension);
+    public Task<BlobDownloadInfo> getBlob(string name, string container);
+    public Task deleteBlob(string name, string container);
 }
