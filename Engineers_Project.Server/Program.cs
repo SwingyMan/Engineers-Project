@@ -84,7 +84,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("Open");
 app.UseAuthentication();
 app.UseAuthorization();
 

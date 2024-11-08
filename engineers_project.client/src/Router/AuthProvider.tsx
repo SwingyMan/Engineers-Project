@@ -10,9 +10,9 @@ const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 const AuthProvider = ({ children }: Children) => {
   const [user, setUser] = useState<Partial<User> | null>(null);
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("site")
+   sessionStorage.getItem("polsl-social")
   );
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(token===null?false:true);
 
   const logIn = async (data: Partial<User>) => {
     //TODO testy
@@ -31,13 +31,17 @@ const AuthProvider = ({ children }: Children) => {
 
       if (text) {
         const res = JSON.parse(text);
-        if (res.data) {
-          setUser(res.data.user);
+        console.log(res)
+        console.log(res.token)
+        if (res.token) {
+         // setUser(res.data.user);
           setToken(res.token);
-          localStorage.setItem("site", res.token);
+          sessionStorage.setItem("polsl-social", res.token );
+          setIsAuthenticated(true)
           return;
         }
-        throw new Error(res.message);
+          throw new Error(res.message);
+        
       }
     } catch (err) {
       console.error(err);
@@ -48,7 +52,7 @@ const AuthProvider = ({ children }: Children) => {
     setIsAuthenticated(false);
     setUser(null);
     setToken(null);
-    localStorage.removeItem("site");
+    sessionStorage.removeItem("polsl-social");
   };
 
   return (

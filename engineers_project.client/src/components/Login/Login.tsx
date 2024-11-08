@@ -56,7 +56,7 @@ export function Login() {
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated, navigate]);
   const [input, setInput] = useState({
-    Username: "",
+    Email: "",
     Password: "",
   });
   const [Login, setLogin] = useState("Login");
@@ -86,7 +86,7 @@ export function Login() {
     e.preventDefault();
     console.log(input);
     if (Login == "Login") {
-      if (input.Username !== "" && input.Password !== "") {
+      if (input.Email !== "" && input.Password !== "") {
         logIn(input);
       } else {
         console.log("Nie podano loginu lub hasła!");
@@ -114,8 +114,8 @@ export function Login() {
         <InputWraper>
           <StyledInput
             type="text"
-            name="Username"
-            placeholder="Username"
+            name="Email"
+            placeholder="E-mail"
             onChange={handleInput}
             autoFocus={true}
           />
@@ -125,8 +125,8 @@ export function Login() {
           <InputWraper>
             <StyledInput
               type="text"
-              name="E-mail"
-              placeholder="E-mail"
+              name="Username"
+              placeholder="Username"
               onChange={handleInput}
             />
           </InputWraper>

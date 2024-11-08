@@ -35,7 +35,6 @@ public class UserController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    [DisableCors]
     public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
     {
         var token = await _mediator.Send(new LoginCommand(userLoginDto));
