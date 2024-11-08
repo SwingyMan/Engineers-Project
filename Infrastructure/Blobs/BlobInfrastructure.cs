@@ -17,8 +17,10 @@ public class BlobInfrastructure : IBlobInfrastructure
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(container);
         var blobClient = containerClient.GetBlobClient($"{guid.ToString()}{Path.GetExtension(file.FileName)}");
-        var stream = file.OpenReadStream();
-            await blobClient.UploadAsync(stream, true);
+        var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+            await blobClient.UploadAsync(memoryStream, true);
     }
 
     public async Task<BlobDownloadInfo> getBlob(string name, string container)
