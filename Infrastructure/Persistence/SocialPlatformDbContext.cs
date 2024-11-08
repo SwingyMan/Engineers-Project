@@ -21,11 +21,11 @@ public class SocialPlatformDbContext : DbContext
     public DbSet<GroupUser> GroupUsers { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<GroupPost> GroupPosts { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-    public DbSet<PostsTag> PostTags { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<ChatUser> ChatUsers { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<Attachments> Attachments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,17 +59,6 @@ public class SocialPlatformDbContext : DbContext
             .WithMany(p => p.GroupPosts)
             .HasForeignKey(gp => gp.PostId);
 
-        // PostTag relationships
-        modelBuilder.Entity<PostsTag>()
-            .HasOne(pt => pt.Post)
-            .WithMany(p => p.PostsTags)
-            .HasForeignKey(pt => pt.PostId);
-
-        modelBuilder.Entity<PostsTag>()
-            .HasOne(pt => pt.Tag)
-            .WithMany(t => t.PostsTags)
-            .HasForeignKey(pt => pt.TagId);
-
         // ChatUser relationships
         modelBuilder.Entity<ChatUser>() //
             .HasOne(cu => cu.User)
@@ -91,5 +80,7 @@ public class SocialPlatformDbContext : DbContext
             .HasOne(m => m.User)
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.UserId);
+        
+        modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
     }
 }

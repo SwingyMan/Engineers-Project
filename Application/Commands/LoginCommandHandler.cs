@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure.Security.KeyVault.Keys;
+using Azure.Security.KeyVault.Secrets;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using MediatR;
@@ -10,7 +12,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
 {
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
-
     public LoginCommandHandler(SocialPlatformDbContext context, IMapper mapper)
     {
         _context = context;
@@ -22,9 +23,16 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
         var user = _mapper.Map<User>(request.UserLoginDto);
         var query = await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x =>
             x.Email == user.Email);
+        if (query is null)
+            return null;
         var password_check = BCrypt.Net.BCrypt.Verify(request.UserLoginDto.Password, query.Password);
+
+        if (!query.IsActivated)
+            return null;
+
         if (password_check)
             return query.CreateToken(query.Username, query.Email, query.Id, query.Role.Name);
+
         return null;
     }
 }

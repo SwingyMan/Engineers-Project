@@ -66,3 +66,9 @@ resource "azurerm_storage_container" "videos" {
   storage_account_name  = azurerm_storage_account.example.name
   container_access_type = "private"
 }
+resource "azurerm_storage_container" "terraform" {
+  depends_on            = [azurerm_storage_account.example]
+  name                  = "terraform"
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = "private"
+}

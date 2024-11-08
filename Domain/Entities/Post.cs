@@ -13,12 +13,8 @@ public class Post
     public string Status { get; set; }
     public string Availability { get; set; }
     public DateTime CreatedAt { get; set; }
-
+    public List<Attachments> Attachments { get; set; }
     [JsonIgnore] public User User { get; set; }
 
     [JsonIgnore] public IEnumerable<GroupPost>? GroupPosts { get; set; }
-
-    [JsonIgnore]
-    //public BoardPost BoardPost { get; set; }
-    public ICollection<PostsTag>? PostsTags { get; set; }
 }

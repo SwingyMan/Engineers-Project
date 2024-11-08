@@ -70,7 +70,9 @@ public class DbSeeder
                     Password = BCrypt.Net.BCrypt.HashPassword(_secretClient.GetSecret("adminpassword").Value.Value),
                     RoleId = adminRole.Id,
                     CreatedAt = DateTime.UtcNow,
-                    IpOfRegistry = "127.0.0.1"
+                    IpOfRegistry = "127.0.0.1",
+                    IsActivated = true,
+                    ActivationToken = new Guid()
                 },
                 new User
                 {
@@ -80,7 +82,9 @@ public class DbSeeder
                     Password = BCrypt.Net.BCrypt.HashPassword(_secretClient.GetSecret("userpassword").Value.Value),
                     RoleId = userRole.Id,
                     CreatedAt = DateTime.UtcNow,
-                    IpOfRegistry = "127.0.0.1"
+                    IpOfRegistry = "127.0.0.1",
+                    IsActivated = true,
+                    ActivationToken = new Guid()
                 }
             };
 

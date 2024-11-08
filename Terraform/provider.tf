@@ -9,13 +9,12 @@ terraform {
       version = "3.6.3"
     }
   }
-  cloud {
-
-    organization = "CaptchaCatchers"
-
-    workspaces {
-      name = "Engineers"
-    }
+  backend "azurerm" {
+    key = "terraform.tfstate"
+    resource_group_name = "project-engineers"
+    container_name = "terraform"
+    storage_account_name = "socialplatformsa"
+    use_azuread_auth = true
   }
 }
 provider "random" {}
