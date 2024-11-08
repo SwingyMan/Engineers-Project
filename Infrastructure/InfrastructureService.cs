@@ -33,7 +33,7 @@ public static class InfrastructureService
             {
                 clientbuilder.AddBlobServiceClient(new Uri("https://socialplatformsa.blob.core.windows.net/"));
                 clientbuilder.AddSecretClient(new Uri("https://socialplatformkv.vault.azure.net/"));
-                clientbuilder.AddContentSafetyClient(new Uri("https://westeurope.api.cognitive.microsoft.com/"));
+                clientbuilder.AddContentSafetyClient(new Uri("https://safetext.cognitiveservices.azure.com/"));
                 clientbuilder.AddEmailClient(new Uri("https://socialplatformcs.europe.communication.azure.com"));
                 clientbuilder.AddTextAnalyticsClient(new Uri("https://westeurope.api.cognitive.microsoft.com/"));
                 clientbuilder.AddTextTranslationClient(new DefaultAzureCredential());
