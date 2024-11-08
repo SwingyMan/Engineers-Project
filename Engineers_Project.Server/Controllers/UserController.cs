@@ -5,11 +5,13 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
 
 [Route("api/v1/[controller]/[action]")]
+
 public class UserController : Controller
 {
     private readonly IMediator _mediator;
@@ -33,6 +35,7 @@ public class UserController : Controller
 
     [HttpPost]
     [AllowAnonymous]
+    [DisableCors]
     public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
     {
         var token = await _mediator.Send(new LoginCommand(userLoginDto));

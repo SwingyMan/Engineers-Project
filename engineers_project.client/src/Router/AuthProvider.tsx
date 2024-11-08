@@ -4,6 +4,7 @@ import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
 import { User } from "../DTO/User";
 
+
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
@@ -15,17 +16,14 @@ const AuthProvider = ({ children }: Children) => {
 
   const logIn = async (data: Partial<User>) => {
     //TODO testy
-    setTimeout(() => {
-      console.log("login success");
-      setIsAuthenticated(true);
-    }, 1000);
-    return;
+
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("https://localhost:7290/api/v1/User/Login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        
         body: JSON.stringify(data),
       });
 
