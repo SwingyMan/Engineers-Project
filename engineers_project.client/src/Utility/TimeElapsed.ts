@@ -33,9 +33,5 @@ export function TimeElapsed(timestamp:number):string {
     else{
       diff="teraz"
     }
-    
-console.log()
-
-
   return diff
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Button } from "../Button/Button";
 import { useAuth } from "../../Router/AuthProvider";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 const StyledForm = styled.form`
   width: 450px;
@@ -30,14 +31,30 @@ const InputWraper = styled.div`
   border: 1px solid var(--light-border);
   border-radius: 10px;
   background-color: var(--whiteTransparent20);
+  position: relative;
 `;
+const EyeIcon = styled.div`
+  position: absolute;
+  right: 0px;
+  padding-right: 12px;
+  top: 4px;
+  cursor: pointer;
+  font-size: 22px;
+  color: var(--white);
+  &:hover{
+    color: var(--whiteTransparent20);
+    transition: 0.1s ease-in;
+  }
 
+`
 
 export function LoginForm() {
     const [input, setInput] = useState({
         Email: "",
         Password: "",
       });
+      
+      const [visible,setVisible]= useState(false)
       const handleInput = (e: { target: { name: string; value: string } }) => {
         const { name, value } = e.target;
         setInput((prev) => ({
@@ -64,11 +81,14 @@ export function LoginForm() {
       </InputWraper>
       <InputWraper>
         <StyledInput
-          type="password"
+          type={visible?"text":"password"}
           name="Password"
           placeholder="Password"
           onChange={handleInput}
         />
+                <EyeIcon onClick={()=>setVisible(!visible)}>
+        {visible?<VscEye/>:<VscEyeClosed/>}
+      </EyeIcon>
       </InputWraper>
 
       <Button onClick={() => {}} value={"Login"} />

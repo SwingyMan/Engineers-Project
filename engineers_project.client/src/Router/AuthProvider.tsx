@@ -48,7 +48,6 @@ const AuthProvider = ({ children }: Children) => {
     }
   };
   const logOut = () => {
-    console.log("logout success");
     setIsAuthenticated(false);
     setUser(null);
     setToken(null);

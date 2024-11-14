@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useAuth } from "../../Router/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
+import { RegisterForm } from "./RegisterForm";
 
 const LoginDiv = styled.div`
   display: flex;
@@ -46,7 +47,6 @@ export function Login() {
       setOtherAction("Register");
     }
   }
-console.log(Message == msg[0])
   return (
     //TODO możliwe że register trzeba dać na osobną stronę/formulaz jako osobny komponent
   
@@ -61,7 +61,7 @@ console.log(Message == msg[0])
         />
       </svg>
       <h1>{Login}</h1>
-      {Message == msg[0]?<LoginForm/>:<></>}
+      {Message == msg[0]?<LoginForm/>:<RegisterForm/>}
 
       <div>{Message}</div>
       <Button
