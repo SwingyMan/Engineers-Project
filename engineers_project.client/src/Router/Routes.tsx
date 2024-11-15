@@ -4,6 +4,7 @@ import ErrorPage from "../Pages/ErrorPage";
 import { LoginPage } from "../Pages/LoginPage";
 import PrivateRoute from "./PrivateRoute";
 import { FeedPage } from "../Pages/FeedPage";
+import { ProfilePage } from "../Pages/ProfilePage";
 
 //dorobić więcej jak jedną stronę
 
@@ -32,7 +33,14 @@ export const router = createBrowserRouter([
     path: "/post"
 
   },
-  { path:"/profile"},
+  { path:"/profile/:id",
+    element:(
+      <PrivateRoute>
+        <ProfilePage/>
+      </PrivateRoute>
+    )
+
+  },
   { path:"/group"
   },
   {

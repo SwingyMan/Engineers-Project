@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MessageBox } from "../components/MessageBox/MessageBox";
+import { Post } from "../components/Post/Post";
 
 import { ChatBox } from "../components/RightNavBar/ChatBox";
 import { ChatFeed } from "../components/RightNavBar/ChatFeed";
@@ -32,12 +32,12 @@ export function FeedPage() {
     return (
         <StyledPage>
             <PostFeed>
-                <MessageBox
+                <Post
                     postInfo={post}
                 />
-                <MessageBox postInfo={post} />
-                <MessageBox postInfo={post} /><MessageBox postInfo={post} />
-                <MessageBox postInfo={post} /><MessageBox postInfo={post} />
+                <Post postInfo={post} />
+                <Post postInfo={post} /><Post postInfo={post} />
+                <Post postInfo={post} /><Post postInfo={post} />
                 <Message date={Date.now()} send={1} sender="JohnDoe" message="adfafasdfaadfASC das dfa sdl asj pq pjqsapkj a;k spjaspfkj asf pais fpih fkajs fpihafpihafspihjasfpkajfphapfi hphpih ah pah fpha spjhf pajs fpkan fpk spfh pahf ph2 privh weih pjwghb purht vpwh epc aspojfhv pwueht vpih dpgvh pvha pihfv dkan fvph vphdaljk lsh "/>
                 <Message date={Date.now()} send={0} sender="DoeJohn" message="adfafasdfaadf"/>
                 <Message date={Date.now()} send={1} sender="JohnDoe" message="adfafasdfaadf"/>

@@ -6,5 +6,4 @@ interface PostDTO{
     img: string
     commentCount: number
     //comments:[]
-    //reactions[]
 }

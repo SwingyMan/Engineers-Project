@@ -10,6 +10,7 @@ const MessageWraper = styled.div<{ send: number }>`
    display: flex;
 flex-direction: column;
 align-items:${(props) => props.send == 1 ? "end" : "start"} ;
+
 min-width: min-content;
 
 
