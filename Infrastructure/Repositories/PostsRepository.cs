@@ -24,7 +24,7 @@ public class PostsRepository(SocialPlatformDbContext _context) : IPostsRepositor
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Post>> GetPostsByAvailabilityAsync(string availability)
+    public async Task<IEnumerable<Post>> GetPostsByAvailabilityAsync(Availability availability)
     {
         return await _context.Set<Post>()
             .Where(p => p.Availability == availability)

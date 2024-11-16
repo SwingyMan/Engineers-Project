@@ -24,7 +24,7 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
         postEntity.UserId = request.guid;
         postEntity.CreatedAt = DateTime.UtcNow;
         postEntity.Status = "status";
-        postEntity.Availability = "availability";
+        postEntity.Availability = request.entity.Availability;
         if (await CheckText(postEntity.Body))
         {
             return await _genericRepository.Add(postEntity);

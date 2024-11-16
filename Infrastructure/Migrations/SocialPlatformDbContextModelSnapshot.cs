@@ -111,6 +111,26 @@ namespace Infrastructure.Migrations
                     b.ToTable("ChatUsers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Friends", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId2")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Friends");
+                });
+
             modelBuilder.Entity("Domain.Entities.Group", b =>
                 {
                     b.Property<Guid>("Id")
@@ -227,9 +247,8 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Availability")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Availability")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -279,6 +298,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid?>("ActivationToken")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("AvatarFileName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");

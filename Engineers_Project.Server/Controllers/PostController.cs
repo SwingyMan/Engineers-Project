@@ -36,6 +36,12 @@ public class PostController : ControllerBase
         return Ok(post);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAvailablePosts()
+    {
+        return Ok(_mediator.Send(
+            new PostQuery(Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").ToString()))));
+    }
     /// <summary>
     ///     Creates a post.
     /// </summary>
@@ -65,7 +71,7 @@ public class PostController : ControllerBase
     /// <param name="genericUpdateCommand">Update command</param>
     /// <returns>The updated post.</returns>
     // PUT api/post/put
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     //[Authorize(Roles = "USER")] 
     public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
     {
