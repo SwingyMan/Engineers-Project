@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.DTOs;
+using AutoMapper;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
 using Domain.Entities;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, UserReturnDTO>
 {
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
@@ -18,7 +19,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
         _mapper = mapper;
     }
 
-    public async Task<JwtToken> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<UserReturnDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<User>(request.UserLoginDto);
         var query = await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x =>
@@ -31,7 +32,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, JwtToken>
             return null;
 
         if (password_check)
-            return query.CreateToken(query.Username, query.Email, query.Id, query.Role.Name);
+        {
+            var token = query.CreateToken(query.Username, query.Email, query.Id, query.Role.Name);
+            var userReturn = _mapper.Map<UserReturnDTO>(query);
+            userReturn.Token = token.Token;
+            return userReturn;
+        }
 
         return null;
     }

@@ -26,6 +26,7 @@ public class SocialPlatformDbContext : DbContext
     public DbSet<ChatUser> ChatUsers { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<Attachments> Attachments { get; set; }
+    public DbSet<Friends> Friends { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,5 +83,6 @@ public class SocialPlatformDbContext : DbContext
             .HasForeignKey(m => m.UserId);
         
         modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
+        modelBuilder.Entity<Post>().Navigation(x => x.User).AutoInclude();
     }
 }

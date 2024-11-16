@@ -94,4 +94,25 @@ public class UserController : Controller
             return BadRequest("Invalid or expired activation link.");
         }
     }
+    [HttpGet]
+    public async Task<IActionResult> GetAvatar(string FileName)
+    {
+        var avatar =await _mediator.Send(new AvatarQuery(FileName));
+        if (avatar is null)
+        {
+            return NotFound();
+        }
+        return Ok(avatar);
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddAvatar([FromForm]AddAvatarCommand addAvatarCommand)
+    {
+        return Ok(await _mediator.Send(addAvatarCommand));
+    }
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAvatar(Guid guid)
+    {
+        await _mediator.Send(new RemoveAvatarCommand(guid));
+        return Ok();
+    }
 }

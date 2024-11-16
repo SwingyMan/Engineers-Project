@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands;
 
-public class LoginCommand : IRequest<JwtToken>
+public class LoginCommand : IRequest<UserReturnDTO>
 {
     public LoginCommand(UserLoginDTO userLoginDto)
     {
