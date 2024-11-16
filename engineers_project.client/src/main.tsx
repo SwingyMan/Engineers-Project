@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './styles/index.css'
+import './styles/colors.css'
 import { RouterProvider } from 'react-router'
 import AuthProvider from './Router/AuthProvider.tsx'
 import { router } from './Router/Routes.tsx'

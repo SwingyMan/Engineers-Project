@@ -10,7 +10,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  color: inherit;
+  color: var(--white);
 `;
 const StyledInput = styled.input`
   height: 100%;
