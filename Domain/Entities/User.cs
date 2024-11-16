@@ -21,8 +21,7 @@ public class User
     public Guid RoleId { get; set; }
     public DateTime CreatedAt { get; set; }
     public string IpOfRegistry { get; set; }
-
-
+    public string AvatarFileName { get; set; } = null;
     public Guid? ActivationToken { get; set; }
     public bool IsActivated { get; set; } = false;
 

@@ -11,10 +11,15 @@ public class Post
     public string Body { get; set; }
     public Guid UserId { get; set; }
     public string Status { get; set; }
-    public string Availability { get; set; }
+    public Availability Availability { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Attachments> Attachments { get; set; }
-    [JsonIgnore] public User User { get; set; }
+     public User User { get; set; }
 
     [JsonIgnore] public IEnumerable<GroupPost>? GroupPosts { get; set; }
+}
+
+public enum Availability
+{
+    Public,Friends
 }

@@ -5,7 +5,7 @@ using System.Net;
 
 namespace Application.Commands;
 
-public class RegisterCommand : IRequest<JwtToken>
+public class RegisterCommand : IRequest<User>
 {
     public RegisterCommand(UserRegisterDTO userRegisterDto, IPAddress ipAddress,string host)
     {

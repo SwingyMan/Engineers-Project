@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, User>
 {
     private readonly SocialPlatformDbContext _context;
     private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
         _emailSender = emailSender;
     }
 
-    public async Task<JwtToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<User> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var mappedEntity = _mapper.Map<User>(request.UserRegisterDto);
         var emailExists = await _mediator.Send(new EmailQuery(request.UserRegisterDto.Email));
@@ -59,8 +59,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, JwtToken>
 
             await SendActivationEmail(mappedEntity,request.Host);
 
-            return entity.Entity.CreateToken(entity.Entity.Username, entity.Entity.Email, entity.Entity.Id,
-                entity.Entity.Role.Name);
+            return entity.Entity;
         }
 
         return null;
