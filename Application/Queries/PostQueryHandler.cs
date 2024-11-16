@@ -16,20 +16,20 @@ public class PostQueryHandler : IRequestHandler<PostQuery, List<Post>>
     public async Task<List<Post>> Handle(PostQuery request, CancellationToken cancellationToken)
     {
         var friends = _context.Friends.Where(x=>(x.UserId1==request.UserId && x.Accepted==true) || (x.UserId2==request.UserId && x.Accepted==true)).ToList();
-        var publicPosts =await _context.Posts.Where(x => x.Availability == Availability.Public).ToListAsync(cancellationToken);
+        var publicPosts =  _context.Posts.Where(x => x.Availability == Availability.Public).ToList();
         foreach (var friend in friends)
         {
             if (request.UserId == friend.UserId1)
-                publicPosts.AddRange(await _context.Posts.Where(x =>
-                    (x.UserId == friend.UserId2 && x.Availability == Availability.Friends)).ToListAsync(cancellationToken));
+                publicPosts.AddRange( _context.Posts.Where(x =>
+                    (x.UserId == friend.UserId2 && x.Availability == Availability.Friends)).ToList());
             else
             {
-                publicPosts.AddRange(await _context.Posts.Where(x =>
+                publicPosts.AddRange(_context.Posts.Where(x =>
                         (x.UserId == friend.UserId1 && x.Availability == Availability.Friends))
-                    .ToListAsync(cancellationToken));
+                    .ToList());
             }
         }
 
-        return publicPosts;
+        return publicPosts.ToList();
     }
 }

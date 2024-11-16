@@ -128,7 +128,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Friends");
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("UserId2");
+
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Group", b =>
@@ -392,6 +396,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Friends", b =>
+                {
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany("FriendsInitiated")
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany("FriendsSent")
+                        .HasForeignKey("UserId2")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.GroupPost", b =>
                 {
                     b.HasOne("Domain.Entities.Group", "Group")
@@ -490,6 +509,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("ChatUsers");
+
+                    b.Navigation("FriendsInitiated");
+
+                    b.Navigation("FriendsSent");
 
                     b.Navigation("GroupUsers");
 
