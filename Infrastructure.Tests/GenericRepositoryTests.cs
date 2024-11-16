@@ -34,7 +34,6 @@ public class GenericRepositoryTests
 
         // Act
         var result = await _mockRepository.Object.GetAll();
-
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(entities, result);

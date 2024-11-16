@@ -39,8 +39,8 @@ public class PostController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAvailablePosts()
     {
-        return Ok(_mediator.Send(
-            new PostQuery(Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").ToString()))));
+        return Ok(await _mediator.Send(
+            new PostQuery(Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString()))));
     }
     /// <summary>
     ///     Creates a post.
@@ -103,5 +103,10 @@ public class PostController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetComments(Guid postId)
+    {
+        return Ok(await _mediator.Send(new PostCommentQuery(postId)));
     }
 }
