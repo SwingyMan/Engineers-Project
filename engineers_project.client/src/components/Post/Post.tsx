@@ -2,7 +2,8 @@ import { Comments } from "../Comments/Comments";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
-import { MdMoreHoriz } from "react-icons/md";
+import { OptionMenu } from "../Utility/OptionMenu";
+
 
 const PostWrapper = styled.div`
   padding: 1em;
@@ -36,9 +37,7 @@ export function Post(props: { postInfo: PostDTO }) {
             </div>
           </div>
         </HeaderInfo>
-        <div>
-            <MdMoreHoriz size={25}/>
-        </div>
+<OptionMenu/>
       </PostHeader>
       <hr />
       <div>{props.postInfo.content}</div>

@@ -1,10 +1,10 @@
 import styled from "styled-components";
-const StyledMessageBox = styled.div<{ send: number }>`
+const StyledMessageBox = styled.div<{send:number }>`
  display: flex;
  flex-direction: ${(props) => props.send == 1 ? "row-reverse" : "row "};
 
 `
-const MessageWraper = styled.div<{ send: number }>`
+const MessageWraper = styled.div<{send:number }>`
    max-width: 80%;
    margin: 2px 10px;
    display: flex;
@@ -15,7 +15,7 @@ min-width: min-content;
 
 
 `
-const StyledMessage = styled.div<{ send: number }>`
+const StyledMessage = styled.div<{send:number}>`
 background-color: ${(props) => props.send == 1 ? "black" : "white"};
 color: ${(props) => props.send == 1 ? "white" : "black"};
 margin:2px;
