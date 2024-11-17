@@ -1,9 +1,11 @@
 using Application;
+using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Hubs;
 using Infrastructure.Seeder;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -66,8 +68,6 @@ builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<DbSeeder>();
 
-
-
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -80,6 +80,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -94,6 +95,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapFallbackToFile("/index.html");
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Autofac.Core;
 using Azure.Identity;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
@@ -67,15 +68,18 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IPostsRepository), typeof(PostsRepository));
         serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
         serviceCollection.AddServiceProfiler();
-        serviceCollection.AddSignalR()
-            .AddAzureSignalR(x =>
-            {
-                x.Endpoints =
-                [
-                    new ServiceEndpoint(new Uri("https://socialplatformsr.service.signalr.net"),
-                        new DefaultAzureCredential())
-                ];
-            });
+        serviceCollection.AddSignalR().AddAzureSignalR(options => { options.Endpoints = [new ServiceEndpoint(new Uri("https://socialplatformsr.service.signalr.net"), new DefaultAzureCredential())]; });
+        serviceCollection.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins",
+                builder =>
+                {
+                    builder.WithOrigins("http://127.0.0.1:5500")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+        });
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddTransient<TextContentSafetyService>();
                 serviceCollection.AddSerilog((services, lc) => lc

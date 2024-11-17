@@ -2,16 +2,28 @@
 
 namespace Infrastructure.Hubs;
 
-public class ChatHub : Hub
+public sealed class ChatHub : Hub
 {
-    public Task BroadcastMessage(string name, string message)
+    public override Task OnDisconnectedAsync(Exception? exception)
     {
-        return Clients.All.SendAsync("broadcastMessage", name, message);
+        return base.OnDisconnectedAsync(exception);
     }
 
-    public Task Echo(string name, string message)
+    public override async Task OnConnectedAsync()
     {
-        return Clients.Client(Context.ConnectionId)
-            .SendAsync("echo", name, $"{message} (echo from server)");
+        Console.WriteLine($"{Context.ConnectionId} has connected"); 
+        await Clients.All.SendAsync("ReceiveMessage", $"{Context.ConnectionId} has joined");
+        Console.WriteLine($"Sent join message for {Context.ConnectionId}");
     }
+
+    public async Task SendNotification(string content)
+    {
+        await Clients.All.SendAsync("ReceiveNotification", content);
+    }
+
+    //public Task Echo(string name, string message)
+    //{
+    //    return Clients.Client(Context.ConnectionId)
+    //        .SendAsync("echo", name, $"{message} (echo from server)");
+    //}
 }
