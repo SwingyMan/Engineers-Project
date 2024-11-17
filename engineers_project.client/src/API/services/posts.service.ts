@@ -1,14 +1,14 @@
 import { del, get, patch, post } from "../API"
-const url ='/posts'
+const url ='Post/'
 export const fetchPosts=():Promise<PostDTO[]> =>{
-    return get(url)
+    return get(url+'GetAvailablePosts')
 }
 export const createPost=(Post :Partial<PostDTO>):Promise<PostDTO>=>{
-    return post(url,Post)
+    return post(url+'Post',Post)
 }
 export const editPost = (Post :Partial<PostDTO>):Promise<PostDTO>=>{
-    return patch(url,Post)
+    return patch(url+'Put/',Post)
 }
 export const deletePost = (id:string):Promise<string>=>{
-    return del(url+`/${id}`)
+    return del(url+`Delete/${id}`)
 }

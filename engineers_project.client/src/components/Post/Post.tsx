@@ -3,6 +3,7 @@ import { ImageDiv } from "../Utility/ImageDiv";
 import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
+import { useNavigate } from "react-router";
 
 
 const PostWrapper = styled.div`
@@ -22,25 +23,27 @@ const PostHeader = styled.div`
 const HeaderInfo = styled.div`
     display: flex;
     gap:4px;
+    cursor: pointer;
 `
 
 export function Post(props: { postInfo: PostDTO }) {
+  const navigate= useNavigate()
   return (
     <PostWrapper>
       <PostHeader>
-        <HeaderInfo>
-          <ImageDiv width={40} url={props.postInfo.img} />
+        <HeaderInfo onClick={()=>{navigate(`/profile/${props.postInfo.user.id}`)}}>
+          <ImageDiv width={40} url={props.postInfo.user.avatarFileName}/>
           <div>
-            <div>{props.postInfo.name}</div>
+            <div>{props.postInfo.user.username}</div>
             <div >
-              {TimeElapsed(props.postInfo.dateOfCreation)}
+              {TimeElapsed(props.postInfo.createdAt)}
             </div>
           </div>
         </HeaderInfo>
 <OptionMenu/>
       </PostHeader>
       <hr />
-      <div>{props.postInfo.content}</div>
+      <div>{props.postInfo.body}</div>
       <hr />
       <Comments />
     </PostWrapper>

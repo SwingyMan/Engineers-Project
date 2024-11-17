@@ -4,14 +4,21 @@ import { Post } from "../components/Post/Post";
 import { ChatBox } from "../components/RightNavBar/ChatBox";
 import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 import { Message } from "../components/Chat/Message";
+import { usePosts } from "../API/hooks/usePosts";
 
 const post:PostDTO = {
-    content:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
-    name:"John Doe",
-    profileLink:"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes",
-    dateOfCreation:Date.now(),
-    img:"src/assets/john-doe.jpg",
-    commentCount:2
+    title:"",
+    body:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
+    user:{
+        id:"",
+        username:"John Doe",
+        avatarFileName:"src/assets/john-doe.jpg",
+    },
+
+    createdAt:new Date(Date.now()),
+    id:"",
+
+
 };
 //POSTY nowy komponent?
 
@@ -29,18 +36,26 @@ const StyledPage = styled.div`
   `
 
 export function FeedPage() {
+    const {data,isPending,isFetched} =usePosts()
+
+    if(isPending){
+        console.log(data)
+    }
+    if(isFetched){
+        console.log(data)
+    }
+
     return (
         <StyledPage>
             <PostFeed>
+                {data&&data.map(post=><Post key={post.id} postInfo={post}/>)}
                 <Post
                     postInfo={post}
                 />
                 <Post postInfo={post} />
                 <Post postInfo={post} /><Post postInfo={post} />
                 <Post postInfo={post} /><Post postInfo={post} />
-                <Message date={Date.now()} send={1} sender="JohnDoe" message="adfafasdfaadfASC das dfa sdl asj pq pjqsapkj a;k spjaspfkj asf pais fpih fkajs fpihafpihafspihjasfpkajfphapfi hphpih ah pah fpha spjhf pajs fpkan fpk spfh pahf ph2 privh weih pjwghb purht vpwh epc aspojfhv pwueht vpih dpgvh pvha pihfv dkan fvph vphdaljk lsh "/>
-                <Message date={Date.now()} send={0} sender="DoeJohn" message="adfafasdfaadf"/>
-                <Message date={Date.now()} send={1} sender="JohnDoe" message="adfafasdfaadf"/>
+            
             </PostFeed>
             <ChatFeed>
             <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" ActivityDate={ Date.now()}/>

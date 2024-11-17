@@ -8,11 +8,12 @@ const getHost = () => {
 };
 
 const getToken = (): string | null => {
-    return localStorage.getItem('token');
+    return localStorage.getItem('polsl-social');
 };
 
 const getHeaders = () => {
     const token = getToken();
+
     return {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -20,6 +21,7 @@ const getHeaders = () => {
 };
 
 export const get = async <T>(url: string): Promise<T> => {
+
     const response = await fetch(`${getHost()}${url}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -33,6 +35,7 @@ export const get = async <T>(url: string): Promise<T> => {
 };
 
 export const post = async <T>(url: string, data: unknown): Promise<T> => {
+    console.log(`${getHost()}${url}`)
     const response = await fetch(`${getHost()}${url}`, {
         method: 'POST',
         headers: getHeaders(),
@@ -47,6 +50,8 @@ export const post = async <T>(url: string, data: unknown): Promise<T> => {
 };
 
 export const put = async <T>(url: string, data: unknown): Promise<T> => {
+    console.log(`${getHost()}${url}`)
+
     const response = await fetch(`${getHost()}${url}`, {
         method: "PUT",
         headers: getHeaders(),

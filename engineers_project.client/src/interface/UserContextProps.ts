@@ -1,9 +1,9 @@
-import { User } from "../DTO/User";
+import { UserDTO } from "../DTO/UserDTO";
 
 export interface UserContextProps {
 	token: string | null;
-	user: Partial<User> | null;
+	user: Partial<UserDTO> | null;
 	isAuthenticated: boolean | null;
-	logIn: (params: Partial<User>) => Promise<void>;
+	logIn: (params: Partial<UserDTO>) => Promise<void>;
 	logOut: () => void;
 }

@@ -1,7 +1,10 @@
 
-export function TimeElapsed(timestamp:number):string {
+export function TimeElapsed(timestamp:Date):string {
     let diff       
-    let elapsedS =~~((Date.now() -timestamp)/1000);
+    let now =new Date(Date.now());
+    let elapsedS =((now.getTime() -Date.parse(`${timestamp}`))/1000);
+
+    console.log(now.getTime() -Date.parse(`${timestamp}`));
     if(elapsedS>=60){
 
       
@@ -16,7 +19,7 @@ export function TimeElapsed(timestamp:number):string {
             let elapsedD = ~~(elapsedH/24)
             
             if(elapsedD>=7){
-              diff = "not implemented yet"
+              diff = `${~~(elapsedD/7)} tygodni temu`
             }
             else{
               diff=`${elapsedD} dni temu`

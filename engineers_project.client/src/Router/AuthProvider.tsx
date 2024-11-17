@@ -2,19 +2,19 @@
 import { createContext, useContext, useState } from "react";
 import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
-import { User } from "../DTO/User";
+import { UserDTO } from "../DTO/UserDTO";
 
 
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
-  const [user, setUser] = useState<Partial<User> | null>(null);
+  const [user, setUser] = useState<Partial<UserDTO> | null>(null);
   const [token, setToken] = useState<string | null>(
-   sessionStorage.getItem("polsl-social")
+   localStorage.getItem("polsl-social")
   );
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(token===null?false:true);
 
-  const logIn = async (data: Partial<User>) => {
+  const logIn = async (data: Partial<UserDTO>) => {
     //TODO testy
 
     try {
@@ -36,7 +36,7 @@ const AuthProvider = ({ children }: Children) => {
         if (res.token) {
          // setUser(res.data.user);
           setToken(res.token);
-          sessionStorage.setItem("polsl-social", res.token );
+          localStorage.setItem("polsl-social", res.token );
           setIsAuthenticated(true)
           return;
         }
@@ -51,7 +51,7 @@ const AuthProvider = ({ children }: Children) => {
     setIsAuthenticated(false);
     setUser(null);
     setToken(null);
-    sessionStorage.removeItem("polsl-social");
+    localStorage.removeItem("polsl-social");
   };
 
   return (

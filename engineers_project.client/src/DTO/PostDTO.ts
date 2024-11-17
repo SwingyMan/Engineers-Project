@@ -1,9 +1,16 @@
+
+
 interface PostDTO{
-    content: string
-    name: string
-    profileLink:string//id
-    dateOfCreation: number
-    img: string
-    commentCount: number
-    //comments:[]
+    id:string,
+    title: string,
+    body: string,
+    status?: string,
+    availability?: 1|0,
+    createdAt: Date,
+    attachments?: string|null,
+    user: {
+        id: string,
+        username:string,
+        avatarFileName: string,
+    }
 }
