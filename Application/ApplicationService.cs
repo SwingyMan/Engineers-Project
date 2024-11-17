@@ -97,6 +97,13 @@ public static class ApplicationService
             typeof(GenericUpdateCommandHandler<PostDTO, Post>));
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Post>>),
             typeof(GenericDeleteCommandHandler<Post>));
+        //comment
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<CommentDTO,Comment>,Comment>),
+            typeof(GenericAddCommandHandler<CommentDTO,Comment>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericUpdateCommand<CommentDTO, Comment>, Comment>),
+            typeof(GenericUpdateCommandHandler<CommentDTO, Comment>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Comment>>),
+            typeof(GenericDeleteCommandHandler<Comment>));
         //chat
         serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
         serviceCollection.AddAuthorization(options =>

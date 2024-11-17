@@ -20,6 +20,8 @@ public class MappingProfile : Profile
         CreateMap<ChatUserDTO, ChatUser>();
         CreateMap<ChatMessageDTO, ChatMessage>();
         CreateMap<ChatDTO, Chat>();
+        CreateMap<CommentDTO, Comment>()
+            .ForMember(x=>x.CreatedDate,y=>y.MapFrom(src=>DateTime.Now));
         CreateMap<User,UserReturnDTO>().ForMember(x=>x.Id,opt=>opt.MapFrom(src=>src.Id))
             .ForMember(x=>x.FirstName,opt=>opt.MapFrom(src=>src.Username))
             .ForMember(x=>x.AvatarName,opt=>opt.MapFrom(src=>src.AvatarFileName));

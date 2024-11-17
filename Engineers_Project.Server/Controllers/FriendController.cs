@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
 
-[Microsoft.AspNetCore.Components.Route("api/v1/[controller]/[action]")]
+[Route("api/v1/[controller]/[action]")]
+[ApiController]
 public class FriendController : Controller
 {
     private readonly IMediator _mediator;
@@ -17,26 +18,31 @@ public class FriendController : Controller
     [HttpGet]
     public async Task<IActionResult> GetFriends()
     {
-        return Ok(await _mediator.Send(new FriendQuery(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").ToString()))));
+        return Ok(await _mediator.Send(new FriendQuery(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()))));
     }
     [HttpPost]
-    public async Task<IActionResult> AddFriend([FromBody]Guid friendId)
+    public async Task<IActionResult> AddFriend(Guid friendId)
     {
-        return Ok(await _mediator.Send(new AddFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").ToString()), friendId)));
+        return Ok(await _mediator.Send(new AddFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()), friendId)));
     }
     [HttpDelete]
-    public async Task<IActionResult> RemoveFriend([FromBody]Guid friendId)
+    public async Task<IActionResult> RemoveFriend(Guid friendId)
     {
         await _mediator.Send(
-            new RemoveFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").ToString()),
+            new RemoveFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()),
                 friendId));
         return Ok();
 
     }
 
     [HttpPost]
-    public async Task<IActionResult> AcceptFriend([FromBody] Guid friendId)
+    public async Task<IActionResult> AcceptFriend( Guid friendId)
     {
-        return Ok(await _mediator.Send(new AcceptFriendCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").ToString()), friendId)));
+        var friend =
+            await _mediator.Send(new AcceptFriendCommand(
+                Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()), friendId));
+        if (friend is null)
+            return BadRequest();
+        return Ok(friend);
     }
 }
