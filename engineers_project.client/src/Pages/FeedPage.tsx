@@ -3,20 +3,19 @@ import { Post } from "../components/Post/Post";
 
 import { ChatBox } from "../components/RightNavBar/ChatBox";
 import { ChatFeed } from "../components/RightNavBar/ChatFeed";
-import { Message } from "../components/Chat/Message";
 import { usePosts } from "../API/hooks/usePosts";
 
 const post:PostDTO = {
     title:"",
     body:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
     user:{
-        id:"",
+        id:"1",
         username:"John Doe",
         avatarFileName:"src/assets/john-doe.jpg",
     },
 
     createdAt:new Date(Date.now()),
-    id:"",
+    id:"1",
 
 
 };

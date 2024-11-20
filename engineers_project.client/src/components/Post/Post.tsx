@@ -31,10 +31,10 @@ export function Post(props: { postInfo: PostDTO }) {
   return (
     <PostWrapper>
       <PostHeader>
-        <HeaderInfo onClick={()=>{navigate(`/profile/${props.postInfo.user.id}`)}}>
+        <HeaderInfo onClick={()=>{navigate(`/post/${props.postInfo.id}`)}}>
           <ImageDiv width={40} url={props.postInfo.user.avatarFileName}/>
           <div>
-            <div>{props.postInfo.user.username}</div>
+            <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.user.id}`)}}>{props.postInfo.user.username}</div>
             <div >
               {TimeElapsed(props.postInfo.createdAt)}
             </div>
