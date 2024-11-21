@@ -99,5 +99,6 @@ public class SocialPlatformDbContext : DbContext
         });
         modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
         modelBuilder.Entity<Post>().Navigation(x => x.User).AutoInclude();
+        modelBuilder.Entity<Post>().Navigation(x => x.Comments).AutoInclude();
     }
 }
