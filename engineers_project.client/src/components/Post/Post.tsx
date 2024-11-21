@@ -30,8 +30,8 @@ export function Post(props: { postInfo: PostDTO }) {
   const navigate= useNavigate()
   return (
     <PostWrapper>
-      <PostHeader>
-        <HeaderInfo onClick={()=>{navigate(`/post/${props.postInfo.id}`)}}>
+      <PostHeader onClick={()=>{navigate(`/post/${props.postInfo.id}`,{state:props.postInfo})}}>
+        <HeaderInfo>
           <ImageDiv width={40} url={props.postInfo.user.avatarFileName}/>
           <div>
             <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.user.id}`)}}>{props.postInfo.user.username}</div>

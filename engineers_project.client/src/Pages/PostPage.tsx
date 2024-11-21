@@ -1,3 +1,4 @@
+import { useLocation } from "react-router";
 import { Post } from "../components/Post/Post";
 
 const post:PostDTO = {
@@ -15,9 +16,11 @@ const post:PostDTO = {
 
 }; 
 export function PostPage(){
+    const location=useLocation()
+    console.log(location.state)
     return(
         <>
-        <Post postInfo={post}/>
+        <Post postInfo={location.state}/>
         </>
     )
 }
