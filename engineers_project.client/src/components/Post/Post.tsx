@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 
 
 const PostWrapper = styled.div`
+
   padding: 1em;
   background-color: #6085afcc;
   /*  */

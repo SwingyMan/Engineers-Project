@@ -3,7 +3,7 @@ const url ='Post/'
 export const fetchPosts=():Promise<PostDTO[]> =>{
     return get(url+'GetAvailablePosts')
 }
-export const createPost=(Post :Partial<PostDTO>):Promise<PostDTO>=>{
+export const createPost=(Post:{} ):Promise<PostDTO>=>{
     return post(url+'Post',Post)
 }
 export const editPost = (Post :Partial<PostDTO>):Promise<PostDTO>=>{

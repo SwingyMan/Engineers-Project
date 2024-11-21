@@ -5,6 +5,12 @@ import styled from "styled-components";
 const Options = styled.div`
   position: relative;
   cursor: pointer;
+  height: 25px;
+  transition: 150ms;
+  &:hover{
+    
+    background-color: var(--whiteTransparent20);
+}
 `;
 
 const StyledMenu = styled.div<{open:boolean}>`
@@ -13,6 +19,7 @@ const StyledMenu = styled.div<{open:boolean}>`
   
   transform: translate(-50%);
   display: ${(props)=>props.open?'block':'none'};
+
 `
 
 const OptionList = styled.div`
@@ -28,7 +35,7 @@ const optionList = ["edit", "delete"];
 export function OptionMenu() {
     const [open,setOpen] = useState(false)
   return (
-    <Options onClick={()=>setOpen(!open)}>
+    <Options onClick={(e)=>{e.stopPropagation();setOpen(!open)}}>
       <MdMoreHoriz size={25} />
       <StyledMenu open={open}>
         {optionList.map((option) => (

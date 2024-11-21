@@ -10,7 +10,7 @@ export const usePosts = () => {
     }
     const { isError, isFetched, data, error, isPending } = PostQuery()
     const handleAddPost = useMutation({
-        mutationFn: async (newPost:Partial<PostDTO>) => {
+        mutationFn: async (newPost:{}) => {
             await createPost(newPost)
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey })

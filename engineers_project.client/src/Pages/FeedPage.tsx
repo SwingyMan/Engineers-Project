@@ -28,14 +28,11 @@ flex:1;
   /* hide elements */
   /* visibility: hidden; */
   `
-const StyledPage = styled.div`
-    flex:1;
-    display: flex;
-    overflow: auto;
-  `
+
+const obj:{} = {entity:{title: "string",body: "string",availability: 0}}
 
 export function FeedPage() {
-    const {data,isPending,isFetched} =usePosts()
+    const {data,isPending,isFetched,handleAddPost} =usePosts()
 
     if(isPending){
         console.log(data)
@@ -44,22 +41,17 @@ export function FeedPage() {
         console.log(data)
     }
 
-    return (
-        <StyledPage>
+    return (<>
+            {/* <button onClick={()=>{handleAddPost.mutate(obj)}}> add</button> */}
             <PostFeed>
                 {data&&data.map(post=><Post key={post.id} postInfo={post}/>)}
-                <Post
-                    postInfo={post}
-                />
-                <Post postInfo={post} />
-                <Post postInfo={post} /><Post postInfo={post} />
-                <Post postInfo={post} /><Post postInfo={post} />
-            
+
+    
             </PostFeed>
             <ChatFeed>
             <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" ActivityDate={ Date.now()}/>
             <ChatBox ChatName="a" Sender="JohnDoe" ChatImg="src/assets/john-doe.jpg" Message="QWERTY" ActivityDate={ Date.now()}/>
             </ChatFeed>
-        </StyledPage>
+</>
     )
 }
