@@ -25,16 +25,23 @@ public class User
     public Guid? ActivationToken { get; set; }
     public bool IsActivated { get; set; } = false;
 
-    [JsonIgnore] public Role Role { get; set; }
-    [JsonIgnore] public ICollection<Friends> FriendsInitiated { get; set; }
-    [JsonIgnore] public ICollection<Friends> FriendsSent { get; set; }
-    [JsonIgnore] public ICollection<GroupUser> GroupUsers { get; set; }
+    [JsonIgnore] 
+    public Role Role { get; set; }
+    [JsonIgnore] 
+    public ICollection<Friends> FriendsInitiated { get; set; }
+    [JsonIgnore] 
+    public ICollection<Friends> FriendsSent { get; set; }
+    [JsonIgnore] 
+    public ICollection<GroupUser> GroupUsers { get; set; }
 
-    [JsonIgnore] public ICollection<Post> Posts { get; set; }
+    [JsonIgnore] 
+    public ICollection<Post> Posts { get; set; }
 
-    [JsonIgnore] public ICollection<Message> Messages { get; set; }
+    [JsonIgnore] 
+    public ICollection<Message> Messages { get; set; }
 
-    [JsonIgnore] public ICollection<ChatUser> ChatUsers { get; set; }
+    [JsonIgnore] 
+    public ICollection<ChatUser> ChatUsers { get; set; }
 
 
 
