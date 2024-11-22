@@ -42,7 +42,7 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
             var response = await _safetyClient.AnalyzeTextAsync(text);
 
             // Check if any content category flags the text as inappropriate
-            if (response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == TextCategory.Hate)?.Severity > 0 ||
+            if (response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == TextCategory.Hate)?.Severity > 2 ||
                 response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == TextCategory.SelfHarm)?.Severity > 0 ||
                 response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == TextCategory.Sexual)?.Severity > 0 || 
                 response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == TextCategory.Violence)?.Severity > 0)

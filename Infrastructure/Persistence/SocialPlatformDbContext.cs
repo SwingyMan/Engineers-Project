@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Infrastructure.Seeder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Persistence;
 
@@ -13,6 +14,8 @@ public class SocialPlatformDbContext : DbContext
     public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
         : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateInfinityConversions", true);
     }
 
     public DbSet<User> Users { get; set; }

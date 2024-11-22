@@ -17,8 +17,9 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand,Commen
     }
     public async Task<Comment> Handle(AddCommentCommand request, CancellationToken cancellationToken)
     {
-        var comment = _mapper.Map<Comment>(request);
+        var comment = _mapper.Map<Comment>(request.CommentDto);
         comment.UserId = request.UserId; 
+        comment.CreatedDate = DateTime.Now;
         await _context.Comments.AddAsync(comment,cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return comment;
