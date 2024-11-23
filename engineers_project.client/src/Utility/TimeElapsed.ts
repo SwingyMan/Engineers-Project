@@ -26,11 +26,11 @@ export function TimeElapsed(timestamp:Date):string {
             }
           }
           else{
-            diff = `${elapsedH} godz. temu`
+            diff = `${elapsedH} godzin temu`
           }
         }
         else{
-          diff= `${elapsedM} min. temu`
+          diff= `${elapsedM} minut temu`
         }
     }
     else{

@@ -35,7 +35,7 @@ export const get = async <T>(url: string): Promise<T> => {
 };
 
 export const post = async <T>(url: string, data: unknown): Promise<T> => {
-    console.log(`${getHost()}${url}`)
+
     const response = await fetch(`${getHost()}${url}`, {
         method: 'POST',
         headers: getHeaders(),
@@ -50,7 +50,7 @@ export const post = async <T>(url: string, data: unknown): Promise<T> => {
 };
 
 export const put = async <T>(url: string, data: unknown): Promise<T> => {
-    console.log(`${getHost()}${url}`)
+
 
     const response = await fetch(`${getHost()}${url}`, {
         method: "PUT",

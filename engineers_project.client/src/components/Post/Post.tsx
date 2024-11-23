@@ -26,6 +26,11 @@ const HeaderInfo = styled.div`
     gap:4px;
     cursor: pointer;
 `
+const Title=styled.div`
+  font-size: 1.2em;
+  font-weight: 400;
+  margin-bottom: .1em;
+`
 
 export function Post(props: { postInfo: PostDTO }) {
   const navigate= useNavigate()
@@ -44,6 +49,7 @@ export function Post(props: { postInfo: PostDTO }) {
 <OptionMenu/>
       </PostHeader>
       <hr />
+      <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
       <hr />
       <Comments />
