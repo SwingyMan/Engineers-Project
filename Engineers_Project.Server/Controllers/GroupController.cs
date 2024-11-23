@@ -45,12 +45,12 @@ public class GroupController : ControllerBase
     /// <summary>
     ///     Updates a Group.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="updateGroupCommand">Update command</param>
     /// <returns>The updated Group.</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<GroupDTO, Group> genericUpdateCommand)
+    public async Task<IActionResult> Put([FromBody] UpdateGroupCommand updateGroupCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateGroupCommand));
     }
 
     /// <summary>
