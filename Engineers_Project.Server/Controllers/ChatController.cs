@@ -48,12 +48,12 @@ public class ChatController : ControllerBase
     /// <summary>
     ///     Updates a Chat.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="UpdateCommand">Update command</param>
     /// <returns>The updated Chat.</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<ChatDTO, Chat> genericUpdateCommand)
+    public async Task<IActionResult> Put([FromBody] UpdateChatCommand updateChatCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateChatCommand));
     }
 
     /// <summary>

@@ -39,8 +39,19 @@ public class PostController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAvailablePosts()
     {
-        return Ok(await _mediator.Send(
-            new PostQuery(Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString()))));
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new PostQuery(guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+
+
     }
     /// <summary>
     ///     Creates a post.
@@ -67,14 +78,14 @@ public class PostController : ControllerBase
     /// <summary>
     ///     Updates a post.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="updatePostCommand">Update command</param>
     /// <returns>The updated post.</returns>
     // PUT api/post/put
     [HttpPatch]
     //[Authorize(Roles = "USER")] 
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
+    public async Task<IActionResult> Put([FromBody] UpdatePostCommand updatePostCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updatePostCommand));
     }
 
     /// <summary>
@@ -97,7 +108,7 @@ public class PostController : ControllerBase
     /// <returns>All tags</returns>
     // GET api/post/getall
     [HttpGet]
-    [Authorize(Roles="ADMIN")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));

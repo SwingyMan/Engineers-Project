@@ -52,14 +52,14 @@ public class RoleController : ControllerBase
     /// <summary>
     ///     Updates a role.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="updateRoleCommand">Update command</param>
     /// <returns>The updated role.</returns>
     // PUT api/role/put
     [HttpPut("{id}")]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<RoleDTO, Role> genericUpdateCommand)
+    public async Task<IActionResult> Put([FromBody] UpdateRoleCommand updateRoleCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateRoleCommand));
     }
 
     /// <summary>
