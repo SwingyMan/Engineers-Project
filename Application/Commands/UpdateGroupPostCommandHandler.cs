@@ -10,6 +10,11 @@ public class UpdateGroupPostCommandHandler : IRequestHandler<UpdateGroupPostComm
     private readonly IGenericRepository<GroupPost> _genericRepository;
     private readonly IMapper _mapper;
 
+    public UpdateGroupPostCommandHandler(IGenericRepository<GroupPost> genericRepository, IMapper mapper)
+    {
+        _genericRepository = genericRepository;
+        _mapper = mapper;
+    }
     public async Task<GroupPost> Handle(UpdateGroupPostCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<GroupPost>(request.entity);

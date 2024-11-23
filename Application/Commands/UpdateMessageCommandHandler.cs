@@ -10,6 +10,11 @@ public class UpdateMessageCommandHandler : IRequestHandler<UpdateMessageCommand,
     private readonly IGenericRepository<Message> _genericRepository;
     private readonly IMapper _mapper;
 
+    public UpdateMessageCommandHandler(IGenericRepository<Message> genericRepository, IMapper mapper)
+    {
+        _genericRepository = genericRepository;
+        _mapper = mapper;
+    }
     public async Task<Message> Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Message>(request.entity);

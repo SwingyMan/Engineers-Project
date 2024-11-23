@@ -8,7 +8,6 @@ namespace Application.Commands;
 public class UpdateRoleCommand : IRequest<Role>
 {
     public RoleDTO entity { get; }
-    [JsonIgnore]
     public Guid id { get; }
 
     public UpdateRoleCommand(RoleDTO entity, Guid id)

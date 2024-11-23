@@ -11,6 +11,11 @@ public class UpdateChatUserCommandHandler : IRequestHandler<UpdateChatUserComman
     private readonly IGenericRepository<ChatUser> _genericRepository;
     private readonly IMapper _mapper;
 
+    public UpdateChatUserCommandHandler(IGenericRepository<ChatUser> genericRepository, IMapper mapper)
+    {
+        _genericRepository = genericRepository;
+        _mapper = mapper;
+    }
     public async Task<ChatUser> Handle(UpdateChatUserCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<ChatUser>(request.entity);

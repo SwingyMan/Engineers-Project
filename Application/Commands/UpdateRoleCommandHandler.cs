@@ -12,6 +12,12 @@ public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Role>
     private readonly IGenericRepository<Role> _genericRepository;
     private readonly IMapper _mapper;
 
+    public UpdateRoleCommandHandler(IGenericRepository<Role> genericRepository, IMapper mapper)
+    {
+        _genericRepository = genericRepository;
+        _mapper = mapper;
+    }
+
     public async Task<Role> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Role>(request.entity);

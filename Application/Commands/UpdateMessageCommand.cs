@@ -9,7 +9,6 @@ namespace Application.Commands;
 public class UpdateMessageCommand : IRequest<Message>
 {
     public MessageDTO entity { get; }
-    [JsonIgnore]
     public Guid id { get; }
 
     public UpdateMessageCommand(MessageDTO entity, Guid id)

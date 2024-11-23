@@ -10,6 +10,11 @@ public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, Gro
     private readonly IGenericRepository<Group> _genericRepository;
     private readonly IMapper _mapper;
 
+    public UpdateGroupCommandHandler(IGenericRepository<Group> genericRepository, IMapper mapper)
+    {
+        _genericRepository = genericRepository;
+        _mapper = mapper;
+    }
     public async Task<Group> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Group>(request.entity);

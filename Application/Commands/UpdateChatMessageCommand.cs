@@ -8,7 +8,6 @@ namespace Application.Commands;
 public class UpdateChatMessageCommand : IRequest<ChatMessage>
 {
     public ChatMessageDTO entity { get; }
-    [JsonIgnore]
     public Guid id { get; }
 
     public UpdateChatMessageCommand(ChatMessageDTO entity, Guid id)

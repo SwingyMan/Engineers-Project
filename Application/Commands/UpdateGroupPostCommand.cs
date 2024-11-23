@@ -8,7 +8,6 @@ namespace Application.Commands;
 public class UpdateGroupPostCommand : IRequest<GroupPost>
 {
     public GroupPostDTO entity { get; }
-    [JsonIgnore]
     public Guid id { get; }
 
     public UpdateGroupPostCommand(GroupPostDTO entity, Guid id)

@@ -11,7 +11,6 @@ public class UpdateUserCommand : IRequest<User>
 {
 
     public UserDTO entity { get; }
-    [JsonIgnore]
     public Guid id { get; }
 
     public UpdateUserCommand(UserDTO entity, Guid id)
