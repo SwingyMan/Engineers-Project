@@ -15,10 +15,13 @@ public class GroupRepository : IGroupRepository
         _context = context;
     }
 
-    public async Task<Group> Update(Group group)
+    public async Task<Group> Update(Guid guid,Group group)
     {
-        _context.Entry(group).State = EntityState.Modified;
+        var entity = await _context.Groups.FindAsync(guid);
+        entity.Name = group.Name;
+        entity.Description = group.Description;
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return group;
+        return entity;
     }
 }

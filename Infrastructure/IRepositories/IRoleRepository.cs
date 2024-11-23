@@ -6,5 +6,5 @@ namespace Infrastructure.IRepositories;
 
 public interface IRoleRepository
 {
-    Task<Role> Update(Role role);
+    Task<Role> Update(Guid guid,Role role);
 }

@@ -5,5 +5,5 @@ namespace Infrastructure.IRepositories;
 
 public interface IGroupRepository
 {
-    Task<Group> Update(Group group);
+    Task<Group> Update(Guid guid,Group group);
 }

@@ -37,11 +37,15 @@ public class PostsRepository(SocialPlatformDbContext _context) : IPostsRepositor
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Post> UpdatePostAsync(Post post)
+    public async Task<Post> UpdatePostAsync(Guid guid,Post post)
     {
-        _context.Entry(post).State = EntityState.Modified;
+        var entity = await _context.Posts.FindAsync(guid);
+        entity.Availability = post.Availability;
+        entity.Title = post.Title;
+        entity.Body = post.Body;
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return post;
+        return entity;
     }
 
     public async Task DeletePostAsync(Guid postId)

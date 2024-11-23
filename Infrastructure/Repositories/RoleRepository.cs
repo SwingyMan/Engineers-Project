@@ -15,10 +15,12 @@ public class RoleRepository : IRoleRepository
         _context = context;
     }
 
-    public async Task<Role> Update(Role role)
+    public async Task<Role> Update(Guid guid,Role role)
     {
-        _context.Entry(role).State = EntityState.Modified;
+        var entity = await _context.Roles.FindAsync(guid);
+        role.Name = role.Name;
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return role;
+        return entity;
     }
 }

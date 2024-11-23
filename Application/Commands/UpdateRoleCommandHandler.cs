@@ -21,6 +21,6 @@ public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Role>
     public async Task<Role> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Role>(request.entity);
-        return await _repository.Update(mapped);
+        return await _repository.Update(request.id,mapped);
     }
 }

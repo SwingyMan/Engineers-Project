@@ -18,6 +18,6 @@ public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, Gro
     public async Task<Group> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Group>(request.entity);
-        return await _repository.Update(mapped);
+        return await _repository.Update(request.id,mapped);
     }
 }

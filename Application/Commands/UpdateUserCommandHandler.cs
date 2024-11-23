@@ -21,6 +21,6 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, User>
     public async Task<User> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<User>(request.entity);
-        return await _repository.Update(mapped);
+        return await _repository.Update(request.id,mapped);
     }
 }

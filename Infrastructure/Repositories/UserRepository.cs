@@ -21,10 +21,14 @@ public class UserRepository : IUserRepository
         return true;
     }
 
-    public async Task<User> Update(User user)
+    public async Task<User> Update(Guid guid,User user)
     {
-        _context.Entry(user).State = EntityState.Modified;
+        var entity = await _context.Users.FindAsync(guid);
+        entity.Username = user.Username;
+        entity.Email = user.Email;
+        entity.Password = user.Password;
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return user;
+        return entity;
     }
 }

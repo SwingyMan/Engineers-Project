@@ -18,6 +18,6 @@ public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, Chat>
     public async Task<Chat> Handle(UpdateChatCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Chat>(request.entity);
-        return await _repository.Update(mapped);
+        return await _repository.Update(request.id,mapped);
     }
 }

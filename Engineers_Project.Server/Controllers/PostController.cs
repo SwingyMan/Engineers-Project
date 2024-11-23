@@ -39,8 +39,19 @@ public class PostController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAvailablePosts()
     {
-        return Ok(await _mediator.Send(
-            new PostQuery(Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString()))));
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new PostQuery(guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+
+
     }
     /// <summary>
     ///     Creates a post.

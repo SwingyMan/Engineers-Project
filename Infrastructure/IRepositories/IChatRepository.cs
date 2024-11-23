@@ -5,5 +5,5 @@ namespace Infrastructure.IRepositories;
 
 public interface IChatRepository
 {
-    Task<Chat> Update(Chat chat);
+    Task<Chat> Update(Guid guid,Chat chat);
 }
