@@ -8,17 +8,17 @@ namespace Application.Commands;
 
 public class UpdateGroupUserCommandHandler : IRequestHandler<UpdateGroupUserCommand, GroupUser>
 {
-    private readonly IGenericRepository<GroupUser> _genericRepository;
+    private readonly IGroupUserRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateGroupUserCommandHandler(IGenericRepository<GroupUser> genericRepository, IMapper mapper)
+    public UpdateGroupUserCommandHandler(IGroupUserRepository repository, IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _repository = repository;
         _mapper = mapper;
     }
     public async Task<GroupUser> Handle(UpdateGroupUserCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<GroupUser>(request.entity);
-        return await _genericRepository.Update(request.id, mapped);
+        return await _repository.Update(mapped);
     }
 }

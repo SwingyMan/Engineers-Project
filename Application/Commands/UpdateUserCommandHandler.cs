@@ -9,18 +9,18 @@ namespace Application.Commands;
 
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, User>
 {
-    private readonly IGenericRepository<User> _genericRepository;
+    private readonly IUserRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateUserCommandHandler(IGenericRepository<User> genericRepository, IMapper mapper)
+    public UpdateUserCommandHandler(IUserRepository repository, IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<User> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<User>(request.entity);
-        return await _genericRepository.Update(request.id, mapped);
+        return await _repository.Update(mapped);
     }
 }

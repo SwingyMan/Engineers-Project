@@ -7,17 +7,17 @@ namespace Application.Commands;
 
 public class UpdateChatMessageCommandHandler : IRequestHandler<UpdateChatMessageCommand, ChatMessage>
 {
-    private readonly IGenericRepository<ChatMessage> _genericRepository;
+    private readonly IChatMessageRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateChatMessageCommandHandler(IGenericRepository<ChatMessage> genericRepository, IMapper mapper)
+    public UpdateChatMessageCommandHandler(IChatMessageRepository repository, IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _repository = repository;
         _mapper = mapper;
     }
     public async Task<ChatMessage> Handle(UpdateChatMessageCommand request, CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<ChatMessage>(request.entity);
-        return await _genericRepository.Update(request.id, mapped);
+        return await _repository.Update(mapped);
     }
 }

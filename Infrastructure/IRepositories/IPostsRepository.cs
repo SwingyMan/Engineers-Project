@@ -9,6 +9,6 @@ public interface IPostsRepository
     Task<IEnumerable<Post>> GetPostsByUserIdAsync(Guid userId);
     Task<IEnumerable<Post>> GetPostsByAvailabilityAsync(Availability availability);
     Task AddPostAsync(Post post);
-    Task UpdatePostAsync(Post post);
+    Task<Post> UpdatePostAsync(Post post);
     Task DeletePostAsync(Guid postId);
 }
