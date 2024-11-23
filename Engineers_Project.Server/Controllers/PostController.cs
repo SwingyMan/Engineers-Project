@@ -49,7 +49,6 @@ public class PostController : ControllerBase
     /// <returns>The updated post.</returns>
     // POST api/post/post
     [HttpPost]
-    [Authorize(Roles="USER")]
     public async Task<IActionResult> Post([FromBody] AddPostCommand addPostCommand)
     {
         var userIdClaim = User.FindFirst("id");
@@ -71,11 +70,10 @@ public class PostController : ControllerBase
     /// <param name="genericUpdateCommand">Update command</param>
     /// <returns>The updated post.</returns>
     // PUT api/post/put
-    [HttpPatch("{id}")]
+    [HttpPatch]
     //[Authorize(Roles = "USER")] 
     public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<PostDTO, Post> genericUpdateCommand)
     {
-        var x = Request.HttpContext;
         return Ok(await _mediator.Send(genericUpdateCommand));
     }
 

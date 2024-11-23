@@ -29,7 +29,6 @@ public class PostQueryHandler : IRequestHandler<PostQuery, List<Post>>
                     .ToList());
             }
         }
-
         return publicPosts.ToList();
     }
 }
