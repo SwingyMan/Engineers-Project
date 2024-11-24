@@ -27,7 +27,7 @@ public class UserController : Controller
     {
         var ipAddress = HttpContext.Connection.RemoteIpAddress;
         var host = HttpContext.Request.Host.Host;
-        var token = await _mediator.Send(new RegisterCommand(userDto, ipAddress,host));
+        var token = await _mediator.Send(new RegisterCommand(userDto, ipAddress, host));
         if (token is null)
             return NotFound();
         return Ok(token);
@@ -58,7 +58,7 @@ public class UserController : Controller
     }
 
     [HttpPatch]
-    public async Task<IActionResult> UpdateByID([FromBody] GenericUpdateCommand<UserDTO, User> genericUpdateCommand)
+    public async Task<IActionResult> UpdateByID([FromBody] UpdateUserCommand updateUserCommand)
     {
         var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
         if (userIdClaim == null)
@@ -67,12 +67,12 @@ public class UserController : Controller
         }
 
         var userId = Guid.Parse(userIdClaim.Value);
-        if (userId != genericUpdateCommand.id)
+        if (userId != updateUserCommand.id)
         {
             return Forbid("Users can only update their own information.");
         }
 
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateUserCommand));
     }
 
     [HttpDelete]
@@ -99,7 +99,7 @@ public class UserController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAvatar(string FileName)
     {
-        var avatar =await _mediator.Send(new AvatarQuery(FileName));
+        var avatar = await _mediator.Send(new AvatarQuery(FileName));
         if (avatar is null)
         {
             return NotFound();
@@ -107,7 +107,7 @@ public class UserController : Controller
         return Ok(avatar);
     }
     [HttpPost]
-    public async Task<IActionResult> AddAvatar([FromForm]AddAvatarCommand addAvatarCommand)
+    public async Task<IActionResult> AddAvatar([FromForm] AddAvatarCommand addAvatarCommand)
     {
         return Ok(await _mediator.Send(addAvatarCommand));
     }

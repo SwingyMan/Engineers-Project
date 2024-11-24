@@ -1,4 +1,5 @@
-﻿using Infrastructure.IRepositories;
+﻿using Domain.Entities;
+using Infrastructure.IRepositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,5 +19,16 @@ public class UserRepository : IUserRepository
         var entity = await _context.Users.Where(x => x.Email == email).ToListAsync();
         if (entity.Count == 0) return false;
         return true;
+    }
+
+    public async Task<User> Update(Guid guid,User user)
+    {
+        var entity = await _context.Users.FindAsync(guid);
+        entity.Username = user.Username;
+        entity.Email = user.Email;
+        entity.Password = user.Password;
+        _context.Entry(entity).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return entity;
     }
 }

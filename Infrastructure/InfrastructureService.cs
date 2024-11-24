@@ -40,7 +40,7 @@ public static class InfrastructureService
                 clientbuilder.UseCredential(new DefaultAzureCredential());
             }
         );
-        
+
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
         serviceCollection.AddAuthentication(options =>
@@ -65,7 +65,15 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IBlobInfrastructure), typeof(BlobInfrastructure));
         serviceCollection.AddScoped(typeof(IUserRepository), typeof(UserRepository));
         serviceCollection.AddScoped(typeof(IPostsRepository), typeof(PostsRepository));
-        serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
+        serviceCollection.AddScoped(typeof(IChatRepository), typeof(ChatRepository));
+        serviceCollection.AddScoped(typeof(IChatMessageRepository), typeof(ChatMessageRepository));
+        serviceCollection.AddScoped(typeof(IChatUserRepository), typeof(ChatUserRepository));
+        serviceCollection.AddScoped(typeof(IGroupRepository), typeof(GroupRepository));
+        serviceCollection.AddScoped(typeof(IGroupPostRepository), typeof(GroupPostRepository));
+        serviceCollection.AddScoped(typeof(IGroupUserRepository), typeof(GroupUserRepository));
+        serviceCollection.AddScoped(typeof(IMessageRepository), typeof(MessageRepository));
+        serviceCollection.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
+        serviceCollection.AddApplicationInsightsTelemetry(x => x.ConnectionString = insightskey);
         serviceCollection.AddServiceProfiler();
         serviceCollection.AddSignalR()
             .AddAzureSignalR(x =>
@@ -78,9 +86,9 @@ public static class InfrastructureService
             });
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddTransient<TextContentSafetyService>();
-                serviceCollection.AddSerilog((services, lc) => lc
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console());
+        serviceCollection.AddSerilog((services, lc) => lc
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console());
     }
 }
