@@ -16,6 +16,9 @@ public class Post
     public DateTime CreatedAt { get; set; }
     public ICollection<Attachments> Attachments { get; set; }
     public ICollection<Comment> Comments { get; set; }
+    [NotMapped] public string Username => User.Username;
+    [NotMapped] public string AvatarName => User.AvatarFileName;
+    [JsonIgnore]
     public User User { get; set; }
 
     [JsonIgnore] 

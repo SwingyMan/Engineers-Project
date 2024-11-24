@@ -53,8 +53,8 @@ public class MessageController : ControllerBase
     /// <param name="UpdateMessageCommand">Update command</param>
     /// <returns>The updated message.</returns>
     // PUT api/message/put
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] UpdateMessageCommand genericUpdateCommand)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch([FromBody] UpdateMessageCommand genericUpdateCommand)
     {
         return Ok(await _mediator.Send(genericUpdateCommand));
     }
