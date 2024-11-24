@@ -19,10 +19,14 @@ public class User
     public string Email { get; set; }
     [JsonIgnore] public string Password { get; set; }
     public Guid RoleId { get; set; }
+    [JsonIgnore]
     public DateTime CreatedAt { get; set; }
+    [JsonIgnore]
     public string IpOfRegistry { get; set; }
     public string AvatarFileName { get; set; } = null;
+    [JsonIgnore]
     public Guid? ActivationToken { get; set; }
+    [JsonIgnore]
     public bool IsActivated { get; set; } = false;
 
     [JsonIgnore] 

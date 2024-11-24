@@ -50,8 +50,8 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="UpdateCommand">Update command</param>
     /// <returns>The updated Chat.</returns>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] UpdateChatCommand updateChatCommand)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch([FromBody] UpdateChatCommand updateChatCommand)
     {
         return Ok(await _mediator.Send(updateChatCommand));
     }

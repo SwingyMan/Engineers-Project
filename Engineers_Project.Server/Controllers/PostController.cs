@@ -83,7 +83,7 @@ public class PostController : ControllerBase
     // PUT api/post/put
     [HttpPatch]
     //[Authorize(Roles = "USER")] 
-    public async Task<IActionResult> Put([FromBody] UpdatePostCommand updatePostCommand)
+    public async Task<IActionResult> Patch([FromBody] UpdatePostCommand updatePostCommand)
     {
         return Ok(await _mediator.Send(updatePostCommand));
     }
@@ -113,9 +113,5 @@ public class PostController : ControllerBase
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));
     }
-    [HttpGet]
-    public async Task<IActionResult> GetComments(Guid postId)
-    {
-        return Ok(await _mediator.Send(new PostCommentQuery(postId)));
-    }
+
 }

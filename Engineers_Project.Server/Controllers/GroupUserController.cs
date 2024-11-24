@@ -53,8 +53,8 @@ public class GroupUserController : ControllerBase
     /// <param name="updateGroupUserCommand">Update command</param>
     /// <returns>The updated groupUser.</returns>
     // PUT api/groupUser/put
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] UpdateGroupUserCommand updateGroupUserCommand)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch([FromBody] UpdateGroupUserCommand updateGroupUserCommand)
     {
         return Ok(await _mediator.Send(updateGroupUserCommand));
     }
