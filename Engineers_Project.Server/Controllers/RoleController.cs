@@ -55,9 +55,9 @@ public class RoleController : ControllerBase
     /// <param name="updateRoleCommand">Update command</param>
     /// <returns>The updated role.</returns>
     // PUT api/role/put
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Put([FromBody] UpdateRoleCommand updateRoleCommand)
+    public async Task<IActionResult> Patch([FromBody] UpdateRoleCommand updateRoleCommand)
     {
         return Ok(await _mediator.Send(updateRoleCommand));
     }
