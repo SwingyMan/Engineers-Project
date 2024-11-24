@@ -1,4 +1,4 @@
-import { UserDTO } from "../DTO/UserDTO";
+import { UserDTO } from "../API/DTO/UserDTO";
 
 export interface UserContextProps {
 	token: string | null;

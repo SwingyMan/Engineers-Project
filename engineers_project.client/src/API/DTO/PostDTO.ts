@@ -8,6 +8,7 @@ interface PostDTO{
     availability?: 1|0,
     createdAt: Date,
     attachments?: string|null,
+    comments:[],
     user: {
         id: string,
         username:string,

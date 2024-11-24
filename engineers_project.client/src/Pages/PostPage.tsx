@@ -1,26 +1,14 @@
 import { useLocation } from "react-router";
 import { Post } from "../components/Post/Post";
-
-const post:PostDTO = {
-    title:"",
-    body:"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur voluptate nostrum dolores quidem distinctio placeat, laboriosam, sed fugit eum expedita, sapiente repellendus enim. Maxime iure possimus repellendus tempora eum recusandae!",
-    user:{
-        id:"1",
-        username:"John Doe",
-        avatarFileName:"src/assets/john-doe.jpg",
-    },
-
-    createdAt:new Date(Date.now()),
-    id:"1",
+import { usePostDetails } from "../API/hooks/usePostDetails";
 
 
-}; 
 export function PostPage(){
     const location=useLocation()
-    console.log(location.state)
+    const {data} = usePostDetails(location.pathname.slice(6))
     return(
         <>
-        <Post postInfo={location.state}/>
+        {data&&<Post postInfo={data}/>}
         </>
     )
 }

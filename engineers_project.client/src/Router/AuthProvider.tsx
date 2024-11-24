@@ -2,7 +2,7 @@
 import { createContext, useContext, useState } from "react";
 import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
-import { UserDTO } from "../DTO/UserDTO";
+import { UserDTO } from "../API/DTO/UserDTO";
 
 
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);

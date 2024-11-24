@@ -4,7 +4,6 @@ export function TimeElapsed(timestamp:Date):string {
     let now =new Date(Date.now());
     let elapsedS =((now.getTime() -Date.parse(`${timestamp}`))/1000);
 
-    console.log(now.getTime() -Date.parse(`${timestamp}`));
     if(elapsedS>=60){
 
       

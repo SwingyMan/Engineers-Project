@@ -14,19 +14,15 @@ const PostFeed = styled.div`
 export function FeedPage() {
   const { data, isPending, isFetched } = usePosts();
 
-  if (isPending) {
-    console.log(data);
-  }
-  if (isFetched) {
-    console.log(data);
-  }
 
   return (
     <>
-
       <PostFeed>
         <CreatePost />
-        {data && data.map((post) => <Post key={post.id} postInfo={post} />)}
+        {data &&
+          data.pages.map((group, i) =>
+            group.map((post) => <Post key={post.id} postInfo={post} />)
+          )}
       </PostFeed>
       <ChatFeed>
         <ChatBox

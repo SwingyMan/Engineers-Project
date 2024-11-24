@@ -14,7 +14,7 @@ const PostWrapper = styled.div`
   margin: 1em;
   border-radius: 10px;
   border: 1px solid var(--darkGrey);
-  align-items: flex-start;
+
 `;
 const PostHeader = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export function Post(props: { postInfo: PostDTO }) {
     <PostWrapper>
       <PostHeader onClick={()=>{navigate(`/post/${props.postInfo.id}`,{state:props.postInfo})}}>
         <HeaderInfo>
-          <ImageDiv width={40} url={props.postInfo.user.avatarFileName}/>
+          <ImageDiv width={40} url={""}/>
           <div>
             <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.user.id}`)}}>{props.postInfo.user.username}</div>
             <div >
@@ -52,7 +52,9 @@ export function Post(props: { postInfo: PostDTO }) {
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
       <hr />
-      <Comments />
+        <div>
+            Komentarze ({props.postInfo.comments.length})
+        </div>
     </PostWrapper>
   );
 }

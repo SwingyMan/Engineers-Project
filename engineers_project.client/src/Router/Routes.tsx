@@ -17,9 +17,9 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element:(
+        element: (
           <PrivateRoute>
-            <FeedPage/>
+            <FeedPage />
           </PrivateRoute>
         ),
         errorElement: (
@@ -27,29 +27,29 @@ export const router = createBrowserRouter([
             <ErrorPage />
           </PrivateRoute>
         ),
-      },
+        
+          
+        
+      },{
+            path: "/post/:id",
+            element: (
+              <PrivateRoute>
+                <PostPage />
+              </PrivateRoute>
+            ),
+          },
     ],
   },
+
   {
-    path: "/post/:id",
-    element:(
+    path: "/profile/:id",
+    element: (
       <PrivateRoute>
-        <PostPage/>
+        <ProfilePage />
       </PrivateRoute>
-    )
-
-
+    ),
   },
-  { path:"/profile/:id",
-    element:(
-      <PrivateRoute>
-        <ProfilePage/>
-      </PrivateRoute>
-    )
-
-  },
-  { path:"/group"
-  },
+  { path: "/group" },
   {
     path: "/login",
     element: <LoginPage />,
