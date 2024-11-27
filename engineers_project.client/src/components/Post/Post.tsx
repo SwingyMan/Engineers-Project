@@ -1,4 +1,3 @@
-import { Comments } from "../Comments/Comments";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
@@ -38,9 +37,9 @@ export function Post(props: { postInfo: PostDTO }) {
     <PostWrapper>
       <PostHeader onClick={()=>{navigate(`/post/${props.postInfo.id}`,{state:props.postInfo})}}>
         <HeaderInfo>
-          <ImageDiv width={40} url={""}/>
+          <ImageDiv width={40} url={props.postInfo.avatarFileName?props.postInfo.avatarFileName:""}/>
           <div>
-            <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.user.id}`)}}>{props.postInfo.user.username}</div>
+            <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.userId}`)}}>{props.postInfo.username}</div>
             <div >
               {TimeElapsed(props.postInfo.createdAt)}
             </div>
@@ -50,7 +49,7 @@ export function Post(props: { postInfo: PostDTO }) {
       </PostHeader>
       <hr />
       <Title>{props.postInfo.title}</Title>
-      <div>{props.postInfo.body}</div>
+      <div><b>{props.postInfo.body}</b></div>
       <hr />
         <div>
             Komentarze ({props.postInfo.comments.length})

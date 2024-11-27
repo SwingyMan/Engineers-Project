@@ -8,13 +8,13 @@ const StyledImage = styled.div`
     return<>
             <StyledImage> 
             <svg aria-hidden="true" width={props.width} height={props.width}>
-            <mask id=":circ:">                
+            <mask id={`:circ${props.width}:`}>                
             <circle cx={props.width/2} cy={props.width/2} r={props.width/2} fill="white" ></circle>
             </mask>
-            <g mask="url(#:circ:)">
+            <g mask={`url(#:circ${props.width}:)`}>
                 <image x="0" y="0" preserveAspectRatio="xMidYMid slice" height={"100%"} href={props.url} width={"100%"}
                 />
-                <circle stroke="grba(0,0,0,0.05)" fill="none" cx={props.width/2} cy={props.width/2} r={props.width/2} ></circle>
+                <circle stroke="grba(0,0,0,0.05)" fill="none" cx={(props.width/2)} cy={(props.width/2)} r={(props.width/2)} ></circle>
             </g>
             </svg>
             </StyledImage>  

@@ -9,9 +9,7 @@ interface PostDTO{
     createdAt: Date,
     attachments?: string|null,
     comments:[],
-    user: {
-        id: string,
-        username:string,
-        avatarFileName: string,
-    }
+    userId:string,
+    username:string,
+    avatarFileName:string
 }
