@@ -10,14 +10,15 @@ import { Comment } from "../components/Post/Comment";
 const PostFeed = styled.div`
   flex: 1;
   overflow-y: scroll;
-  background-color: var();
+  color: var(--white);
+
 `;
 const comm :CommentDTO= {
  content:"ahsdb voiqjbdvuahbf vkj,ah d jhalhfd lnalhv alndz vlad nfmxckjvhn jklsfn v,mxńćvjha dcm,n kjhajldfh lamdn c,mxn ljha ncvm andc,jmh n,mvn slf hnamnv ,m ,fja; dfn,mvnz",
  avararName:"src/assets/john-doe.jpg",
  username:"qefqev vqeverv",
  postId:"",
- createdDate:Date.now(),
+ createdDate:new Date(Date.now()),
  userId:""
 }
 export function FeedPage() {
@@ -28,10 +29,10 @@ export function FeedPage() {
     <>
       <PostFeed>
         <CreatePost />
-        {data &&
+        {isPending?"Loading...":(data &&
           data.pages.map((group, i) =>
-            group.map((post) => <Post key={post.id} postInfo={post} />)
-          )}
+            group.map((post) => <Post key={post.id} postInfo={post} details={0} />)
+          ))}
           <Comment comment={comm}/>
       </PostFeed>
       <ChatFeed>

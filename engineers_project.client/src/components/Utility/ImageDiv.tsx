@@ -1,12 +1,13 @@
 import styled from "styled-components";
-const StyledImage = styled.div`
+const StyledImage = styled.div<{margin?:string}>`
     height: 100%;
     display: flex;
     align-items: center;
+    margin: ${(props)=>props.margin?props.margin:"none"};
 `
- export function ImageDiv(props: { width: number; url: string | undefined; }){
+ export function ImageDiv(props: { width: number; url: string | undefined; margin?:string }){
     return<>
-            <StyledImage> 
+            <StyledImage margin={props.margin}> 
             <svg aria-hidden="true" width={props.width} height={props.width}>
             <mask id={`:circ${props.width}:`}>                
             <circle cx={props.width/2} cy={props.width/2} r={props.width/2} fill="white" ></circle>

@@ -1,7 +1,7 @@
 interface CommentDTO{
     content:string,
     postId:string
-    createdDate:number
+    createdDate:Date
     userId:string,
     username:string,
     avararName:string

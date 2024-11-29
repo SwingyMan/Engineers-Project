@@ -3,6 +3,7 @@ import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
+import { Comment } from "./Comment";
 
 
 const PostWrapper = styled.div`
@@ -25,35 +26,36 @@ const HeaderInfo = styled.div`
     gap:4px;
     cursor: pointer;
 `
-const Title=styled.div`
+const Title = styled.div`
   font-size: 1.2em;
   font-weight: 400;
   margin-bottom: .1em;
 `
 
-export function Post(props: { postInfo: PostDTO }) {
-  const navigate= useNavigate()
+export function Post(props: { postInfo: PostDTO, details:1|0 }) {
+  const navigate = useNavigate()
   return (
     <PostWrapper>
-      <PostHeader onClick={()=>{navigate(`/post/${props.postInfo.id}`,{state:props.postInfo})}}>
+      <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
         <HeaderInfo>
-          <ImageDiv width={40} url={props.postInfo.avatarFileName?props.postInfo.avatarFileName:""}/>
+          <ImageDiv width={40} url={props.postInfo.avatarFileName ? props.postInfo.avatarFileName : ""} />
           <div>
-            <div onClick={(e)=>{e.stopPropagation(),navigate(`/profile/${props.postInfo.userId}`)}}>{props.postInfo.username}</div>
+            <div onClick={(e) => { e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`) }}>{props.postInfo.username}</div>
             <div >
               {TimeElapsed(props.postInfo.createdAt)}
             </div>
           </div>
         </HeaderInfo>
-<OptionMenu/>
+        <OptionMenu />
       </PostHeader>
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div><b>{props.postInfo.body}</b></div>
       <hr />
-        <div>
-            Komentarze ({props.postInfo.comments.length})
-        </div>
+      {props.details===1?(props.postInfo.comments.map((comment)=>(<Comment comment={comment}/>))):
+      (<div>
+        Komentarze ({props.postInfo.comments.length})
+      </div>)}
     </PostWrapper>
   );
 }

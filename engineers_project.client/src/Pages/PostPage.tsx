@@ -8,7 +8,7 @@ export function PostPage(){
     const {data} = usePostDetails(location.pathname.slice(6))
     return(
         <>
-        {data&&<Post postInfo={data}/>}
+        {data&&<Post postInfo={data} details={1}/>}
         </>
     )
 }
