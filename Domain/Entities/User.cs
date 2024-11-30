@@ -46,6 +46,8 @@ public class User
 
     [JsonIgnore] 
     public ICollection<ChatUser> ChatUsers { get; set; }
+    [JsonIgnore]
+    public RefreshToken RefreshToken { get; set; }
 
 
 
