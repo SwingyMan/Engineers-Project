@@ -115,4 +115,15 @@ public class UserController : Controller
         await _mediator.Send(new RemoveAvatarCommand(guid));
         return Ok();
     }
+    [HttpGet]
+    public async Task<IActionResult> RefreshToken(string refreshToken)
+    {
+        var token = await _mediator.Send(new RefreshTokenCommand(refreshToken));
+        if (token is null)
+            return NotFound();
+        return Ok(new 
+        {
+            token =token,
+        });
+    }
 }
