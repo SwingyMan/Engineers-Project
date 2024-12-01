@@ -34,8 +34,6 @@ export function FeedPage() {
           data.pages.map((group, i) =>
             group.map((post) => <Post key={post.id} postInfo={post} details={0} />)
           ))}
-          <CreateComment/>
-          <Comment comment={comm}/>
       </PostFeed>
       <ChatFeed>
         <ChatBox

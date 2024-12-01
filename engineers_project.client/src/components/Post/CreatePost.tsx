@@ -60,8 +60,10 @@ export function CreatePost() {
   };
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(newPost)
     handleAddPost.mutate({ entity: { ...newPost } });
+    setNewPost({    title: "",
+      body: "",
+      availability: 0,})
   };
   return (
     <NewPostWraper>
@@ -71,6 +73,7 @@ export function CreatePost() {
             type="text"
             name="title"
             placeholder="Title"
+            value={newPost.title}
             onChange={handleInput}
           />
         </InputWraper>
@@ -78,6 +81,7 @@ export function CreatePost() {
           <BodyInput
             type="text"
             name="body"
+            value={newPost.body}
             placeholder="Body"
             onChange={handleInput}
           />

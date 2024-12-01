@@ -1,6 +1,10 @@
-import { useQueryClient, useQuery, useMutation, InfiniteData } from "@tanstack/react-query";
 import {
-  createPost,
+  useQueryClient,
+  useQuery,
+  useMutation,
+  InfiniteData,
+} from "@tanstack/react-query";
+import {
   editPost,
   deletePost,
   fetchPost,
@@ -8,15 +12,16 @@ import {
 export const usePostDetails = (id: string) => {
   const QueryKey = ["post", id];
   const queryClient = useQueryClient();
-  const init: InfiniteData<PostDTO[], unknown> | undefined=queryClient.getQueryData(["post"])
+  const init: InfiniteData<PostDTO[], unknown> | undefined =
+    queryClient.getQueryData(["post"]);
 
   const PostQuery = () => {
     return useQuery({
       queryKey: QueryKey,
       queryFn: () => fetchPost(QueryKey[1]),
-      initialData: () => init?.pages[0].find((d)=>d.id===QueryKey[1]),
+      initialData: () => init?.pages[0].find((d) => d.id === QueryKey[1]),
       staleTime: 60 * 1000,
-      initialDataUpdatedAt:1000
+      initialDataUpdatedAt: 1000,
     });
   };
   const { isError, isFetched, data, error, isPending } = PostQuery();

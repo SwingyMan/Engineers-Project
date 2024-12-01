@@ -40,7 +40,6 @@ public static class InfrastructureService
                 clientbuilder.UseCredential(new DefaultAzureCredential());
             }
         );
-
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
         serviceCollection.AddAuthentication(options =>

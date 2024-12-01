@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { Comment } from "./Comment";
+import { CreateComment } from "./CreateComment";
 
 
 const PostWrapper = styled.div`
@@ -14,6 +15,8 @@ const PostWrapper = styled.div`
   margin: 1em;
   border-radius: 10px;
   border: 1px solid var(--darkGrey);
+  height: min-content;
+  min-width: 50%;
 
 `;
 const PostHeader = styled.div`
@@ -34,6 +37,7 @@ const Title = styled.div`
 
 export function Post(props: { postInfo: PostDTO, details:1|0 }) {
   const navigate = useNavigate()
+  console.log(props.postInfo)
   return (
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
@@ -50,9 +54,9 @@ export function Post(props: { postInfo: PostDTO, details:1|0 }) {
       </PostHeader>
       <hr />
       <Title>{props.postInfo.title}</Title>
-      <div><b>{props.postInfo.body}</b></div>
+      <div>{props.postInfo.body}</div>
       <hr />
-      {props.details===1?(props.postInfo.comments.map((comment)=>(<Comment comment={comment}/>))):
+      {props.details===1?(<><CreateComment id={props.postInfo.id}/>{props.postInfo.comments.map((comment)=>(<Comment comment={comment}/>))}</>):
       (<div>
         Komentarze ({props.postInfo.comments.length})
       </div>)}
