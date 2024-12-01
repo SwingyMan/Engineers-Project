@@ -1,4 +1,3 @@
-import { title } from "process";
 import { useState } from "react";
 import styled from "styled-components";
 import { usePosts } from "../../API/hooks/usePosts";
@@ -42,10 +41,11 @@ const BodyInput = styled.input`
   color: inherit;
 `;
 export function CreatePost() {
+
   const [newPost, setNewPost] = useState({
-      title: "",
-      body: "",
-      availability: 0,
+    title: "",
+    body: "",
+    availability: 0,
   });
   const { handleAddPost } = usePosts();
   const handleInput = (e: {
@@ -61,7 +61,7 @@ export function CreatePost() {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     console.log(newPost)
-    handleAddPost.mutate({entity:{...newPost}});
+    handleAddPost.mutate({ entity: { ...newPost } });
   };
   return (
     <NewPostWraper>

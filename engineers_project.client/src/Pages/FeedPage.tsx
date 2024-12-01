@@ -6,6 +6,7 @@ import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 import { usePosts } from "../API/hooks/usePosts";
 import { CreatePost } from "../components/Post/CreatePost";
 import { Comment } from "../components/Post/Comment";
+import { CreateComment } from "../components/Post/CreateComment";
 
 const PostFeed = styled.div`
   flex: 1;
@@ -33,6 +34,7 @@ export function FeedPage() {
           data.pages.map((group, i) =>
             group.map((post) => <Post key={post.id} postInfo={post} details={0} />)
           ))}
+          <CreateComment/>
           <Comment comment={comm}/>
       </PostFeed>
       <ChatFeed>

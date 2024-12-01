@@ -20,13 +20,7 @@ export const usePostDetails = (id: string) => {
     });
   };
   const { isError, isFetched, data, error, isPending } = PostQuery();
-  const handleAddPost = useMutation({
-    mutationFn: async (newPost: {}) => {
-      await createPost(newPost);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey }),
-    //onError
-  });
+
   const handleEditPost = useMutation({
     mutationFn: async (editedPost: Partial<PostDTO>) => {
       await editPost(editedPost);
@@ -42,8 +36,6 @@ export const usePostDetails = (id: string) => {
 
   return {
     data,
-
-    handleAddPost,
     handleEditPost,
     handleDeletePost,
     error,

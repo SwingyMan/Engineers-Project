@@ -49,25 +49,25 @@ const EyeIcon = styled.div`
 `
 
 export function LoginForm() {
-    const [input, setInput] = useState({
-        Email: "admin@example.com",
-        Password: "74]fKH#ayb",
-      });
-      
-      const [visible,setVisible]= useState(false)
-      const handleInput = (e: { target: { name: string; value: string } }) => {
-        const { name, value } = e.target;
-        setInput((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      };
-      
-      const { logIn } = useAuth();
-      const handleSubmitEvent = (e: { preventDefault: () => void }) => {
-        e.preventDefault();
-        logIn(input);
-      };
+  const [input, setInput] = useState({
+    Email: "admin@example.com",
+    Password: "74]fKH#ayb",
+  });
+
+  const [visible, setVisible] = useState(false)
+  const handleInput = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const { logIn } = useAuth();
+  const handleSubmitEvent = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    logIn(input);
+  };
   return (
     <StyledForm onSubmit={handleSubmitEvent}>
       <InputWraper>
@@ -77,23 +77,23 @@ export function LoginForm() {
           placeholder="E-mail"
           onChange={handleInput}
           defaultValue={""}
-          autoFocus={true} 
+          autoFocus={true}
         />
       </InputWraper>
       <InputWraper>
         <StyledInput
-          type={visible?"text":"password"}
+          type={visible ? "text" : "password"}
           name="Password"
           placeholder="Password"
           defaultValue={""}
           onChange={handleInput}
         />
-                <EyeIcon onClick={()=>setVisible(!visible)}>
-        {visible?<VscEye/>:<VscEyeClosed/>}
-      </EyeIcon>
+        <EyeIcon onClick={() => setVisible(!visible)}>
+          {visible ? <VscEye /> : <VscEyeClosed />}
+        </EyeIcon>
       </InputWraper>
 
-      <Button onClick={() => {}} value={"Login"} />
+      <Button onClick={() => { }} value={"Login"} />
     </StyledForm>
   );
 }
