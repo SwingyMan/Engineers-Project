@@ -52,7 +52,6 @@ export function CreatePost() {
     target: { name: string; value: string | 1 | 0 };
   }) => {
     const { name, value } = e.target;
-    console.log(newPost)
     setNewPost((prev) => ({
       ...prev,
       [name]: value,

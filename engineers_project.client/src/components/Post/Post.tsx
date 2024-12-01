@@ -37,7 +37,6 @@ const Title = styled.div`
 
 export function Post(props: { postInfo: PostDTO, details:1|0 }) {
   const navigate = useNavigate()
-  console.log(props.postInfo)
   return (
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
