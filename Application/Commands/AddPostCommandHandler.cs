@@ -2,6 +2,7 @@
 using Azure.AI.ContentSafety;
 using Domain.Entities;
 using Infrastructure.IRepositories;
+using Infrastructure.Persistence;
 using MediatR;
 
 namespace Application.Commands;
@@ -11,8 +12,10 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
     private readonly IGenericRepository<Post> _genericRepository;
     private readonly IMapper _mapper;
     private readonly ContentSafetyClient _safetyClient;
-    public AddPostCommandHandler(IGenericRepository<Post> genericRepository, IMapper mapper,ContentSafetyClient safetyClient)
+    private readonly SocialPlatformDbContext _context;
+    public AddPostCommandHandler(IGenericRepository<Post> genericRepository, IMapper mapper,ContentSafetyClient safetyClient,SocialPlatformDbContext context)
     {
+        _context = context;
         _genericRepository = genericRepository;
         _mapper = mapper;
         _safetyClient = safetyClient;
@@ -25,6 +28,8 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
         postEntity.CreatedAt = DateTime.UtcNow;
         postEntity.Status = "status";
         postEntity.Availability = request.entity.Availability;
+        var user = _context.Users.Single(x=>x.Id == request.guid);
+        postEntity.User = user;
         if (await CheckText(postEntity.Body))
         {
             return await _genericRepository.Add(postEntity);
