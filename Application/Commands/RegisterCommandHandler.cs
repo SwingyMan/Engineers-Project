@@ -54,6 +54,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, User>
             mappedEntity.ActivationToken = Guid.NewGuid();
             mappedEntity.IsActivated = false;
             mappedEntity.CreatedAt = DateTime.UtcNow;
+            mappedEntity.AvatarFileName = "default.jpg";
             var entity = await _context.AddAsync(mappedEntity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 

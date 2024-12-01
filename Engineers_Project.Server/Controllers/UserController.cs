@@ -102,7 +102,7 @@ public class UserController : Controller
         {
             return NotFound();
         }
-        return Ok(avatar);
+        return avatar;
     }
     [HttpPost]
     public async Task<IActionResult> AddAvatar([FromForm] AddAvatarCommand addAvatarCommand)
