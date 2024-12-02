@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { Comment } from "./Comment";
 import { CreateComment } from "./CreateComment";
 import { getImg } from "../../API/API";
+import { useComments } from "../../API/hooks/useComments";
 
 
 const PostWrapper = styled.div`
@@ -38,6 +39,7 @@ const Title = styled.div`
 
 export function Post(props: { postInfo: PostDTO, details:1|0 }) {
   const navigate = useNavigate()
+
   return (
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>

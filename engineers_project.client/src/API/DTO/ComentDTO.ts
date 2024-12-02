@@ -5,5 +5,5 @@ interface CommentDTO{
     createdDate:Date
     userId:string,
     username:string,
-    avararName:string
+    avatarId:string
 }
