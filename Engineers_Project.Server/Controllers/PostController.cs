@@ -113,5 +113,18 @@ public class PostController : ControllerBase
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));
     }
-
+    [HttpGet]
+    public async Task<IActionResult> FindPostByTitle(string title)
+    {
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new PostTitleQuery(title,guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }  }
 }
