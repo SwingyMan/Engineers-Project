@@ -25,7 +25,7 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
     {
         var postEntity = _mapper.Map<Post>(request.entity);
         postEntity.UserId = request.guid;
-        postEntity.CreatedAt = DateTime.UtcNow;
+        postEntity.CreatedAt = DateTime.Now;
         postEntity.Status = "status";
         postEntity.Availability = request.entity.Availability;
         var user = _context.Users.Single(x=>x.Id == request.guid);
