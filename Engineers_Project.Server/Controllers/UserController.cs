@@ -104,7 +104,7 @@ public class UserController : Controller
         {
             return NotFound();
         }
-        return Ok(avatar);
+        return avatar;
     }
     [HttpPost]
     public async Task<IActionResult> AddAvatar([FromForm] AddAvatarCommand addAvatarCommand)
@@ -116,5 +116,16 @@ public class UserController : Controller
     {
         await _mediator.Send(new RemoveAvatarCommand(guid));
         return Ok();
+    }
+    [HttpGet]
+    public async Task<IActionResult> RefreshToken(string refreshToken)
+    {
+        var token = await _mediator.Send(new RefreshTokenCommand(refreshToken));
+        if (token is null)
+            return NotFound();
+        return Ok(new 
+        {
+            token =token,
+        });
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using System.Security.Cryptography;
+using Application.DTOs;
 using AutoMapper;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
@@ -22,7 +23,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, UserReturnDTO>
     public async Task<UserReturnDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<User>(request.UserLoginDto);
-        var query = await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x =>
+        var query = await _context.Users.Include(x => x.Role).Include(x=>x.RefreshToken).FirstOrDefaultAsync(x =>
             x.Email == user.Email);
         if (query is null)
             return null;
@@ -36,6 +37,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, UserReturnDTO>
             var token = query.CreateToken(query.Username, query.Email, query.Id, query.Role.Name);
             var userReturn = _mapper.Map<UserReturnDTO>(query);
             userReturn.Token = token.Token;
+            var refreshToken = new RefreshToken(Guid.NewGuid(), Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)), userReturn.Id, DateTime.Now.AddHours(8));
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
+            userReturn.RefreshToken = refreshToken.Token;
             return userReturn;
         }
 

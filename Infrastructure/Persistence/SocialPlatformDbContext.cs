@@ -31,6 +31,7 @@ public class SocialPlatformDbContext : DbContext
     public DbSet<Attachments> Attachments { get; set; }
     public DbSet<Friends> Friends { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
