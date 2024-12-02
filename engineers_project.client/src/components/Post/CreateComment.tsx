@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import styled from "styled-components";
 import { useComments } from "../../API/hooks/useComments";
+import { getImg } from "../../API/API";
 
 const CreateCommentWrapper = styled.div`
   display: flex;
@@ -48,7 +49,8 @@ const SendIcon = styled.div`
   pointer-events: none  ;
 `;
 export function CreateComment({ id }: { id: string }) {
-  console.log(id)
+  
+
   const [newComment, setNewComment] = useState({
     postId: id,
     content: "",

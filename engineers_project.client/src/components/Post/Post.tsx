@@ -5,6 +5,7 @@ import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { Comment } from "./Comment";
 import { CreateComment } from "./CreateComment";
+import { getImg } from "../../API/API";
 
 
 const PostWrapper = styled.div`
@@ -41,7 +42,7 @@ export function Post(props: { postInfo: PostDTO, details:1|0 }) {
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
         <HeaderInfo>
-          <ImageDiv width={40} url={props.postInfo.avatarFileName ? props.postInfo.avatarFileName : ""} />
+          <ImageDiv width={40} url={props.postInfo.avatarName ? getImg(props.postInfo.avatarName) : ""} />
           <div>
             <div onClick={(e) => { e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`) }}>{props.postInfo.username}</div>
             <div >
@@ -55,7 +56,7 @@ export function Post(props: { postInfo: PostDTO, details:1|0 }) {
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
       <hr />
-      {props.details===1?(<><CreateComment id={props.postInfo.id}/>{props.postInfo.comments.map((comment)=>(<Comment comment={comment}/>))}</>):
+      {props.details===1?(<><CreateComment id={props.postInfo.id}/>{props.postInfo.comments.map((comment)=>(<Comment key={comment.id} comment={comment}/>))}</>):
       (<div>
         Komentarze ({props.postInfo.comments.length})
       </div>)}

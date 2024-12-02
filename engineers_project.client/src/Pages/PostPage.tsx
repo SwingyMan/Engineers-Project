@@ -8,6 +8,7 @@ const PostWrapper = styled.div`
     overflow-y: scroll;
     display: flex;
     justify-content: center;
+    color: var(--white);
 `
 
 export function PostPage(){

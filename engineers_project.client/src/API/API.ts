@@ -1,7 +1,7 @@
 const getHost = () => {
     if (import.meta.env.PROD) {
         const url = new URL(window.location.href);
-        return `${url.protocol}//${url.host}/`;//TODO dodać link 
+        return `${url.protocol}//${url.host}/`;
     } else {
         return import.meta.env.VITE_HOST_DEV;
     }
@@ -64,16 +64,17 @@ export const put = async <T>(url: string, data: unknown): Promise<T> => {
     return response.json()
 };
 export const patch = async <T>(url: string, data: unknown): Promise<T> => {
-const response = await fetch(`${getHost()}${url}`,{
-    method:"PATCH",
-    headers: getHeaders(),
-    body: JSON.stringify(data),
-})
-if (!response.ok) {
-    throw new Error(`PUT request failed: ${response.status}`);
+    const response = await fetch(`${getHost()}${url}`, {
+        method: "PATCH",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+        throw new Error(`PUT request failed: ${response.status}`);
+    }
+    return response.json()
 }
-return response.json()
-}
+
 
 export const del = async <T>(url: string): Promise<T> => {
     const response = await fetch(`${getHost()}${url}`, {
@@ -84,5 +85,11 @@ export const del = async <T>(url: string): Promise<T> => {
         throw new Error(`DELETE request failed: ${response.status}`);
     }
 
+
     return response.json()
+}
+export const getImg = (url: string) => {
+    const src = `${getHost()}User/GetAvatar?FileName=${url}`
+return src
+
 }

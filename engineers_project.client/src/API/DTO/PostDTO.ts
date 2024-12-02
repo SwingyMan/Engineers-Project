@@ -8,8 +8,8 @@ interface PostDTO{
     availability?: 1|0,
     createdAt: Date,
     attachments?: string|null,
-    comments:[],
+    comments:CommentDTO[],
     userId:string,
     username:string,
-    avatarFileName:string
+    avatarName:string
 }

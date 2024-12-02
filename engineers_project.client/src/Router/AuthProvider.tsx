@@ -8,7 +8,7 @@ import { UserDTO } from "../API/DTO/UserDTO";
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
-  const [user, setUser] = useState<Partial<UserDTO> | null>(null);
+  const [user, setUser] = useState<Partial<User> | null>(null);
   const [token, setToken] = useState<string | null>(
    localStorage.getItem("polsl-social")
   );
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }: Children) => {
         console.log(res)
         console.log(res.token)
         if (res.token) {
-         // setUser(res.data.user);
+          setUser({id:res.id,avatarName:res.avatarName,firstName:res.firstName});
           setToken(res.token);
           localStorage.setItem("polsl-social", res.token );
           setIsAuthenticated(true)

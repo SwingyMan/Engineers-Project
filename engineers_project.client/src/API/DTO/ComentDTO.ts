@@ -1,4 +1,5 @@
 interface CommentDTO{
+    id:string,
     content:string,
     postId:string
     createdDate:Date

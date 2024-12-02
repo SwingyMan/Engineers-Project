@@ -3,6 +3,7 @@ import { SearchBar } from "../SearchBar/SearchBar";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
+import { getImg } from "../../API/API";
 
 const StyledTopBar = styled.div`
   background-color: var(--blue);
@@ -61,7 +62,8 @@ function filter(searchInput: string) {
 
 }
 export function TopNavBar() {
-  const { logOut } = useAuth()
+  const { logOut,user } = useAuth()
+  console.log(user)
   return (
     <>
       <StyledTopBar>
@@ -71,7 +73,7 @@ export function TopNavBar() {
         <SearchBar searchFunction={filter} />
         <Buttons>
           <LogoutButton   onClick={() => { logOut() }} >{"Wyloguj "}<IoExitOutline /></LogoutButton>
-          <ImageDiv width={40} url={"src/assets/john-doe.jpg"} />
+          <ImageDiv width={40} url={user?.avatarName?`${getImg(user.avatarName)}`:""} />
 
         </Buttons>
       </StyledTopBar>
