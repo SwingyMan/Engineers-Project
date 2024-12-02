@@ -128,4 +128,10 @@ public class UserController : Controller
             token =token,
         });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUserByName(string userName)
+    {
+        return Ok(await _mediator.Send(new UserQuery(userName)));
+    }
 }
