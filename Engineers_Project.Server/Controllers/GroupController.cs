@@ -74,4 +74,10 @@ public class GroupController : ControllerBase
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Group>()));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupByName(string name)
+    {
+        return Ok(await _mediator.Send(new GroupQuery(name)));
+    }
 }
