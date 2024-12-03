@@ -1,18 +1,21 @@
-
 import { createContext, useContext, useState } from "react";
 import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
 import { UserDTO } from "../API/DTO/UserDTO";
 
-
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
-  const [user, setUser] = useState<Partial<User> | null>(null);
-  const [token, setToken] = useState<string | null>(
-   localStorage.getItem("polsl-social")
+  const storedUser =localStorage.getItem("user")!
+  const [user, setUser] = useState<User| null>(
+    JSON.parse(storedUser)
   );
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(token===null?false:true);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("polsl-social")
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    token === null ? false : true
+  );
 
   const logIn = async (data: Partial<UserDTO>) => {
     //TODO testy
@@ -23,7 +26,7 @@ const AuthProvider = ({ children }: Children) => {
         headers: {
           "Content-Type": "application/json",
         },
-        
+
         body: JSON.stringify(data),
       });
 
@@ -31,17 +34,21 @@ const AuthProvider = ({ children }: Children) => {
 
       if (text) {
         const res = JSON.parse(text);
-        console.log(res)
-        console.log(res.token)
+        const user1:User = {
+          id: res.id,
+          avatarName: res.avatarName,
+          firstName: res.firstName,
+        }
         if (res.token) {
-          setUser({id:res.id,avatarName:res.avatarName,firstName:res.firstName});
+          setUser(user1);
+          localStorage.setItem("user",JSON.stringify(user1))
           setToken(res.token);
-          localStorage.setItem("polsl-social", res.token );
-          setIsAuthenticated(true)
+          
+          localStorage.setItem("polsl-social", res.token);
+          setIsAuthenticated(true);
           return;
         }
-          throw new Error(res.message);
-        
+        throw new Error(res.message);
       }
     } catch (err) {
       console.error(err);
@@ -52,6 +59,7 @@ const AuthProvider = ({ children }: Children) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("polsl-social");
+    localStorage.removeItem("user");
   };
 
   return (

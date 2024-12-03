@@ -1,13 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createComment, deleteComment, editComment, fetchComments } from "../services/comments.service";
+import {
+  createComment,
+  deleteComment,
+  editComment,
+  fetchComments,
+} from "../services/comments.service";
 
 export const useComments = (id: string) => {
-  const QueryKey = [id];
+  const QueryKey = ["comments",id];
   const queryClient = useQueryClient();
   const CommentQuery = () => {
     return useQuery({
       queryKey: QueryKey,
-      queryFn: ()=>fetchComments(id),
+      queryFn: () => fetchComments(id),
       staleTime: 60 * 1000,
     });
   };
@@ -16,8 +21,12 @@ export const useComments = (id: string) => {
     mutationFn: async (newComment: Partial<CommentDTO>) => {
       await createComment(newComment);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey }),
-    //onError
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QueryKey })
+    },
+    onError: (e)=>{
+      console.log(e)
+    }
   });
   const handleEditComment = useMutation({
     mutationFn: async (editedComment: Partial<CommentDTO>) => {

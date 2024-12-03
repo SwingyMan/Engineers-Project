@@ -62,10 +62,12 @@ export function CreateComment({ id }: { id: string }) {
       [name]: value,
     }));
   };
-  const { handleAddComment } = useComments(id);
+  const { handleAddComment,data } = useComments(id);
   const SubmitComment = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    console.log(data)
     handleAddComment.mutate(newComment);
+    console.log(data)
     setNewComment({...newComment, content:""})
   };
   return (

@@ -3,10 +3,8 @@ import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
-import { Comment } from "./Comment";
-import { CreateComment } from "./CreateComment";
 import { getImg } from "../../API/API";
-import { useComments } from "../../API/hooks/useComments";
+import { useAuth } from "../../Router/AuthProvider";
 
 
 const PostWrapper = styled.div`
@@ -37,8 +35,9 @@ const Title = styled.div`
   margin-bottom: .1em;
 `
 
-export function Post(props: { postInfo: PostDTO, details:1|0 }) {
+export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,setIsOpen:Function}) {
   const navigate = useNavigate()
+
 
   return (
     <PostWrapper>
@@ -52,16 +51,15 @@ export function Post(props: { postInfo: PostDTO, details:1|0 }) {
             </div>
           </div>
         </HeaderInfo>
-        <OptionMenu />
+        {props.isMenu?<OptionMenu id={props.postInfo.id} isOpen={props.isOpen} setIsOpen={props.setIsOpen}/>:null}
       </PostHeader>
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
       <hr />
-      {props.details===1?(<><CreateComment id={props.postInfo.id}/>{props.postInfo.comments.map((comment)=>(<Comment key={comment.id} comment={comment}/>))}</>):
-      (<div>
+     <div>
         Komentarze ({props.postInfo.comments.length})
-      </div>)}
+      </div>
     </PostWrapper>
   );
 }

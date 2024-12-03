@@ -5,6 +5,8 @@ import { ChatBox } from "../components/RightNavBar/ChatBox";
 import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 import { usePosts } from "../API/hooks/usePosts";
 import { CreatePost } from "../components/Post/CreatePost";
+import { useState } from "react";
+import { useAuth } from "../Router/AuthProvider";
 
 const PostFeed = styled.div`
   flex: 1;
@@ -15,15 +17,19 @@ const PostFeed = styled.div`
 
 export function FeedPage() {
   const { data, isPending, isFetched } = usePosts();
-
-
+  const [openMenu,setOpenMenu] = useState<null|string>(null)
+  const handleMenuOpen=(id:string)=>{
+    console.log(id)
+    setOpenMenu(id)
+  }
+  const {user} = useAuth()
   return (
     <>
       <PostFeed>
         <CreatePost />
         {isPending?"Loading...":(data &&
           data.pages.map((group, i) =>
-            group.map((post) => <Post key={post.id} postInfo={post} details={0} />)
+            group.map((post) => <Post key={post.id} postInfo={post} isMenu={post.userId===user?.id} isOpen={openMenu===post.id} setIsOpen={()=>handleMenuOpen(post.id)}/>)
           ))}
       </PostFeed>
       <ChatFeed>

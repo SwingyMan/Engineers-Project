@@ -11,6 +11,7 @@ color: var(--white);
 `
 const ContentWrapper = styled.div`
     padding:0 5px;
+    max-width: 90%;
 `
 const Comm = styled.div`
 margin-top: .25em;

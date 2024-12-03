@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { MdMoreHoriz } from "react-icons/md";
 import styled from "styled-components";
 
@@ -16,7 +15,7 @@ const Options = styled.div`
 const StyledMenu = styled.div<{open:boolean}>`
   position: absolute;
   left:50%;
-  
+  color: var(--offBlack);
   transform: translate(-50%);
   display: ${(props)=>props.open?'block':'none'};
 
@@ -32,12 +31,12 @@ background-color: var(--white);
 `;
 
 const optionList = ["edit", "delete"];
-export function OptionMenu() {
-    const [open,setOpen] = useState(false)
+export function OptionMenu({id,isOpen,setIsOpen}:{id:string,isOpen:boolean,setIsOpen:Function}) {
+
   return (
-    <Options onClick={(e)=>{e.stopPropagation();setOpen(!open)}}>
+    <Options  onClick={(e)=>{e.stopPropagation(),setIsOpen()}}>
       <MdMoreHoriz size={25} />
-      <StyledMenu open={open}>
+      <StyledMenu open={isOpen}>
         {optionList.map((option) => (
           <OptionList key={option}>{option}</OptionList>
         ))}
@@ -45,3 +44,4 @@ export function OptionMenu() {
     </Options>
   );
 }
+ 
