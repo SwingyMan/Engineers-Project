@@ -65,10 +65,10 @@ public class SocialPlatformDbContext : DbContext
             .WithMany(u => u.ChatUsers)
             .HasForeignKey(cu => cu.UserId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Chat)
-            .WithMany(c => c.ChatUsers)
-            .HasForeignKey(cu => cu.ChatId);
+        //modelBuilder.Entity<User>()
+        //    .HasOne(cu => cu.ChatUsers)
+        //    .WithMany(c => c)
+        //    .HasForeignKey(cu => cu.ChatId);
 
         modelBuilder.Entity<ChatUser>()
             .HasOne(cu => cu.Message)

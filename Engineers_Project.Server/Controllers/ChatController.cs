@@ -2,9 +2,14 @@
 using Application.DTOs;
 using Application.Queries;
 using Domain.Entities;
+using Infrastructure.Hubs;
+using Infrastructure.IRepositories;
+using Infrastructure.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace Engineers_Project.Server.Controllers;
 
@@ -14,10 +19,17 @@ namespace Engineers_Project.Server.Controllers;
 public class ChatController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IChatRepository _chatRepository;
+    private readonly IGenericRepository<User> _userRepository;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public ChatController(IMediator mediator)
+
+    public ChatController(IMediator mediator, IChatRepository chatRepository, IGenericRepository<User> userRepository, IHubContext<ChatHub> hubContext)
     {
         _mediator = mediator;
+        _chatRepository = chatRepository;
+        _userRepository = userRepository;
+        _hubContext = hubContext;
     }
 
     /// <summary>
@@ -32,6 +44,62 @@ public class ChatController : ControllerBase
         var chat = await _mediator.Send(new GenericGetByIdQuery<ChatDTO>(id));
         if (chat == null) return NotFound();
         return Ok(chat);
+    }
+
+    public async Task<IActionResult> GetOrCreateChat([FromBody] string recipientId)
+    {
+        string userId = User.FindFirstValue("id");
+
+        Guid userGuid = Guid.Parse(userId);
+        Guid recipientGuid = Guid.Parse(recipientId);
+
+        Guid[] userIds = [userGuid, recipientGuid];
+        Chat? chat = await _chatRepository.GetChatByUserIds(userIds);
+
+        if(chat == null)
+        {
+            User user = await _mediator.Send(new GenericGetByIdQuery<User>(userGuid));
+            User user2 = await _mediator.Send(new GenericGetByIdQuery<User>(recipientGuid));
+            //User user = await _userRepository.GetByID(userGuid);
+            //User user2 = await _userRepository.GetByID(recipientGuid);
+
+            chat = new Chat()
+            {
+                Users = [user, user2],
+                Name = ""
+            };
+
+            await _chatRepository.AddChatAsync(chat);
+        }
+
+        return Ok(chat);
+    }
+
+    public async Task SendMessage([FromBody] MessageDTO message)
+    {
+        string senderId = User.FindFirst("id")?.Value!;
+        Guid senderGuid = Guid.Parse(senderId);
+
+        ChatHubMessageDTO chatHubMessageDTO = new ChatHubMessageDTO()
+        {
+            Message = message.Content,
+            ChatId = message.ChatId.ToString(),
+            SenderId = senderId,
+            Timestamp = DateTime.UtcNow
+        };
+
+        // Save message to the db
+
+        await _mediator.Send(new GenericAddCommand<MessageDTO, Message>(message));
+
+        // Send message via SignalR
+        Chat chat = await _mediator.Send(new GenericGetByIdQuery<Chat>(message.ChatId));
+
+        string recipientId = chat.Users.First(user => user.Id != senderGuid).Id.ToString();
+
+        await _hubContext.Clients.User(recipientId).SendAsync("ReceiveMessage", message.Content);
+
+
     }
 
     /// <summary>

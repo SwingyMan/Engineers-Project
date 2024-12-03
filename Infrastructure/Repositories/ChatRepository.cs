@@ -1,0 +1,24 @@
+﻿using Domain.Entities;
+using Infrastructure.IRepositories;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Repositories;
+
+public class ChatRepository(SocialPlatformDbContext _context) : IChatRepository
+{
+    public async Task<Chat?> GetChatByUserIds(Guid[] userIds)
+    {
+        return await _context.Chats
+            .Include(c => c.Users)
+            .FirstOrDefaultAsync(c => c.Users.Count == 2
+            && c.Users.Any(u => u.Id == userIds[0])
+            && c.Users.Any(u => u.Id == userIds[1]));
+    }
+
+    public async Task AddChatAsync(Chat chat)
+    {
+        _context.Set<Chat>().Add(chat);
+        await _context.SaveChangesAsync();
+    }
+}

@@ -3,9 +3,12 @@ using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Hubs;
 using Infrastructure.Seeder;
+using Infrastructure.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -58,7 +61,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Samurai API",
+        Title = "Social Platform API",
     });
 
 });
@@ -67,6 +70,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<DbSeeder>();
+
 
 var app = builder.Build();
 app.UseDefaultFiles();
@@ -95,6 +99,15 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapFallbackToFile("/index.html");
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chat");
+
+//app.MapPost("chat/user", async (
+//    string userId,
+//    string content,
+//    IHubContext<ChatHub, IChatClient> context) =>
+//{
+//    await context.Clients.User(userId).ReceiveMessage(content);
+//    return Results.NoContent();
+//});
 
 app.Run();

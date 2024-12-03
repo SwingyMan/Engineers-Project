@@ -1,6 +1,7 @@
 ﻿using Application.Commands;
 using Application.DTOs;
 using Application.Queries;
+using Azure.AI.ContentSafety;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,7 @@ public class PostController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
+        var claims = User.Claims;
         var post = await _mediator.Send(new GenericGetByIdQuery<Post>(id));
         if (post == null) return NotFound();
         return Ok(post);
