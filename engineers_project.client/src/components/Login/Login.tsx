@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../Button/Button";
 import styled from "styled-components";
 import { useAuth } from "../../Router/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
@@ -28,7 +28,7 @@ export function Login() {
 
   const { isAuthenticated } = useAuth();
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
+    if (isAuthenticated) navigate("/",{replace:true});
   }, [isAuthenticated, navigate]);
 
   const [Login, setLogin] = useState("Login");

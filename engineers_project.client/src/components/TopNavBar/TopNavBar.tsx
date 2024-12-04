@@ -4,7 +4,6 @@ import { ImageDiv } from "../Utility/ImageDiv";
 import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
 import { getImg } from "../../API/API";
-import { useSearch } from "../../API/hooks/useSearch";
 
 const StyledTopBar = styled.div`
   background-color: var(--blue);
@@ -44,31 +43,17 @@ const LogoutButton = styled.button`
     transition-duration: 0.15s;
   }
 `;
-const table = [
-  { id: "1", value: "Apple" },
-  { id: "2", value: "Banana" },
-  { id: "3", value: "Cherry" },
-  { id: "4", value: "Date" },
-  { id: "5", value: "Elderberry" },
-  { id: "6", value: "Fig" },
-  { id: "7", value: "Grape" },
-  { id: "8", value: "Honeydew" },
-  { id: "9", value: "Kiwi" },
-  { id: "10", value: "Lemon" },
-];
-function filter(searchInput: string) {
-  return table.filter((r) => r.value.includes(searchInput));
-}
+
+
 export function TopNavBar() {
   const { logOut, user } = useAuth();
-  const { searchResult} = useSearch("")
   return (
     <>
       <StyledTopBar>
         <Logo>
           <img height={40} width={40} src="src/assets/logo-politechnika.png" />
         </Logo>
-        <SearchBar searchFunction={filter} />
+        <SearchBar  />
         <Buttons>
           <LogoutButton
             onClick={() => {

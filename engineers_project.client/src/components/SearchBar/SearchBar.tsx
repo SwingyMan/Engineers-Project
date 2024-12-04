@@ -1,26 +1,31 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
+import { fetchPostByTitle } from "../../API/services/searchByName.service";
+import { useNavigate } from "react-router";
 
 //bacground color do zmiany
 const StyledSearchBar = styled.div`
   width: 30%;
-  color:white;
+  color: white;
   font-size: 16px;
   z-index: 1;
-`
-const SearchInput = styled.div<{open:boolean}>`
+`;
+const SearchInput = styled.div<{ open: boolean }>`
   display: flex;
   background-color: rgb(69, 114, 159);
   height: 40px;
-  border-radius: ${(props)=>props.open==true?"20px":"20px 20px 0px 0px"};
-  margin: ${(props)=>props.open==true?"5px auto":"5px auto 0px auto"};
+  border-radius: ${(props) =>
+    props.open == true ? "20px" : "20px 20px 0px 0px"};
+  margin: ${(props) => (props.open == true ? "5px auto" : "5px auto 0px auto")};
   box-sizing: border-box;
   color: white;
   align-items: center;
   padding-left: 5px;
-  
-  `;
+  &:focus {
+    border: solid 1px white;
+  }
+`;
 const StyledInput = styled.input`
   background-color: transparent;
   width: 100%;
@@ -35,61 +40,91 @@ const StyledInput = styled.input`
   }
 `;
 const SearchResult = styled.div`
-&>:last-child{
-  border-radius: 0 0 15px 15px;
-}
-&>:hover{
+  & > :last-child {
+    border-radius: 0 0 15px 15px;
+  }
+  & > :hover {
     background-color: #003c7d;
   }
 `;
 const ResultRow = styled.div`
-  padding:5px 15px;
+  padding: 5px 15px;
   background-color: rgb(69, 114, 159);
   cursor: pointer;
-border-top: rgba(255, 255, 255, 0.30) 1px solid;
-`
-interface row {
-  id: string;
-  value: string;
-}
+  border-top: rgba(255, 255, 255, 0.3) 1px solid;
+`;
 
-interface searchBar {
-  searchFunction: (a: string) => { id: string; value: string }[];
-}
-export function SearchBar({ searchFunction }: searchBar) {
-  const [searchValue, setSearchValue] = useState("");
-  const init: row[] = [];
-  const [searchResult, setSearchResult] = useState(init);
-  useEffect(() => {
-    if (searchValue.length >= 2) {
-      setSearchResult(searchFunction(searchValue));
+export function SearchBar() {
+  const [query, setQuery] = useState(""); // User input
+  const init: PostDTO[] = [];
+  const [results, setResults] = useState(init); // API results
+  const [loading, setLoading] = useState(false); // Loading state
+  const inputRef = useRef(null);
+  // Function to handle API search
+  const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    console.log(input);
+    setQuery(() => input);
+
+    if (input.length < 2) {
+      setResults([]);
+      return;
     }
-    else {
-      setSearchResult([]);
+
+    setLoading(true);
+    try {
+      // Replace with your actual API endpoint
+      const response = fetchPostByTitle(input);
+      const data = await response;
+      setResults(data); // Adjust based on API response structure
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [searchValue]);
+  };
+  const navigate = useNavigate();
   return (
     <StyledSearchBar>
-      <SearchInput open={(searchValue.length==0)}>
-        <MdSearch size={32} />
-        <StyledInput value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-      </SearchInput>
+      <form 
+      // onSubmit={(e) => (e.preventDefault(), navigate("/post/"))}
+      >
+        <SearchInput
+          open={
+            query.length == 0 || document.activeElement !== inputRef.current
+          }
+        >
+          <MdSearch size={32} />
+          <StyledInput
+            name="query"
+            value={query}
+            ref={inputRef}
+            onChange={(e) => handleSearch(e)}
+          />
+        </SearchInput>
+      </form>
       <SearchResult>
         {/* search result */}
-        {searchValue.length == 0 ?
-          null : (
-            searchValue.length < 2 ?
-              <ResultRow>Wpisz co najmniej 2 znaki</ResultRow> :
-
-              (searchResult.length > 0 ?
-                (
-                  searchResult.map(
-                    (row) => <ResultRow key={row.id}>{row.value}</ResultRow> //row probabaly new element
-                  )
-                ) : (
-                  <ResultRow>Nie znaleziono </ResultRow>
-                ))
-          )}
+        {query.length == 0 ||
+        document.activeElement !== inputRef.current ? null : query.length <
+          2 ? (
+          <ResultRow>Wpisz co najmniej 2 znaki</ResultRow>
+        ) : loading ? (
+          <ResultRow>Loading...</ResultRow>
+        ) : results.length === 0 ? (
+          <ResultRow>Not Found</ResultRow>
+        ) : (
+          results.slice(0, 7).map((row) => (
+            <ResultRow
+              onClick={() => {
+                navigate("/post/" + row.id), setQuery("");
+              }}
+              key={row.id}
+            >
+              {row.title}
+            </ResultRow>
+          ))
+        )}
       </SearchResult>
     </StyledSearchBar>
   );
