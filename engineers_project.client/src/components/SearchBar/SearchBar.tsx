@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FocusEvent, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
 import { fetchPostByTitle } from "../../API/services/searchByName.service";
@@ -84,7 +84,7 @@ export function SearchBar() {
     }
   };
   const navigate = useNavigate();
-  const handleBlur=(e)=>{
+  const handleBlur=(e: FocusEvent<HTMLDivElement, Element>)=>{
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setActive(false);
   }
