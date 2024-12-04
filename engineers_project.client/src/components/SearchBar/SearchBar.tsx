@@ -84,8 +84,13 @@ export function SearchBar() {
     }
   };
   const navigate = useNavigate();
+  const handleBlur=(e)=>{
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setActive(false);
+  }
+  }
   return (
-    <StyledSearchBar>
+    <StyledSearchBar tabIndex={-1}onBlur={(e)=>handleBlur(e)}>
       <form
       // onSubmit={(e) => (e.preventDefault(), navigate("/post/"))}
       >
@@ -93,7 +98,7 @@ export function SearchBar() {
           <MdSearch size={32} />
           <StyledInput
             onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
+            
             name="query"
             value={query}
             onChange={(e) => handleSearch(e)}
@@ -112,7 +117,8 @@ export function SearchBar() {
           results.slice(0, 7).map((row) => (
             <ResultRow
               onClick={() => {
-                navigate("/post/" + row.id), setQuery("");
+                navigate("/post/" + row.id), 
+                setActive(false)
               }}
               key={row.id}
             >
