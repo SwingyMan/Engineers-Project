@@ -59,7 +59,7 @@ export function SearchBar() {
   const init: PostDTO[] = [];
   const [results, setResults] = useState(init); // API results
   const [loading, setLoading] = useState(false); // Loading state
-  const inputRef = useRef(null);
+  const [active, setActive] = useState(false);
   // Function to handle API search
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -86,28 +86,23 @@ export function SearchBar() {
   const navigate = useNavigate();
   return (
     <StyledSearchBar>
-      <form 
+      <form
       // onSubmit={(e) => (e.preventDefault(), navigate("/post/"))}
       >
-        <SearchInput
-          open={
-            query.length == 0 || document.activeElement !== inputRef.current
-          }
-        >
+        <SearchInput open={!active}>
           <MdSearch size={32} />
           <StyledInput
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
             name="query"
             value={query}
-            ref={inputRef}
             onChange={(e) => handleSearch(e)}
           />
         </SearchInput>
       </form>
       <SearchResult>
         {/* search result */}
-        {query.length == 0 ||
-        document.activeElement !== inputRef.current ? null : query.length <
-          2 ? (
+        { !active ? null : query.length < 2 ? (
           <ResultRow>Wpisz co najmniej 2 znaki</ResultRow>
         ) : loading ? (
           <ResultRow>Loading...</ResultRow>
