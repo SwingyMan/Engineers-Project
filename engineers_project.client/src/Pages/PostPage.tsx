@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { useParams } from "react-router";
 import { usePostDetails } from "../API/hooks/usePostDetails";
 import styled from "styled-components";
 import { PostDetails } from "../components/Post/PostDetails";
@@ -11,15 +11,18 @@ const PostWrapper = styled.div`
     display: flex;
     justify-content: center;
     color: var(--white);
+    width: 100%;
 `
 
 export function PostPage(){
-    const location=useLocation()
+    const {id} = useParams()
+    if (id===undefined){
+        return
+    }
     const {user} = useAuth()
-    const {data} = usePostDetails(location.pathname.slice(6))
+    const {data} = usePostDetails(id)
     const [openMenu,setOpenMenu] = useState<null|string>(null)
     const handleMenuOpen=(id:string)=>{
-      console.log(id)
       setOpenMenu(id)
     }
     return(

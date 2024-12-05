@@ -1,8 +1,10 @@
 import { ChangeEvent, FocusEvent, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import styled from "styled-components";
-import { fetchPostByTitle } from "../../API/services/searchByName.service";
 import { useNavigate } from "react-router";
+import { useSearchPosts } from "../../API/hooks/useSearchPosts";
+import { useSearchUsers } from "../../API/hooks/useSearchUsers";
+import { UserCard } from "../User/UserCard";
 
 //bacground color do zmiany
 const StyledSearchBar = styled.div`
@@ -56,49 +58,33 @@ const ResultRow = styled.div`
 
 export function SearchBar() {
   const [query, setQuery] = useState(""); // User input
-  const init: PostDTO[] = [];
-  const [results, setResults] = useState(init); // API results
-  const [loading, setLoading] = useState(false); // Loading state
   const [active, setActive] = useState(false);
+  const { data: postData, isFetching, isError } = useSearchPosts(query);
+  const { data: userData } = useSearchUsers(query);
   // Function to handle API search
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    console.log(input);
     setQuery(() => input);
-
-    if (input.length < 2) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // Replace with your actual API endpoint
-      const response = fetchPostByTitle(input);
-      const data = await response;
-      setResults(data); // Adjust based on API response structure
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
   };
   const navigate = useNavigate();
-  const handleBlur=(e: FocusEvent<HTMLDivElement, Element>)=>{
+  const handleBlur = (e: FocusEvent<HTMLDivElement, Element>) => {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setActive(false);
-  }
-  }
+    }
+  };
+  console.log(userData)
   return (
-    <StyledSearchBar tabIndex={-1}onBlur={(e)=>handleBlur(e)}>
+    <StyledSearchBar tabIndex={-1} onBlur={(e) => handleBlur(e)}>
       <form
-      // onSubmit={(e) => (e.preventDefault(), navigate("/post/"))}
+        onSubmit={(e) => (
+          e.preventDefault(),
+          query.length < 2 ? null : navigate("/search/" + query)
+        )}
       >
         <SearchInput open={!active}>
           <MdSearch size={32} />
           <StyledInput
             onFocus={() => setActive(true)}
-            
             name="query"
             value={query}
             onChange={(e) => handleSearch(e)}
@@ -107,24 +93,29 @@ export function SearchBar() {
       </form>
       <SearchResult>
         {/* search result */}
-        { !active ? null : query.length < 2 ? (
+        {!active ? null : query.length < 2 ? (
           <ResultRow>Wpisz co najmniej 2 znaki</ResultRow>
-        ) : loading ? (
+        ) : isFetching ? (
           <ResultRow>Loading...</ResultRow>
-        ) : results.length === 0 ? (
+        ) : (postData && postData.length === 0 )&&(userData&&userData.length===0)? (
           <ResultRow>Not Found</ResultRow>
         ) : (
-          results.slice(0, 7).map((row) => (
-            <ResultRow
-              onClick={() => {
-                navigate("/post/" + row.id), 
-                setActive(false)
-              }}
-              key={row.id}
-            >
-              {row.title}
-            </ResultRow>
-          ))
+          <>
+            {postData &&
+              postData.slice(0, 7).map((row) => (
+                <ResultRow
+                  onClick={() => {
+                    navigate("/post/" + row.id), setActive(false);
+                  }}
+                  key={row.id}
+                >
+                  {row.title}
+                </ResultRow>
+              ))}
+            {userData&&userData.slice(0,7).map((row)=>
+            <UserCard user={row}/>
+            )}
+          </>
         )}
       </SearchResult>
     </StyledSearchBar>

@@ -14,10 +14,11 @@ const ContentWrapper = styled.div`
     max-width: 90%;
 `
 const Comm = styled.div`
-margin-top: .25em;
+    margin-top: .25em;
     border-radius: 4px;
     background-color: var(--whiteTransparent20);
     padding: 5px;
+    overflow-wrap: break-word;
 `
 const Username = styled.div`
     font-weight: 400;

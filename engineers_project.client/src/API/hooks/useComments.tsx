@@ -5,8 +5,9 @@ import {
   editComment,
   fetchComments,
 } from "../services/comments.service";
+import { UUID } from "crypto";
 
-export const useComments = (id: string) => {
+export const useComments = (id: UUID) => {
   const QueryKey = ["comments",id];
   const queryClient = useQueryClient();
   const CommentQuery = () => {

@@ -5,6 +5,8 @@ import {
   InfiniteData,
 } from "@tanstack/react-query";
 import { editPost, deletePost, fetchPost } from "../services/posts.service";
+import { PostDTO } from "../DTO/PostDTO";
+
 export const usePostDetails = (id: string) => {
   const QueryKey = [id];
   const queryClient = useQueryClient();

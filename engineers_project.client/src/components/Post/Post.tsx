@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { getImg } from "../../API/API";
-import { useAuth } from "../../Router/AuthProvider";
+import { PostDTO } from "../../API/DTO/PostDTO";
 
 
 const PostWrapper = styled.div`

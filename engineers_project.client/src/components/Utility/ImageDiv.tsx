@@ -3,7 +3,7 @@ const StyledImage = styled.div<{margin?:string}>`
     height: 100%;
     display: flex;
     align-items: center;
-    margin: ${(props)=>props.margin?props.margin:"none"};
+    margin: ${(props)=>props.margin?props.margin:0};
 `
  export function ImageDiv(props: { width: number; url: string | undefined; margin?:string }){
     return<>
