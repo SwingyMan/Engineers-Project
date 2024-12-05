@@ -127,4 +127,20 @@ public class PostController : ControllerBase
         {
             return Unauthorized();
         }  }
+
+    [HttpGet]
+    public async Task<IActionResult> FindPostByUser(Guid userId)
+    {
+        try
+        {
+            var ownerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(ownerId);
+            return Ok(await _mediator.Send(
+                new PostUserQuery(userId,guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        } 
+    }
 }
