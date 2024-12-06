@@ -5,7 +5,8 @@ import { useAuth } from "../../Router/AuthProvider";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 const StyledForm = styled.form`
-  width: 450px;
+ width: 450px;
+  min-width: none; 
   display: flex;
   flex-direction: column;
   align-items: center;

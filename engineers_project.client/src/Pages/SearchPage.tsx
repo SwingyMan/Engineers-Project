@@ -69,6 +69,7 @@ export function SearchPage() {
   const [openMenu, setOpenMenu] = useState<null | string>(null);
 
   const { user } = useAuth();
+  console.log(user)
   const { data: PostData, isPending: isPostPending } = useSearchPosts(query);
   const { data: UserData, isPending: isUserPending } = useSearchUsers(query);
   return (

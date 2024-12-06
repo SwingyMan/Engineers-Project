@@ -1,4 +1,5 @@
 import { del, get, patch, post } from "../API"
+import { PostDTO } from "../DTO/PostDTO"
 const url ='Post/'
 export const fetchPosts=({pageParam}:{pageParam:number}):Promise<PostDTO[]> =>{
     return get(url+'GetAvailablePosts')

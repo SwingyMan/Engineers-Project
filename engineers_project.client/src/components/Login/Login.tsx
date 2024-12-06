@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../Button/Button";
 import styled from "styled-components";
 import { useAuth } from "../../Router/AuthProvider";
-import { replace, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 

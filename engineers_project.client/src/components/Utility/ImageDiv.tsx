@@ -1,6 +1,5 @@
 import styled from "styled-components";
 const StyledImage = styled.div<{margin?:string}>`
-    height: 100%;
     display: flex;
     align-items: center;
     margin: ${(props)=>props.margin?props.margin:0};

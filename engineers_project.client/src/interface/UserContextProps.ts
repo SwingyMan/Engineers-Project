@@ -1,3 +1,4 @@
+import { User } from "../API/DTO/User";
 import { UserDTO } from "../API/DTO/UserDTO";
 
 export interface UserContextProps {

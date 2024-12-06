@@ -65,7 +65,7 @@ export function TopNavBar() {
           </LogoutButton>
           <ImageDiv
             width={40}
-            url={user?.avatarName ? `${getImg(user.avatarName)}` : ""}
+            url={user?.avatarFileName ? `${getImg(user.avatarFileName)}` : ""}
           />
         </Buttons>
       </StyledTopBar>

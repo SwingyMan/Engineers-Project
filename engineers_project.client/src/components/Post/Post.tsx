@@ -17,7 +17,7 @@ const PostWrapper = styled.div`
   border: 1px solid var(--darkGrey);
   height: min-content;
   min-width: 50%;
-
+  color: var(--white);
 `;
 const PostHeader = styled.div`
   display: flex;

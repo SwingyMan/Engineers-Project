@@ -70,7 +70,7 @@ export const patch = async <T>(url: string, data: unknown): Promise<T> => {
         body: JSON.stringify(data),
     })
     if (!response.ok) {
-        throw new Error(`PUT request failed: ${response.status}`);
+        throw new Error(`PATCH request failed: ${response.status}`);
     }
     return response.json()
 }

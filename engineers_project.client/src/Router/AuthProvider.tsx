@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
 import { UserDTO } from "../API/DTO/UserDTO";
+import { User } from "../API/DTO/User";
 
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
@@ -16,7 +17,7 @@ const AuthProvider = ({ children }: Children) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     token === null ? false : true
   );
-
+console.log(token)
   const logIn = async (data: Partial<UserDTO>) => {
     //TODO testy
 
@@ -36,8 +37,8 @@ const AuthProvider = ({ children }: Children) => {
         const res = JSON.parse(text);
         const user1:User = {
           id: res.id,
-          avatarName: res.avatarName,
-          firstName: res.firstName,
+          avatarFileName: res.avatarFileName,
+          username: res.username,
         }
         if (res.token) {
           setUser(user1);
