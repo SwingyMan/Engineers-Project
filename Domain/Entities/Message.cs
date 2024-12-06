@@ -11,4 +11,5 @@ public class Message
     public DateTime CreationDate { get; set; }
     public Guid UserId { get; set; }
     [JsonIgnore] public User User { get; set; }
+    [JsonIgnore] public Chat Chat { get; set; }
 }

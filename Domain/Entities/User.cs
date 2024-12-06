@@ -34,10 +34,7 @@ public class User
 
     [JsonIgnore] public ICollection<Message> Messages { get; set; }
 
-    [JsonIgnore] public ICollection<ChatUser> ChatUsers { get; set; }
-
-
-
+    [JsonIgnore] public ICollection<Chat> Chats { get; set; } = new List<Chat>();
 
     public JwtToken CreateToken(string username, string email, Guid id, string role)
     {

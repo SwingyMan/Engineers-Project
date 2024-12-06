@@ -1,8 +1,9 @@
 ﻿namespace Infrastructure.SignalR;
-public class ChatHubMessageDTO
+
+public class ChatMessageResponseObject
 {
-    public string ChatId { get; set; }
+    public string Id { get; set; }
     public string Content { get; set; }
     public DateTime CreationDate { get; set; }
-    public string UserId { get; set; }
+    public ChatUserResponseObject User { get; set; }
 }

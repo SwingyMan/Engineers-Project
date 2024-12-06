@@ -2,5 +2,5 @@
 
 public interface IChatClient
 {
-    Task ReceiveMessage(ChatHubMessageDTO message);
+    Task ReceiveMessage(ChatMessageResponseObject message);
 }

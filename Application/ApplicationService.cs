@@ -5,6 +5,7 @@ using Application.DTOs;
 using Application.Queries;
 using Autofac.Core;
 using Domain.Entities;
+using Infrastructure.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -98,7 +99,13 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Post>>),
             typeof(GenericDeleteCommandHandler<Post>));
         //chat
-        serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<ChatHubMessageDTO, Message>, Message>),
+            typeof(GenericAddCommandHandler<ChatHubMessageDTO, Message>));
+
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Chat>, Chat>),
+            typeof(GetChatByIdQueryHandler));
+
+        //serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
         serviceCollection.AddAuthorization(options =>
         {
             options.AddPolicy("ChatMemberOrAdmin", policy =>

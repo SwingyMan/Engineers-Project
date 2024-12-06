@@ -60,27 +60,47 @@ public class SocialPlatformDbContext : DbContext
             .HasForeignKey(gp => gp.PostId);
 
         // ChatUser relationships
-        modelBuilder.Entity<ChatUser>() //
-            .HasOne(cu => cu.User)
-            .WithMany(u => u.ChatUsers)
-            .HasForeignKey(cu => cu.UserId);
+        //modelBuilder.Entity<ChatUser>() 
+        //    .HasOne(cu => cu.User)
+        //    .WithMany(u => u.ChatUsers)
+        //    .HasForeignKey(cu => cu.UserId);
 
         //modelBuilder.Entity<User>()
         //    .HasOne(cu => cu.ChatUsers)
         //    .WithMany(c => c)
         //    .HasForeignKey(cu => cu.ChatId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Message)
-            .WithMany()
-            .HasForeignKey(cu => cu.MessageId);
+        //modelBuilder.Entity<ChatUser>()
+        //    .HasOne(cu => cu.Message)
+        //    .WithMany()
+        //    .HasForeignKey(cu => cu.MessageId);
 
         // Message relationships
         modelBuilder.Entity<Message>()
             .HasOne(m => m.User)
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.UserId);
-        
-        modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId);
+
+        // Chat relationships
+        modelBuilder.Entity<Chat>()
+            .HasMany(c => c.Users)
+            .WithMany(u => u.Chats)
+            .UsingEntity<Dictionary<string, object>>(
+            "ChatUser", 
+            j => j.HasOne<User>().WithMany().HasForeignKey("UserId"), 
+            j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"));
+    
+
+    // Posts relationships
+    modelBuilder.Entity<Post>()
+            .HasMany(x => x.Attachments)
+            .WithOne(p => p.Post)
+            .HasForeignKey(x=>x.PostId);
+
     }
 }
