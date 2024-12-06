@@ -143,4 +143,21 @@ public class PostController : ControllerBase
             return Unauthorized();
         } 
     }
+
+    [HttpGet]
+    public async Task<IActionResult> FindPostInGroup(Guid groupId)
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            await _mediator.Send(
+                new PostGroupQuery(groupId,guid));
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
 }
