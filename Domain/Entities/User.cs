@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Domain.Entities;
 
@@ -21,7 +18,6 @@ public class User
     public Guid RoleId { get; set; }
     public DateTime CreatedAt { get; set; }
     public string IpOfRegistry { get; set; }
-
 
     public Guid? ActivationToken { get; set; }
     public bool IsActivated { get; set; } = false;

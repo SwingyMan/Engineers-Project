@@ -37,7 +37,7 @@ public class ChatController : ControllerBase
     }
 
     /// <summary>
-    ///     Retrieves a Chat by its Guid.
+    /// Retrieves a Chat by its Guid.
     /// </summary>
     /// <param name="id">Chat Guid</param>
     /// <returns>The retrieved Chat, if found.</returns>
@@ -56,23 +56,29 @@ public class ChatController : ControllerBase
     /// <param name="query">User guid</param>
     /// <returns>Chat DTO of the chat room between two users.</returns>
     [HttpPost]
-    public async Task<IActionResult> GetOrCreateChat([FromBody] Guid recipientGuid)
+    public async Task<IActionResult> GetOrCreateChat([FromBody] GetOrCreateChatDTO getOrCreateChatDTO)
     {
         Guid userGuid = Guid.Parse(User.FindFirstValue("id")!);
-        Guid[] userIds = [userGuid, recipientGuid];
+        Guid[] userIds = [userGuid, getOrCreateChatDTO.RecipientGuid];
 
         Chat? chat = await _chatRepository.GetChatByUserIds(userIds);
 
         if (chat == null)
         {
             User sender = await _userRepository.GetByID(userGuid);
-            User recipient = await _userRepository.GetByID(recipientGuid);
+            User recipient = await _userRepository.GetByID(getOrCreateChatDTO.RecipientGuid);
 
             var command = new CreateChatCommand() { Users = [sender, recipient] };
             chat = await _mediator.Send(command);
         }
         return Ok(_mapper.Map<ChatResponseObject>(chat));
     }
+
+    /// <summary>
+    /// Sends private chat message via SignalR hub
+    /// </summary>
+    /// <param name="message">MessageDTO of the message intended to be sent</param>
+    /// <returns>Sent message response DTO</returns>
     [HttpPost]
     public async Task<IActionResult> SendMessage([FromBody] MessageDTO message)
     {
@@ -102,49 +108,5 @@ public class ChatController : ControllerBase
         var messageResponseObject = _mapper.Map<ChatMessageResponseObject>(newMessage);
         await _hubContext.Clients.User(recipientId).SendAsync("ReceiveMessage", messageResponseObject);
         return Ok(messageResponseObject);
-    }
-
-    /// <summary>
-    ///     Creates a Chat.
-    /// </summary>
-    /// <param name="genericAddCommand">ChatDTO</param>
-    /// <returns>The created Chat.</returns>
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GenericAddCommand<ChatDTO, Chat> genericAddCommand)
-    {
-        return Ok(await _mediator.Send(genericAddCommand));
-    }
-
-    /// <summary>
-    ///     Updates a Chat.
-    /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
-    /// <returns>The updated Chat.</returns>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<ChatDTO, Chat> genericUpdateCommand)
-    {
-        return Ok(await _mediator.Send(genericUpdateCommand));
-    }
-
-    /// <summary>
-    ///     Deletes a Chat.
-    /// </summary>
-    /// <param name="id">Chat Guid</param>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _mediator.Send(new GenericDeleteCommand<ChatDTO>(id));
-        return Ok();
-    }
-
-    /// <summary>
-    ///     Retrieves all Chats.
-    /// </summary>
-    /// <param name="query"></param>
-    /// <returns>All Chats</returns>
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromBody] GenericGetAllQuery<ChatDTO> query)
-    {
-        return Ok(await _mediator.Send(query));
     }
 }
