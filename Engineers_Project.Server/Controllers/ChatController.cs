@@ -49,29 +49,27 @@ public class ChatController : ControllerBase
         return Ok(chat);
     }
 
+    /// <summary>
+    /// Retrieves chat between current user and user with given ID. 
+    /// If chat between those two users does not exist, it is created and then returned.
+    /// </summary>
+    /// <param name="query">User guid</param>
+    /// <returns>Chat DTO of the chat room between two users.</returns>
     [HttpPost]
-    public async Task<IActionResult> GetOrCreateChat([FromBody] string recipientId)
+    public async Task<IActionResult> GetOrCreateChat([FromBody] Guid recipientGuid)
     {
-        string userId = User.FindFirstValue("id");
-
-        Guid userGuid = Guid.Parse(userId);
-        Guid recipientGuid = Guid.Parse(recipientId);
-
+        Guid userGuid = Guid.Parse(User.FindFirstValue("id")!);
         Guid[] userIds = [userGuid, recipientGuid];
+
         Chat? chat = await _chatRepository.GetChatByUserIds(userIds);
 
-        if(chat == null)
+        if (chat == null)
         {
-            User user = await _mediator.Send(new GenericGetByIdQuery<User>(userGuid));
-            User user2 = await _mediator.Send(new GenericGetByIdQuery<User>(recipientGuid));
+            User sender = await _userRepository.GetByID(userGuid);
+            User recipient = await _userRepository.GetByID(recipientGuid);
 
-            chat = new Chat()
-            {
-                Users = new List<User>() { user, user2},
-                Name = ""
-            };
-            
-            await _chatRepository.AddChatAsync(chat);
+            var command = new CreateChatCommand() { Users = [sender, recipient] };
+            chat = await _mediator.Send(command);
         }
         return Ok(_mapper.Map<ChatResponseObject>(chat));
     }

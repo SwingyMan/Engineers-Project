@@ -105,6 +105,9 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Chat>, Chat>),
             typeof(GetChatByIdQueryHandler));
 
+        serviceCollection.AddTransient(typeof(IRequestHandler<CreateChatCommand, Chat>),
+            typeof(CreateChatCommandHandler));
+
         //serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
         serviceCollection.AddAuthorization(options =>
         {

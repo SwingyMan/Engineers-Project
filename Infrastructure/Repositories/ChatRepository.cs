@@ -25,9 +25,10 @@ public class ChatRepository(SocialPlatformDbContext _context) : IChatRepository
             .FirstOrDefaultAsync(c => c.Id == chatId);
     }
 
-    public async Task AddChatAsync(Chat chat)
+    public async Task<Chat?> AddChatAsync(Chat chat)
     {
         _context.Set<Chat>().Add(chat);
         await _context.SaveChangesAsync();
+        return chat;
     }
 }
