@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Infrastructure.Seeder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Persistence;
 
@@ -13,6 +14,8 @@ public class SocialPlatformDbContext : DbContext
     public SocialPlatformDbContext(DbContextOptions<SocialPlatformDbContext> options)
         : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateInfinityConversions", true);
     }
 
     public DbSet<User> Users { get; set; }
@@ -26,7 +29,9 @@ public class SocialPlatformDbContext : DbContext
     public DbSet<ChatUser> ChatUsers { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<Attachments> Attachments { get; set; }
-
+    public DbSet<Friends> Friends { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -16,21 +16,39 @@ public class User
     public string Email { get; set; }
     [JsonIgnore] public string Password { get; set; }
     public Guid RoleId { get; set; }
+    [JsonIgnore]
     public DateTime CreatedAt { get; set; }
+    [JsonIgnore]
     public string IpOfRegistry { get; set; }
-
+    public string AvatarFileName { get; set; } = null;
+    [JsonIgnore]
     public Guid? ActivationToken { get; set; }
+    [JsonIgnore]
     public bool IsActivated { get; set; } = false;
 
-    [JsonIgnore] public Role Role { get; set; }
+    [JsonIgnore] 
+    public Role Role { get; set; }
+    [JsonIgnore] 
+    public ICollection<Friends> FriendsInitiated { get; set; }
+    [JsonIgnore] 
+    public ICollection<Friends> FriendsSent { get; set; }
+    [JsonIgnore] 
+    public ICollection<GroupUser> GroupUsers { get; set; }
 
-    [JsonIgnore] public ICollection<GroupUser> GroupUsers { get; set; }
+    [JsonIgnore] 
+    public ICollection<Post> Posts { get; set; }
 
-    [JsonIgnore] public ICollection<Post> Posts { get; set; }
-
-    [JsonIgnore] public ICollection<Message> Messages { get; set; }
+    [JsonIgnore] 
+    public ICollection<Message> Messages { get; set; }
 
     [JsonIgnore] public ICollection<Chat> Chats { get; set; } = new List<Chat>();
+    [JsonIgnore] 
+    public ICollection<ChatUser> ChatUsers { get; set; }
+    [JsonIgnore]
+    public RefreshToken RefreshToken { get; set; }
+
+
+
 
     public JwtToken CreateToken(string username, string email, Guid id, string role)
     {

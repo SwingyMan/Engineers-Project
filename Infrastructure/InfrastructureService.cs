@@ -36,14 +36,14 @@ public static class InfrastructureService
             {
                 clientbuilder.AddBlobServiceClient(new Uri("https://socialplatformsa.blob.core.windows.net/"));
                 clientbuilder.AddSecretClient(new Uri("https://socialplatformkv.vault.azure.net/"));
-                clientbuilder.AddContentSafetyClient(new Uri("https://westeurope.api.cognitive.microsoft.com/"));
+                clientbuilder.AddContentSafetyClient(new Uri("https://safetext.cognitiveservices.azure.com/"));
                 clientbuilder.AddEmailClient(new Uri("https://socialplatformcs.europe.communication.azure.com"));
                 clientbuilder.AddTextAnalyticsClient(new Uri("https://westeurope.api.cognitive.microsoft.com/"));
                 clientbuilder.AddTextTranslationClient(new DefaultAzureCredential());
                 clientbuilder.UseCredential(new DefaultAzureCredential());
             }
         );
-        
+
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
 
@@ -87,6 +87,15 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IUserRepository), typeof(UserRepository));
         serviceCollection.AddScoped(typeof(IPostsRepository), typeof(PostsRepository));
         serviceCollection.AddScoped(typeof(IChatRepository), typeof(ChatRepository));
+        serviceCollection.AddScoped(typeof(IChatMessageRepository), typeof(ChatMessageRepository));
+        serviceCollection.AddScoped(typeof(IChatUserRepository), typeof(ChatUserRepository));
+        serviceCollection.AddScoped(typeof(IGroupRepository), typeof(GroupRepository));
+        serviceCollection.AddScoped(typeof(IGroupPostRepository), typeof(GroupPostRepository));
+        serviceCollection.AddScoped(typeof(IGroupUserRepository), typeof(GroupUserRepository));
+        serviceCollection.AddScoped(typeof(IMessageRepository), typeof(MessageRepository));
+        serviceCollection.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
+        serviceCollection.AddApplicationInsightsTelemetry(x => x.ConnectionString = insightskey);
+        serviceCollection.AddScoped(typeof(IChatRepository), typeof(ChatRepository));
         serviceCollection.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
         serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
         serviceCollection.AddServiceProfiler();
@@ -106,9 +115,9 @@ public static class InfrastructureService
         });
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddTransient<TextContentSafetyService>();
-                serviceCollection.AddSerilog((services, lc) => lc
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console());
+        serviceCollection.AddSerilog((services, lc) => lc
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console());
     }
 }

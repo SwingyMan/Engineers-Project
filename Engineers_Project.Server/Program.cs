@@ -70,7 +70,11 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplicationService();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<DbSeeder>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Open",
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
 
 var app = builder.Build();
 app.UseDefaultFiles();

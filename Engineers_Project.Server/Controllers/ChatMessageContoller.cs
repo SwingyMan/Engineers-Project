@@ -47,12 +47,12 @@ public class ChatMessageController : ControllerBase
     /// <summary>
     ///     Updates a ChatMessage.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="updateChatMessageCommand">Update command</param>
     /// <returns>The updated ChatMessage.</returns>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<ChatMessageDTO, ChatMessage> genericUpdateCommand)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch([FromBody] UpdateChatMessageCommand updateChatMessageCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateChatMessageCommand));
     }
 
     /// <summary>

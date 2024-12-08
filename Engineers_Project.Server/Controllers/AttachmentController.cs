@@ -35,8 +35,8 @@ public class AttachmentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromForm] AddAttachmentCommand attachmentCommand)
     {
-        await _mediator.Send(attachmentCommand);
-        return Ok();
+        
+        return Ok(await _mediator.Send(attachmentCommand));
     }
 
     [HttpDelete("{Id}")]

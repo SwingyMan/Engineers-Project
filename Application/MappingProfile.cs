@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
+using Serilog;
 using Infrastructure.SignalR;
 
 namespace Application;
@@ -20,14 +21,14 @@ public class MappingProfile : Profile
         CreateMap<ChatUserDTO, ChatUser>();
         CreateMap<ChatMessageDTO, ChatMessage>();
         CreateMap<ChatDTO, Chat>();
-        CreateMap<ChatHubMessageDTO, Message>();
+        CreateMap<CommentDTO, Comment>()
+            .ForMember(x=>x.CreatedDate,y=>y.MapFrom(src=>DateTime.Now));
+        CreateMap<User,UserReturnDTO>().ForMember(x=>x.Id,opt=>opt.MapFrom(src=>src.Id))
+            .ForMember(x=>x.FirstName,opt=>opt.MapFrom(src=>src.Username))
+            .ForMember(x=>x.AvatarName,opt=>opt.MapFrom(src=>src.AvatarFileName));
         CreateMap<AttachmentDTO, Attachments>()
             .ForMember(x=>x.Id,opt=>opt.MapFrom(src=>Guid.NewGuid()))
             .ForMember(x=>x.Type,opt=>opt.MapFrom(src=>src.FileType));
-
-        //CreateMap<Chat, ChatResponseObject>()
-        //    .IncludeMembers(src => src.Messages)
-        //    .IncludeMembers(src => src.Users);
 
         CreateMap<Chat, ChatResponseObject>()
             .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))

@@ -50,13 +50,13 @@ public class GroupUserController : ControllerBase
     /// <summary>
     ///     Updates a groupUser.
     /// </summary>
-    /// <param name="genericUpdateCommand">Update command</param>
+    /// <param name="updateGroupUserCommand">Update command</param>
     /// <returns>The updated groupUser.</returns>
     // PUT api/groupUser/put
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put([FromBody] GenericUpdateCommand<GroupUserDTO, GroupUser> genericUpdateCommand)
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch([FromBody] UpdateGroupUserCommand updateGroupUserCommand)
     {
-        return Ok(await _mediator.Send(genericUpdateCommand));
+        return Ok(await _mediator.Send(updateGroupUserCommand));
     }
 
     /// <summary>
