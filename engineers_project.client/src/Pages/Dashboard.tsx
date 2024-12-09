@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { TopNavBar } from "../components/TopNavBar/TopNavBar";
 import styled from "styled-components";
+import { LeftNavBar } from "../components/LeftNavBar/LeftNavBar";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -15,6 +16,8 @@ export default function Dashboard() {
       <>
         <TopNavBar />
         <StyledPage>
+          
+          <LeftNavBar/>
           <Outlet />
         </StyledPage>
       </>

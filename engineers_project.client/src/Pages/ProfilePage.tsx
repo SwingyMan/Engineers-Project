@@ -16,7 +16,6 @@ const ProfileCard = styled.div`
   flex-direction: row;
   align-items: center;
   height: fit-content;
-  flex-grow:x;
   background-color: var(--whiteTransparent20);
   margin: 10px;
   box-sizing: border-box;

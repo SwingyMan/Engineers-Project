@@ -5,7 +5,6 @@ const StyledChatFeed = styled.div`
   overflow-y: scroll;
   width: 20%;
   padding-top:10px ;
-  padding-right: 5px;
   display: flex;
   flex-direction: column;
 
