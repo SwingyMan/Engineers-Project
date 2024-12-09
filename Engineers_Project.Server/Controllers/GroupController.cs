@@ -149,4 +149,21 @@ public class GroupController : ControllerBase
             return Unauthorized();
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupMembership()
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            await _mediator.Send(
+                new GroupsUserQuery(guid));
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
 }
