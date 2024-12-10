@@ -3,6 +3,7 @@ using Application.Authorization.Requirements;
 using Application.Commands;
 using Application.DTOs;
 using Application.Queries;
+using Application.Services;
 using Autofac.Core;
 using Domain.Entities;
 using Infrastructure.SignalR;
@@ -106,9 +107,6 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Comment>>),
             typeof(GenericDeleteCommandHandler<Comment>));
         //chat
-        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<ChatHubMessageDTO, Message>, Message>),
-            typeof(GenericAddCommandHandler<ChatHubMessageDTO, Message>));
-
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Chat>, Chat>),
             typeof(GetChatByIdQueryHandler));
 
@@ -127,5 +125,7 @@ public static class ApplicationService
                 policy.Requirements.Add(new ChatMessageMemberRequirement());
             });
         });
+
+        serviceCollection.AddTransient<IUserAccessor, UserAccessor>();
     }
 }

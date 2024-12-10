@@ -53,7 +53,7 @@ public class ChatController : ControllerBase
     /// Retrieves chat between current user and user with given ID. 
     /// If chat between those two users does not exist, it is created and then returned.
     /// </summary>
-    /// <param name="query">User guid</param>
+    /// <param name="getOrCreateChatDTO">DTO containing recipieng ID</param>
     /// <returns>Chat DTO of the chat room between two users.</returns>
     [HttpPost]
     public async Task<IActionResult> GetOrCreateChat([FromBody] GetOrCreateChatDTO getOrCreateChatDTO)
@@ -80,33 +80,24 @@ public class ChatController : ControllerBase
     /// <param name="message">MessageDTO of the message intended to be sent</param>
     /// <returns>Sent message response DTO</returns>
     [HttpPost]
-    public async Task<IActionResult> SendMessage([FromBody] MessageDTO message)
+    public async Task<IActionResult> SendMessage([FromBody] AddChatMessageCommand request)
     {
-        string senderId = User.FindFirst("id")?.Value!;
-        Guid senderGuid = Guid.Parse(senderId);
+        Message newMessage = await _mediator.Send(request);
 
-        ChatHubMessageDTO chatHubMessageDTO = new ChatHubMessageDTO()
-        {
-            Content = message.Content,
-            ChatId = message.ChatId.ToString(),
-            UserId = senderId,
-            CreationDate = DateTime.UtcNow
-        }; 
+        GenericGetByIdQuery<Chat> query = new GenericGetByIdQuery<Chat>(request.ChatId);
+        Chat chat = await _mediator.Send(query);
 
-        Message newMessage = await _mediator.Send(new GenericAddCommand<ChatHubMessageDTO, Message>(chatHubMessageDTO));
-        Chat chat = await _mediator.Send(new GenericGetByIdQuery<Chat>(message.ChatId));
-        string recipientId = chat.Users.First(user => user.Id != senderGuid).Id.ToString();
-
-        ChatHubSentMessageDTO dto = new ChatHubSentMessageDTO()
-        {
-            DateTime = DateTime.UtcNow,
-            Message = message.Content,
-            SenderId = senderId,
-            SenderName = User.FindFirst("username")?.Value!
-        };
+        string recipientId = chat.Users.First(user => user.Id != newMessage.UserId).Id.ToString();
 
         var messageResponseObject = _mapper.Map<ChatMessageResponseObject>(newMessage);
         await _hubContext.Clients.User(recipientId).SendAsync("ReceiveMessage", messageResponseObject);
         return Ok(messageResponseObject);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateGroupChat([FromBody] CreateGroupChatDTO createGroupChatDTO)
+    {
+
+
     }
 }

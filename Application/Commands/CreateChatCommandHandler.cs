@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Infrastructure.IRepositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands;
 
@@ -23,7 +22,7 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
             Messages = new List<Message>(),
             Name = ""
         };
-        
+
         return await _chatRepository.AddChatAsync(chat);
     }
 }
