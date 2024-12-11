@@ -12,7 +12,9 @@ public class Group
     public string ImageLink { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    [JsonIgnore] public IEnumerable<GroupUser>? GroupUsers { get; set; }
+    [JsonIgnore] 
+    public IEnumerable<GroupUser>? GroupUsers { get; set; }
 
-    [JsonIgnore] public ICollection<GroupPost>? GroupPosts { get; set; }
+    [JsonIgnore] 
+    public ICollection<GroupPost>? GroupPosts { get; set; }
 }
