@@ -18,6 +18,10 @@ public class RemoveAvatarCommandHandler : IRequestHandler<RemoveAvatarCommand>
     public async Task Handle(RemoveAvatarCommand request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId,cancellationToken);
+        if (user.AvatarFileName == "default.jpg")
+        {
+            return;
+        }
         await _blobInfrastructure.deleteBlob(user.AvatarFileName, "avatars");
         user.AvatarFileName = "default.jpg";
         _context.Users.Update(user);
