@@ -22,6 +22,7 @@ public class AddGroupCommandHandler : IRequestHandler<AddGroupCommand,Group>
     {
         var entity = _mapper.Map<Group>(request.GroupDto);
         entity.CreatedAt = DateTime.Now;
+        entity.ImageLink = "default.jpg";
         var group = await _groupRepository.Add(entity);
         var userGroup = new GroupUser(request.CallerId,group.Id);
         userGroup.IsAccepted = true;
