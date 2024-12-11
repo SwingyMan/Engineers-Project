@@ -72,7 +72,6 @@ export function SearchBar() {
       setActive(false);
     }
   };
-  console.log(userData)
   return (
     <StyledSearchBar tabIndex={-1} onBlur={(e) => handleBlur(e)}>
       <form

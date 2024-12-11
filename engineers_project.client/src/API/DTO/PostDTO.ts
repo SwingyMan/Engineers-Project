@@ -11,6 +11,7 @@ export interface PostDTO{
     attachments?: string|null,
     comments:CommentDTO[],
     userId:UUID,
+    groupId?:string,
     username:string,
     avatarName:string
 }

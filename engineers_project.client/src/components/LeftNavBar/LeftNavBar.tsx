@@ -7,7 +7,6 @@ const NavBarWrapper = styled.div`
   width: 15%;
   height: 100%;
   color: var(--white);
-  padding: 10px;
 `;
 const ButttonWrapper = styled.div<{ avtive?: boolean }>`
   display: flex;
@@ -18,8 +17,11 @@ const ButttonWrapper = styled.div<{ avtive?: boolean }>`
   place-items: center;
   background-color: gray;
   border-radius: 4px;
+  min-width: 0px;
+  margin: 10px;
 `;
 const MainNavMenu = styled.div`
+display: flex;
 flex-grow: 1;
 `;
 

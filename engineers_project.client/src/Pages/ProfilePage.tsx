@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { useUsers } from "../API/hooks/useUser";
 import { ImageDiv } from "../components/Utility/ImageDiv";
@@ -26,6 +26,7 @@ const ProfileFeed = styled.div`
   width: 100%;
 `;
 export function ProfilePage() {
+  const navigate = useNavigate()
   const { id } = useParams();
   const { data: userData } = useUsers(id);
   const { data: userPosts } = useUserPosts(id);
@@ -44,11 +45,13 @@ export function ProfilePage() {
 
           <ProfileHeader>
             {userData ? userData.username : "Error"}
+            <button onClick={()=>navigate("/editProfile")} value={"submit"}>submit</button>
           </ProfileHeader>
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (
             <Post
+            key={post.id}
               postInfo={post}
               isMenu={post.userId === user?.id}
               isOpen={openMenu === post.id}

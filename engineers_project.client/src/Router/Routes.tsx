@@ -9,6 +9,7 @@ import { PostPage } from "../Pages/PostPage";
 import { SearchPage } from "../Pages/SearchPage";
 import validator from "validator"
 import { GroupPage } from "../Pages/GroupPage";
+import { EditProfilePage } from "../Pages/EditProfilePage";
 
 export const validIdLoader = async ({ params }) => {
   const { id } = params;
@@ -56,6 +57,13 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <ProfilePage />
+          </PrivateRoute>
+        ),
+      },{
+        path: "/EditProfile",
+        element: (
+          <PrivateRoute>
+            <EditProfilePage />
           </PrivateRoute>
         ),
       },{
