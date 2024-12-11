@@ -21,12 +21,14 @@ public class AddGroupCommandHandler : IRequestHandler<AddGroupCommand,Group>
     public async Task<Group> Handle(AddGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Group>(request.GroupDto);
+        entity.CreatedAt = DateTime.Now;
         var group = await _groupRepository.Add(entity);
-        var userGroup = new GroupUser(group.Id,request.CallerId);
+        var userGroup = new GroupUser(request.CallerId,group.Id);
         userGroup.IsAccepted = true;
         userGroup.IsOwner = true;
-        await _dbContext.GroupUsers.AddAsync(userGroup);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.GroupUsers.Add(userGroup);
+        _dbContext.SaveChanges();
+        group.GroupUsers = null;
         return group;
     }
 }

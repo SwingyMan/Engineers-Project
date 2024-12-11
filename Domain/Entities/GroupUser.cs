@@ -12,13 +12,15 @@ public class GroupUser
     public bool IsAccepted { get; set; } = false;
     public bool IsOwner { get; set; } = false;
 
-    [JsonIgnore] public User User { get; set; }
+    [JsonIgnore] 
+    public User User { get; set; }
 
-    [JsonIgnore] public Group Group { get; set; }
+    [JsonIgnore]
+    public Group Group { get; set; }
 
     public GroupUser(Guid userId,Guid groupId)
     {
         UserId = userId;
-        groupId = groupId;
+        GroupId = groupId;
     }
 }
