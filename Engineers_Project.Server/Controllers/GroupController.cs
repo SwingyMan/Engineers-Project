@@ -166,4 +166,29 @@ public class GroupController : ControllerBase
             return Unauthorized();
         }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddImage([FromForm] AddGroupImageCommand addGroupImageCommand)
+    {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        addGroupImageCommand.UserId = guid;
+        return Ok(await _mediator.Send(addGroupImageCommand));
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> RemoveImageFromGroup(Guid groupId)
+    {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        await _mediator.Send(new RemoveGroupImageCommand(guid,groupId));
+        return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupImageById(Guid groupId)
+    {
+        
+        return await _mediator.Send(new GroupImageQuery(groupId));
+    }
 }
