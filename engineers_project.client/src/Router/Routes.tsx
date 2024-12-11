@@ -8,6 +8,7 @@ import { ProfilePage } from "../Pages/ProfilePage";
 import { PostPage } from "../Pages/PostPage";
 import { SearchPage } from "../Pages/SearchPage";
 import validator from "validator"
+import { GroupPage } from "../Pages/GroupPage";
 
 export const validIdLoader = async ({ params }) => {
   const { id } = params;
@@ -64,11 +65,19 @@ export const router = createBrowserRouter([
             <SearchPage />
           </PrivateRoute>
         ),
-      },
+      },{ path: "/group",
+        loader:validIdLoader,
+        element:(
+          <PrivateRoute>
+            <GroupPage/>
+          </PrivateRoute>
+        )
+
+       },
     ],
   },
 
-  { path: "/group" },
+  
   {
     path: "/login",
     element: <LoginPage />,
