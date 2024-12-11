@@ -107,13 +107,17 @@ public class UserController : Controller
         return avatar;
     }
     [HttpPost]
-    public async Task<IActionResult> AddAvatar([FromForm] AddAvatarCommand addAvatarCommand)
+    public async Task<IActionResult> AddAvatar([FromForm] IFormFile file)
     {
-        return Ok(await _mediator.Send(addAvatarCommand));
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        return Ok(await _mediator.Send(new AddAvatarCommand(guid, file)));
     }
     [HttpDelete]
-    public async Task<IActionResult> DeleteAvatar(Guid guid)
+    public async Task<IActionResult> DeleteAvatar()
     {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
         await _mediator.Send(new RemoveAvatarCommand(guid));
         return Ok();
     }
