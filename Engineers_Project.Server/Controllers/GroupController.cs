@@ -26,7 +26,7 @@ public class GroupController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var group = await _mediator.Send(new GenericGetByIdQuery<GroupDTO>(id));
+        var group = await _mediator.Send(new GenericGetByIdQuery<Group>(id));
         if (group == null) return NotFound();
         return Ok(group);
     }
