@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { useUsers } from "../API/hooks/useUser";
 import { ImageDiv } from "../components/Utility/ImageDiv";
-import { getImg } from "../API/API";
+import { getUserImg } from "../API/API";
 import { useUserPosts } from "../API/hooks/useUserPosts";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
@@ -26,32 +26,36 @@ const ProfileFeed = styled.div`
   width: 100%;
 `;
 export function ProfilePage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
-  const { data: userData } = useUsers(id);
-  const { data: userPosts } = useUserPosts(id);
+  const { data: userData } = useUsers(id!);
+  const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
-
   const [openMenu, setOpenMenu] = useState<null | string>(null);
+
   return (
     <>
       <ProfileFeed>
         <ProfileCard>
           <ImageDiv
             width={60}
-            url={userData ? getImg(userData?.avatarFileName) : ""}
+            url={userData ? getUserImg(userData?.avatarFileName) : ""}
             margin={"25px"}
           />
 
           <ProfileHeader>
-            {userData ? userData.username : "Error"}
-            <button onClick={()=>navigate("/editProfile")} value={"submit"}>submit</button>
+            {userData ? userData.username : ""}
+            {id === user?.id && (
+              <button onClick={() => navigate("/editProfile")} value={"submit"}>
+                Edit Profile
+              </button>
+            )}
           </ProfileHeader>
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (
             <Post
-            key={post.id}
+              key={post.id}
               postInfo={post}
               isMenu={post.userId === user?.id}
               isOpen={openMenu === post.id}

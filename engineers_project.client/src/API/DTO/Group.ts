@@ -1,5 +1,6 @@
 export interface Group{
-    Id:string;
-    Name:string;
-    Description:string;
+    id:string;
+    name:string;
+    description:string;
+    imageLink:string
 }

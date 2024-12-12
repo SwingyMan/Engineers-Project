@@ -5,7 +5,7 @@ import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { Comment } from "./Comment";
 import { CreateComment } from "./CreateComment";
-import { getImg } from "../../API/API";
+import { getUserImg } from "../../API/API";
 import { useComments } from "../../API/hooks/useComments";
 
 const PostWrapper = styled.div`
@@ -45,7 +45,7 @@ export function PostDetails(props: { postInfo: PostDTO ;options:boolean, isOpen:
           <ImageDiv
             width={40}
             url={
-              props.postInfo.avatarName ? getImg(props.postInfo.avatarName) : ""
+              props.postInfo.avatarName ? getUserImg(props.postInfo.avatarName) : ""
             }
           />
           <div>

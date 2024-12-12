@@ -3,7 +3,7 @@ import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
 import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
-import { getImg } from "../../API/API";
+import { getUserImg } from "../../API/API";
 import { PostDTO } from "../../API/DTO/PostDTO";
 
 
@@ -43,7 +43,7 @@ export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,s
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
         <HeaderInfo>
-          <ImageDiv width={40} url={props.postInfo.avatarName ? getImg(props.postInfo.avatarName) : ""} />
+          <ImageDiv width={40} url={props.postInfo.avatarName ? getUserImg(props.postInfo.avatarName) : ""} />
           <div>
             <div onClick={(e) => { e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`) }}>{props.postInfo.username}</div>
             <div >

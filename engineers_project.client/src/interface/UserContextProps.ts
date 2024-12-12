@@ -6,5 +6,6 @@ export interface UserContextProps {
 	user: Partial<User> | null;
 	isAuthenticated: boolean | null;
 	logIn: (params: Partial<UserDTO>) => Promise<void>;
+	refreshUser:()=>void;
 	logOut: () => void;
 }

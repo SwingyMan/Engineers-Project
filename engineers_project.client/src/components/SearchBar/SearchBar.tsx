@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { useSearchPosts } from "../../API/hooks/useSearchPosts";
 import { useSearchUsers } from "../../API/hooks/useSearchUsers";
-import { UserCard } from "../User/UserCard";
+import { ImageDiv } from "../Utility/ImageDiv";
+import { getGroupImg, getUserImg } from "../../API/API";
+import { useSearchGroups } from "../../API/hooks/useSearchGroups";
 
 //bacground color do zmiany
 const StyledSearchBar = styled.div`
@@ -45,15 +47,36 @@ const SearchResult = styled.div`
   & > :last-child {
     border-radius: 0 0 15px 15px;
   }
-  & > :hover {
-    background-color: #003c7d;
-  }
 `;
 const ResultRow = styled.div`
   padding: 5px 15px;
   background-color: rgb(69, 114, 159);
   cursor: pointer;
   border-top: rgba(255, 255, 255, 0.3) 1px solid;
+  &:hover {
+    background-color: #003c7d;
+  }
+`;
+const SearchSection = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  padding: 5px 15px;
+  background-color: rgb(69, 114, 159);
+  
+`;
+const ImageResultRow = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px 15px;
+  background-color: rgb(69, 114, 159);
+  gap: 5px;
+
+  border-top: rgba(255, 255, 255, 0.3) 1px solid;
+  cursor: pointer;
+  &:hover {
+    background-color: #003c7d;
+  }
 `;
 
 export function SearchBar() {
@@ -61,6 +84,7 @@ export function SearchBar() {
   const [active, setActive] = useState(false);
   const { data: postData, isFetching, isError } = useSearchPosts(query);
   const { data: userData } = useSearchUsers(query);
+  const { data: groupData } = useSearchGroups(query);
   // Function to handle API search
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -96,24 +120,59 @@ export function SearchBar() {
           <ResultRow>Wpisz co najmniej 2 znaki</ResultRow>
         ) : isFetching ? (
           <ResultRow>Loading...</ResultRow>
-        ) : (postData && postData.length === 0 )&&(userData&&userData.length===0)? (
+        ) : postData &&
+          postData.length === 0 &&
+          userData &&
+          userData.length === 0 ? (
           <ResultRow>Not Found</ResultRow>
         ) : (
           <>
-            {postData &&
-              postData.slice(0, 7).map((row) => (
-                <ResultRow
-                  onClick={() => {
-                    navigate("/post/" + row.id), setActive(false);
-                  }}
-                  key={row.id}
-                >
-                  {row.title}
-                </ResultRow>
-              ))}
-            {userData&&userData.slice(0,7).map((row)=>
-            <UserCard user={row}/>
+            {postData && (
+              <SearchSection>
+                Posts:
+                {postData.slice(0, 5).map((row) => (
+                  <ResultRow
+                    onClick={() => {
+                      navigate("/post/" + row.id), setActive(false);
+                    }}
+                    key={row.id}
+                  >
+                    {row.title}
+                  </ResultRow>
+                ))}
+              </SearchSection>
             )}
+            {userData && (
+              <SearchSection>
+                Users:
+                {userData.slice(0, 5).map((row) => (
+                  <ImageResultRow onClick={()=>{navigate(`/profile/${row.id}`), setActive(false)}} key={row.id}>
+                    <ImageDiv
+                      width={30}
+                      url={getUserImg(row.avatarFileName)}
+                    ></ImageDiv>
+                    {row.username}
+                  </ImageResultRow>
+                ))}
+              </SearchSection>
+            )}
+            {groupData && (
+              <SearchSection>
+                Groups:
+                {groupData.slice(0, 5).map((row) => (
+                  <ImageResultRow onClick={()=>{navigate(`/group/${row.id}`), setActive(false)}} key={row.id} >
+                    <ImageDiv width={30} url={getGroupImg(row.id)} />
+                    
+                    {row.name}
+                  </ImageResultRow>
+                ))}
+              </SearchSection>
+            )}
+            {(groupData||userData||postData)&&<ImageResultRow onClick={()=>{navigate(`/search/${query}`), setActive(false)}}>
+              
+              <MdSearch size={24}/>
+              Search for "{query}"
+              </ImageResultRow>}
           </>
         )}
       </SearchResult>

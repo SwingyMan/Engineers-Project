@@ -7,7 +7,7 @@ import { FeedPage } from "../Pages/FeedPage";
 import { ProfilePage } from "../Pages/ProfilePage";
 import { PostPage } from "../Pages/PostPage";
 import { SearchPage } from "../Pages/SearchPage";
-import validator from "validator"
+import validator from "validator";
 import { GroupPage } from "../Pages/GroupPage";
 import { EditProfilePage } from "../Pages/EditProfilePage";
 
@@ -15,7 +15,7 @@ export const validIdLoader = async ({ params }) => {
   const { id } = params;
 
   // Validate UUID
-  if (!validator.isUUID(id)||id===undefined) {
+  if (!validator.isUUID(id) || id === undefined) {
     return redirect("/");
   }
 
@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/post/:id",
-        loader:validIdLoader,
+        loader: validIdLoader,
         element: (
           <PrivateRoute>
             <PostPage />
@@ -52,47 +52,48 @@ export const router = createBrowserRouter([
       },
       {
         path: "/profile/:id",
-        
-        loader:validIdLoader,
+
+        loader: validIdLoader,
         element: (
           <PrivateRoute>
             <ProfilePage />
           </PrivateRoute>
         ),
-      },{
+      },
+      {
         path: "/EditProfile",
         element: (
           <PrivateRoute>
             <EditProfilePage />
           </PrivateRoute>
         ),
-      },{
+      },
+      {
         path: "/search/:query",
         element: (
           <PrivateRoute>
             <SearchPage />
           </PrivateRoute>
         ),
-      },{ path: "/group",
-        loader:validIdLoader,
-        element:(
+      },
+      {
+        path: "/group/:id",
+        loader: validIdLoader,
+        element: (
           <PrivateRoute>
-            <GroupPage/>
+            <GroupPage />
           </PrivateRoute>
-        )
-
-       },
+        ),
+      },
     ],
   },
 
-  
   {
     path: "/login",
     element: <LoginPage />,
   },
-  { 
-    path:"*",
-    element:<ErrorPage/>//change
-  }
+  {
+    path: "*",
+    element: <ErrorPage />, //change
+  },
 ]);
-

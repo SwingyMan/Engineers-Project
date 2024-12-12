@@ -3,7 +3,7 @@ import { SearchBar } from "../SearchBar/SearchBar";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
-import { getImg } from "../../API/API";
+import { getUserImg } from "../../API/API";
 
 const StyledTopBar = styled.div`
   background-color: var(--blue);
@@ -65,7 +65,7 @@ export function TopNavBar() {
           </LogoutButton>
           <ImageDiv
             width={40}
-            url={user?.avatarFileName ? `${getImg(user.avatarFileName)}` : ""}
+            url={user?.avatarFileName ? `${getUserImg(user.avatarFileName)}` : ""}
           />
         </Buttons>
       </StyledTopBar>

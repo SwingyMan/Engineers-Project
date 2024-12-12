@@ -18,6 +18,7 @@ public class AddAvatarCommandHandler : IRequestHandler<AddAvatarCommand, User>
     private readonly IBlobInfrastructure _blobInfrastructure;
     public async Task<User> Handle(AddAvatarCommand request, CancellationToken cancellationToken)
     {
+        Console.WriteLine(request);
         var user =await _dbContext.Users.FirstAsync(x=>x.Id==request.UserId);
         var guid = Guid.NewGuid();
         user.AvatarFileName = $"{guid}{Path.GetExtension(request.Avatar.FileName)}";

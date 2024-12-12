@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../Router/AuthProvider";
 import styled from "styled-components";
-import { getImg } from "../API/API";
+import { getUserImg, postAttachment } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 
 interface FormData {
@@ -21,7 +21,7 @@ const EditImage = styled.div`
 `;
 const TextInputsWrapper = styled.div``;
 export function EditProfilePage() {
-  const { user } = useAuth();
+  const { user ,refreshUser} = useAuth();
   const [formData, setFormData] = useState<FormData>({
     Username: "",
     Password: "",
@@ -44,29 +44,28 @@ export function EditProfilePage() {
       setFormData({ ...formData, [name]: value });
     }
   };
+  const editImage = () => {
+    if (formData.image !== null) {
+      
+
+        const data = new FormData();
+
+        data.append("file", formData.image!);
+        postAttachment("User/AddAvatar", data);
+        
+      
+    }
+  };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("Username", formData.Username);
-    data.append("Password", formData.Password);
-    if (formData.image) {
-      data.append("image", formData.image);
-    }
+    editImage();
 
-    fetch("/submit", {
-      method: "POST",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Success:", result);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    refreshUser();
+  
+
   };
-  console.log(formData.preview);
+
   return (
     <form onSubmit={handleSubmit}>
       <StyledEditUser>
@@ -77,7 +76,7 @@ export function EditProfilePage() {
             url={
               formData.preview
                 ? formData.preview
-                : getImg(user?.avatarFileName!)
+                : getUserImg(user?.avatarFileName!)
             }
           />
           <input
@@ -86,7 +85,6 @@ export function EditProfilePage() {
             name="image"
             accept=".jpg, .jpeg, .png"
             onChange={handleChange}
-            required
           />
         </EditImage>
         <TextInputsWrapper>
@@ -109,11 +107,9 @@ export function EditProfilePage() {
             name="Password"
             value={formData.Password}
             onChange={handleChange}
-
           />
           <br />
           <br />
-
 
           <br />
           <br />

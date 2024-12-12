@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 const StyledImage = styled.div<{margin?:string}>`
     display: flex;

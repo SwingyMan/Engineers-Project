@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import styled from "styled-components";
 import { useComments } from "../../API/hooks/useComments";
-import { getImg } from "../../API/API";
+import { getUserImg } from "../../API/API";
 
 const CreateCommentWrapper = styled.div`
   display: flex;
@@ -62,12 +62,10 @@ export function CreateComment({ id }: { id: string }) {
       [name]: value,
     }));
   };
-  const { handleAddComment,data } = useComments(id);
+  const { handleAddComment } = useComments(id);
   const SubmitComment = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(data)
     handleAddComment.mutate(newComment);
-    console.log(data)
     setNewComment({...newComment, content:""})
   };
   return (

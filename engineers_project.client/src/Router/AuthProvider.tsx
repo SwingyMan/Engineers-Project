@@ -3,6 +3,7 @@ import { Children } from "../interface/Children";
 import { UserContextProps } from "../interface/UserContextProps";
 import { UserDTO } from "../API/DTO/UserDTO";
 import { User } from "../API/DTO/User";
+import { fetchUserById } from "../API/services/user.service";
 
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
@@ -17,7 +18,19 @@ const AuthProvider = ({ children }: Children) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     token === null ? false : true
   );
-console.log(token)
+  const refreshUser =async()=>{
+    try{
+      const res = await fetchUserById(user?.id!)
+      if (res.avatarFileName!==null){
+        localStorage.setItem("user",JSON.stringify(res))
+        location.reload()
+      }
+      
+    }
+    catch(e){
+      console.log(e)
+    }
+  }
   const logIn = async (data: Partial<UserDTO>) => {
     //TODO testy
 
@@ -44,7 +57,6 @@ console.log(token)
           setUser(user1);
           localStorage.setItem("user",JSON.stringify(user1))
           setToken(res.token);
-          
           localStorage.setItem("polsl-social", res.token);
           setIsAuthenticated(true);
           return;
@@ -65,7 +77,7 @@ console.log(token)
 
   return (
     <AuthContext.Provider
-      value={{ token, user, isAuthenticated, logIn, logOut }}
+      value={{ token, user, isAuthenticated,refreshUser, logIn, logOut }}
     >
       {children}
     </AuthContext.Provider>
