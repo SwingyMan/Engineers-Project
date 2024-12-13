@@ -3,24 +3,39 @@
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.IRepositories;
+using Infrastructure.Persistence;
 using MediatR;
 
 namespace Application.Commands;
 
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, User>
 {
-    private readonly IUserRepository _repository;
-    private readonly IMapper _mapper;
+    private readonly SocialPlatformDbContext _context;
 
-    public UpdateUserCommandHandler(IUserRepository repository, IMapper mapper)
+    public UpdateUserCommandHandler(SocialPlatformDbContext context)
     {
-        _repository = repository;
-        _mapper = mapper;
+        _context = context;
     }
+
 
     public async Task<User> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<User>(request.entity);
-        return await _repository.Update(request.id,mapped);
+        var user = _context.Users.Single(x => x.Id == request.UserId);
+        if (request.Email != string.Empty)
+        {
+            user.Email = request.Email;
+        }
+
+        if (request.Password != string.Empty)
+        {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        }
+
+        if (request.UserName != string.Empty)
+        {
+            user.Username = request.UserName;
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+        return user;    
     }
 }

@@ -10,12 +10,9 @@ namespace Application.Commands;
 public class UpdateUserCommand : IRequest<User>
 {
 
-    public UserDTO entity { get; }
-    public Guid id { get; }
-
-    public UpdateUserCommand(UserDTO entity, Guid id)
-    {
-        this.entity = entity;
-        this.id = id;
-    }
+    [JsonIgnore]
+    public Guid UserId { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Email { get; set; }
 }

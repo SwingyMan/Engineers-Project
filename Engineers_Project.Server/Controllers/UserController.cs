@@ -67,10 +67,7 @@ public class UserController : Controller
         }
 
         var userId = Guid.Parse(userIdClaim.Value);
-        if (userId != updateUserCommand.id)
-        {
-            return Forbid("Users can only update their own information.");
-        }
+        updateUserCommand.UserId = userId;
 
         return Ok(await _mediator.Send(updateUserCommand));
     }
