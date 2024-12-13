@@ -9,10 +9,10 @@ public class Group
 
     public string Name { get; set; }
     public string Description { get; set; }
+    [JsonIgnore]
     public string ImageLink { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    [JsonIgnore] 
     public ICollection<GroupUser>? GroupUsers { get; set; }
 
     [JsonIgnore] 
