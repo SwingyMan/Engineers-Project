@@ -106,5 +106,7 @@ public class SocialPlatformDbContext : DbContext
         modelBuilder.Entity<Post>().Navigation(x => x.User).AutoInclude();
         modelBuilder.Entity<Post>().Navigation(x => x.Comments).AutoInclude();
         modelBuilder.Entity<Comment>().Navigation(x=>x.User).AutoInclude();
+        modelBuilder.Entity<Group>().Navigation(x=>x.GroupPosts).AutoInclude();
+        modelBuilder.Entity<Group>().Navigation(x=>x.GroupUsers).AutoInclude();
     }
 }
