@@ -157,9 +157,23 @@ public class GroupController : ControllerBase
         {
             var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
             var guid = Guid.Parse(callerId);
-            
-            return Ok(await _mediator.Send(
-                new GroupsUserQuery(guid)));
+            var group = await _mediator.Send(
+                new GroupsUserQuery(guid));
+            return Ok(group.Select(g => new 
+            {
+                g.Id,
+                g.Name,
+                g.Description,
+                g.CreatedAt,
+                GroupUsers = g.GroupUsers
+                    .Where(gu => gu.IsAccepted) // Include only accepted GroupUsers
+                    .Select(gu => new 
+                    {
+                        gu.IsOwner,
+                        gu.IsAccepted,
+                        gu.User
+                    })
+            }));
         }
         catch (Exception e)
         {
