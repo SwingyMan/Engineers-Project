@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Domain.Entities;
 
@@ -13,7 +13,7 @@ public class Group
     public DateTime CreatedAt { get; set; }
 
     [JsonIgnore] 
-    public IEnumerable<GroupUser>? GroupUsers { get; set; }
+    public ICollection<GroupUser>? GroupUsers { get; set; }
 
     [JsonIgnore] 
     public ICollection<GroupPost>? GroupPosts { get; set; }

@@ -157,9 +157,9 @@ public class GroupController : ControllerBase
         {
             var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
             var guid = Guid.Parse(callerId);
-            await _mediator.Send(
-                new GroupsUserQuery(guid));
-            return Ok();
+            
+            return Ok(await _mediator.Send(
+                new GroupsUserQuery(guid)));
         }
         catch (Exception e)
         {
