@@ -20,6 +20,6 @@ public class GroupRequestQueryHandler : IRequestHandler<GroupRequestQuery,List<G
         {
             return null;
         }
-        return await _context.GroupUsers.Where(x => x.GroupId == request.GroupId).ToListAsync(cancellationToken);
+        return await _context.GroupUsers.Where(x => x.GroupId == request.GroupId && x.IsAccepted ==false).ToListAsync(cancellationToken);
     }
 }
