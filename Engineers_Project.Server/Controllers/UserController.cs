@@ -135,4 +135,18 @@ public class UserController : Controller
     {
         return Ok(await _mediator.Send(new UserQuery(userName)));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetFriendsRequests()
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+
+        return Ok(await _mediator.Send(new FriendQuery(userId)));
+    }
 }
