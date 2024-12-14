@@ -197,4 +197,17 @@ public class GroupController : ControllerBase
         
         return await _mediator.Send(new GroupImageQuery(groupId));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupRequests(Guid groupId)
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        return Ok(await _mediator.Send(new GroupRequestQuery(userId, groupId)));
+    }
 }
