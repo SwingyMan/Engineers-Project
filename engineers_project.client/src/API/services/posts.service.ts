@@ -16,3 +16,6 @@ export const editPost = (Post :Partial<PostDTO>):Promise<PostDTO>=>{
 export const deletePost = (id:string):Promise<string>=>{
     return del(url+`Delete/${id}`)
 }
+export const fetchPostsInGroup = (id:string):Promise<PostDTO[]>=>{
+    return get(url+"FindPostInGroup?groupId="+id)
+}

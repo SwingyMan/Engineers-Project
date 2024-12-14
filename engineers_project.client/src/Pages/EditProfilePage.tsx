@@ -3,6 +3,7 @@ import { useAuth } from "../Router/AuthProvider";
 import styled from "styled-components";
 import { getUserImg, postAttachment } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
+import { editUserById } from "../API/services/user.service";
 
 interface FormData {
   Username: string;
@@ -21,7 +22,7 @@ const EditImage = styled.div`
 `;
 const TextInputsWrapper = styled.div``;
 export function EditProfilePage() {
-  const { user ,refreshUser} = useAuth();
+  const { user, refreshUser } = useAuth();
   const [formData, setFormData] = useState<FormData>({
     Username: "",
     Password: "",
@@ -44,26 +45,27 @@ export function EditProfilePage() {
       setFormData({ ...formData, [name]: value });
     }
   };
+
   const editImage = () => {
-    if (formData.image !== null) {
-      
-
-        const data = new FormData();
-
-        data.append("file", formData.image!);
-        postAttachment("User/AddAvatar", data);
-        
-      
-    }
+    const data = new FormData();
+    data.append("file", formData.image!);
+    postAttachment("User/AddAvatar", data);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    editImage();
-
+    if (formData.image !== null) {
+      editImage();
+    }
+    if(formData.Password.length===0||formData.Username!==user?.username){
+      const editedUser = {
+        username:formData.Username,
+        password:formData.Password
+      }
+      
+      editUserById(editedUser)
+    }
     refreshUser();
-  
-
   };
 
   return (

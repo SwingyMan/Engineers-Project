@@ -163,16 +163,8 @@ public class GroupController : ControllerBase
             {
                 g.Id,
                 g.Name,
-                g.Description,
-                g.CreatedAt,
-                GroupUsers = g.GroupUsers
-                    .Where(gu => gu.IsAccepted) // Include only accepted GroupUsers
-                    .Select(gu => new 
-                    {
-                        gu.IsOwner,
-                        gu.IsAccepted,
-                        gu.User
-                    })
+                g.Description
+
             }));
         }
         catch (Exception e)

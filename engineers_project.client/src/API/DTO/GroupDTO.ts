@@ -1,7 +1,13 @@
-interface GroupDTO{
-    id:string,
+import { User } from "./User"
+
+export interface GroupDTO {
+    id: string,
     name: string,
     description: string,
-    ImageLink:string,
-    
+    groupUsers: {
+        isAccepted: boolean,
+        isOwner: boolean,
+        user:User
+    }[]
+
 }
