@@ -152,7 +152,7 @@ public class PostController : ControllerBase
             var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
             var guid = Guid.Parse(callerId);
             await _mediator.Send(
-                new PostGroupQuery(groupId,guid));
+                new PostGroupQuery(guid,groupId));
             return Ok();
         }
         catch (Exception e)
