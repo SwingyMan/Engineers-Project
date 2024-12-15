@@ -66,9 +66,9 @@ export function MessageSent({ date, message, sender }: MessageInterface){
         <StyledSendMessageBox>
             <SendMessageWraper>
                 {sender}
-                <StyledMessage>
+                <StyledSendMessage>
                     {message}
-                </StyledMessage>
+                </StyledSendMessage>
                 {date}
             </SendMessageWraper>
         </StyledSendMessageBox>

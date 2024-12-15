@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { Message } from "../../API/DTO/Message";
 
 const StyledChatBox = styled.div`
     
 `
 export function ChatBox(){
+    var chatMessages:Message[] =[] 
     return(
         <StyledChatBox>
             {/* header */}

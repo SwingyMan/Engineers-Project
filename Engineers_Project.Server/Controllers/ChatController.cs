@@ -94,10 +94,4 @@ public class ChatController : ControllerBase
         return Ok(messageResponseObject);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateGroupChat([FromBody] CreateGroupChatDTO createGroupChatDTO)
-    {
-
-
-    }
 }
