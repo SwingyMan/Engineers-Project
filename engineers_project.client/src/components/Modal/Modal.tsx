@@ -98,7 +98,7 @@ interface ModalProps {
    initData:NewPost
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initData}) => {
+const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initData}) => {
     const initPost:NewPost = {...initData}
     const [newPost, setNewPost] = useState(initPost);
    const handleSubmit = (e: React.FormEvent) => {
@@ -155,4 +155,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initData}) => 
   );
 };
 
-export default Modal;
+export default NewPostModal;

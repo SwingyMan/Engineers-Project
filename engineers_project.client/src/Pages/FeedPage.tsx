@@ -7,30 +7,49 @@ import { usePosts } from "../API/hooks/usePosts";
 import { CreatePost } from "../components/Post/CreatePost";
 import { useState } from "react";
 import { useAuth } from "../Router/AuthProvider";
+import { MdAdd } from "react-icons/md";
+import NewPostModal from "../components/Modal/Modal";
+import { usePostDetails } from "../API/hooks/usePostDetails";
 
 const PostFeed = styled.div`
   flex: 1;
   overflow-y: scroll;
   color: var(--white);
-
+  position:relative;
 `;
+const NewPostButton = styled.div`
+position: absolute;
+bottom:10px;
+right: 10px;
+border-radius: 50vh;
+background-color:#007aff;
+padding: 4px 16px;
+display: flex;
+align-items: center;
+cursor: pointer;
+`
 
 export function FeedPage() {
-  const { data, isPending, isFetched } = usePosts();
-  const [openMenu,setOpenMenu] = useState<null|string>(null)
-  const handleMenuOpen=(id:string)=>{
+  const { data, isPending, isFetched , handleAddPost } = usePosts();
+
+  const [openMenu, setOpenMenu] = useState<null | string>(null)
+  const [isModalOpen,setOpenModal]=useState(false)
+  const handleMenuOpen = (id: string) => {
     console.log(id)
     setOpenMenu(id)
   }
-  const {user} = useAuth()
+  const { user } = useAuth()
   return (
     <>
       <PostFeed>
-        <CreatePost />
-        {isPending?"Loading...":(data &&
+        <h3>hello, {user?.username}</h3>
+        {isPending ? "Loading..." : (data &&
           data.pages.map((group, i) =>
-            group.map((post) => <Post key={post.id} postInfo={post} isMenu={post.userId===user?.id} isOpen={openMenu===post.id} setIsOpen={()=>handleMenuOpen(post.id)}/>)
+            group.map((post) => <Post key={post.id} postInfo={post} isMenu={post.userId === user?.id} isOpen={openMenu === post.id} setIsOpen={() => handleMenuOpen(post.id)} />)
           ))}
+        <NewPostButton onClick={()=>setOpenModal(true)}>
+          <MdAdd /> Dodaj Post
+        </NewPostButton>
       </PostFeed>
       <ChatFeed>
         <ChatBox
@@ -48,6 +67,7 @@ export function FeedPage() {
           ActivityDate={Date.now()}
         />
       </ChatFeed>
+      <NewPostModal isOpen={isModalOpen} onClose={()=>setOpenModal(false)} onSubmit={(data)=>{handleAddPost.mutate(data)}}initData={{title:"",body:"",availability:0}}/>
     </>
   );
 }

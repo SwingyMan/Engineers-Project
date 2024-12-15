@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getGroupImg, getUserImg } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 import { useGroupPosts } from "../API/hooks/useGroupPosts";
-import Modal from "../components/Modal/Modal";
+import NewPostModal from "../components/Modal/Modal";
 import { useState } from "react";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
