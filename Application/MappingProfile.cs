@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Entities;
 using Serilog;
+using Infrastructure.SignalR;
 
 namespace Application;
 
@@ -28,5 +29,12 @@ public class MappingProfile : Profile
         CreateMap<AttachmentDTO, Attachments>()
             .ForMember(x=>x.Id,opt=>opt.MapFrom(src=>Guid.NewGuid()))
             .ForMember(x=>x.Type,opt=>opt.MapFrom(src=>src.FileType));
+
+        CreateMap<Chat, ChatResponseObject>()
+            .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))
+            .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src.Messages));
+
+        CreateMap<User, ChatUserResponseObject>();
+        CreateMap<Message, ChatMessageResponseObject>();
     }
 }

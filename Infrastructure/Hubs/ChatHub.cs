@@ -1,17 +1,26 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Domain.Entities;
+using Infrastructure.IRepositories;
+using Infrastructure.Persistence;
+using Infrastructure.SignalR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.Hubs;
 
-public class ChatHub : Hub
+[Authorize]
+public sealed class ChatHub : Hub<IChatClient>
 {
-    public Task BroadcastMessage(string name, string message)
-    {
-        return Clients.All.SendAsync("broadcastMessage", name, message);
-    }
+    private readonly IGenericRepository<Message> _messageRepository;
+    private readonly IMediator _mediator;
 
-    public Task Echo(string name, string message)
+    public ChatHub(IGenericRepository<Message> messageRepository, IMediator mediator)
     {
-        return Clients.Client(Context.ConnectionId)
-            .SendAsync("echo", name, $"{message} (echo from server)");
+        _messageRepository = messageRepository;
+        _mediator = mediator;
+    }
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        return base.OnDisconnectedAsync(exception);
     }
 }

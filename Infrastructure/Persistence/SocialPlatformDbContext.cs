@@ -65,46 +65,47 @@ public class SocialPlatformDbContext : DbContext
             .HasForeignKey(gp => gp.PostId);
 
         // ChatUser relationships
-        modelBuilder.Entity<ChatUser>() //
-            .HasOne(cu => cu.User)
-            .WithMany(u => u.ChatUsers)
-            .HasForeignKey(cu => cu.UserId);
+        //modelBuilder.Entity<ChatUser>() 
+        //    .HasOne(cu => cu.User)
+        //    .WithMany(u => u.ChatUsers)
+        //    .HasForeignKey(cu => cu.UserId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Chat)
-            .WithMany(c => c.ChatUsers)
-            .HasForeignKey(cu => cu.ChatId);
+        //modelBuilder.Entity<User>()
+        //    .HasOne(cu => cu.ChatUsers)
+        //    .WithMany(c => c)
+        //    .HasForeignKey(cu => cu.ChatId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Message)
-            .WithMany()
-            .HasForeignKey(cu => cu.MessageId);
+        //modelBuilder.Entity<ChatUser>()
+        //    .HasOne(cu => cu.Message)
+        //    .WithMany()
+        //    .HasForeignKey(cu => cu.MessageId);
 
         // Message relationships
         modelBuilder.Entity<Message>()
             .HasOne(m => m.User)
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.UserId);
-        modelBuilder.Entity<Friends>(entity =>
-        {
-            entity.HasKey(f => f.Id);
 
-            // Relationships
-            entity.HasOne<User>()
-                .WithMany(u => u.FriendsInitiated)
-                .HasForeignKey(f => f.UserId1)
-                .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId);
 
-            entity.HasOne<User>()
-                .WithMany(u => u.FriendsSent)
-                .HasForeignKey(f => f.UserId2)
-                .OnDelete(DeleteBehavior.Restrict);
-            entity.ToTable("Friends");
-        });
-        modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
-        modelBuilder.Entity<Post>().Navigation(x => x.Attachments).AutoInclude();
-        modelBuilder.Entity<Post>().Navigation(x => x.User).AutoInclude();
-        modelBuilder.Entity<Post>().Navigation(x => x.Comments).AutoInclude();
-        modelBuilder.Entity<Comment>().Navigation(x=>x.User).AutoInclude();
+        // Chat relationships
+        modelBuilder.Entity<Chat>()
+            .HasMany(c => c.Users)
+            .WithMany(u => u.Chats)
+            .UsingEntity<Dictionary<string, object>>(
+            "ChatUser", 
+            j => j.HasOne<User>().WithMany().HasForeignKey("UserId"), 
+            j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"));
+    
+
+    // Posts relationships
+    modelBuilder.Entity<Post>()
+            .HasMany(x => x.Attachments)
+            .WithOne(p => p.Post)
+            .HasForeignKey(x=>x.PostId);
+
     }
 }

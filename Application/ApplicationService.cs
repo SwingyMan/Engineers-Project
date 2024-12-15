@@ -3,8 +3,10 @@ using Application.Authorization.Requirements;
 using Application.Commands;
 using Application.DTOs;
 using Application.Queries;
+using Application.Services;
 using Autofac.Core;
 using Domain.Entities;
+using Infrastructure.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -105,7 +107,13 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Comment>>),
             typeof(GenericDeleteCommandHandler<Comment>));
         //chat
-        serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Chat>, Chat>),
+            typeof(GetChatByIdQueryHandler));
+
+        serviceCollection.AddTransient(typeof(IRequestHandler<CreateChatCommand, Chat>),
+            typeof(CreateChatCommandHandler));
+
+        //serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
         serviceCollection.AddAuthorization(options =>
         {
             options.AddPolicy("ChatMemberOrAdmin", policy =>
@@ -117,5 +125,7 @@ public static class ApplicationService
                 policy.Requirements.Add(new ChatMessageMemberRequirement());
             });
         });
+
+        serviceCollection.AddTransient<IUserAccessor, UserAccessor>();
     }
 }

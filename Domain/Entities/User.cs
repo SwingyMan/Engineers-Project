@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Domain.Entities;
 
@@ -44,6 +41,7 @@ public class User
     [JsonIgnore] 
     public ICollection<Message> Messages { get; set; }
 
+    [JsonIgnore] public ICollection<Chat> Chats { get; set; } = new List<Chat>();
     [JsonIgnore] 
     public ICollection<ChatUser> ChatUsers { get; set; }
     [JsonIgnore]
