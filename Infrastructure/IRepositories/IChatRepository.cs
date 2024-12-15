@@ -1,9 +1,10 @@
-﻿
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Infrastructure.IRepositories;
 
 public interface IChatRepository
 {
-    Task<Chat> Update(Guid guid,Chat chat);
+    Task<Chat?> AddChatAsync(Chat chat);
+    Task<Chat?> GetChatById(Guid chatId);
+    Task<Chat> GetChatByUserIds(Guid[] userIds);
 }

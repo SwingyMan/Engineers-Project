@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Autofac.Core;
 using Azure.Identity;
 using Azure.Security.KeyVault.Keys;
 using Azure.Security.KeyVault.Secrets;
@@ -8,8 +9,10 @@ using Infrastructure.ContentSafety;
 using Infrastructure.IRepositories;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Infrastructure.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
@@ -42,6 +45,9 @@ public static class InfrastructureService
         );
         serviceCollection.AddDbContext<SocialPlatformDbContext>(opt =>
             opt.UseNpgsql(dbkey));
+
+        
+
         serviceCollection.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,6 +65,21 @@ public static class InfrastructureService
                     ValidAudience = "Test.com",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwtkey"]))
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken)
+                            && path.StartsWithSegments("/chat"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                options.Authority = "https://www.test.com";
             });
         serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         serviceCollection.AddScoped(typeof(IBlobInfrastructure), typeof(BlobInfrastructure));
@@ -73,16 +94,24 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IMessageRepository), typeof(MessageRepository));
         serviceCollection.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
         serviceCollection.AddApplicationInsightsTelemetry(x => x.ConnectionString = insightskey);
+        serviceCollection.AddScoped(typeof(IChatRepository), typeof(ChatRepository));
+        serviceCollection.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+        serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
         serviceCollection.AddServiceProfiler();
-        serviceCollection.AddSignalR()
-            .AddAzureSignalR(x =>
-            {
-                x.Endpoints =
-                [
-                    new ServiceEndpoint(new Uri("https://socialplatformsr.service.signalr.net"),
-                        new DefaultAzureCredential())
-                ];
-            });
+        //serviceCollection.AddSignalR().AddAzureSignalR(options => { options.Endpoints = [new ServiceEndpoint(new Uri("https://socialplatformsr.service.signalr.net"), new DefaultAzureCredential())]; });
+        serviceCollection.AddSignalR();
+
+        serviceCollection.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins",
+                builder =>
+                {
+                    builder.WithOrigins("http://127.0.0.1:5500", "http://127.0.0.1:5501")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+        });
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddTransient<TextContentSafetyService>();
         serviceCollection.AddSerilog((services, lc) => lc

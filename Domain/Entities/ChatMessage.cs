@@ -10,7 +10,5 @@ public class ChatMessage
     public Guid ChatId { get; set; }
     public Guid MessageId { get; set; }
 
-    [JsonIgnore] public GroupChat GroupChat { get; set; }
-
     [JsonIgnore] public Message Message { get; set; }
 }

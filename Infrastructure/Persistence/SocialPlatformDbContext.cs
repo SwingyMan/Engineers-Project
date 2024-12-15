@@ -65,20 +65,20 @@ public class SocialPlatformDbContext : DbContext
             .HasForeignKey(gp => gp.PostId);
 
         // ChatUser relationships
-        modelBuilder.Entity<ChatUser>() //
-            .HasOne(cu => cu.User)
-            .WithMany(u => u.ChatUsers)
-            .HasForeignKey(cu => cu.UserId);
+        //modelBuilder.Entity<ChatUser>() 
+        //    .HasOne(cu => cu.User)
+        //    .WithMany(u => u.ChatUsers)
+        //    .HasForeignKey(cu => cu.UserId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Chat)
-            .WithMany(c => c.ChatUsers)
-            .HasForeignKey(cu => cu.ChatId);
+        //modelBuilder.Entity<User>()
+        //    .HasOne(cu => cu.ChatUsers)
+        //    .WithMany(c => c)
+        //    .HasForeignKey(cu => cu.ChatId);
 
-        modelBuilder.Entity<ChatUser>()
-            .HasOne(cu => cu.Message)
-            .WithMany()
-            .HasForeignKey(cu => cu.MessageId);
+        //modelBuilder.Entity<ChatUser>()
+        //    .HasOne(cu => cu.Message)
+        //    .WithMany()
+        //    .HasForeignKey(cu => cu.MessageId);
 
         // Message relationships
         modelBuilder.Entity<Message>()
@@ -109,5 +109,26 @@ public class SocialPlatformDbContext : DbContext
         modelBuilder.Entity<Group>().Navigation(x=>x.GroupPosts).AutoInclude();
         modelBuilder.Entity<Group>().Navigation(x=>x.GroupUsers).AutoInclude();
         modelBuilder.Entity<GroupUser>().Navigation(x=>x.User).AutoInclude();
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId);
+
+        // Chat relationships
+        modelBuilder.Entity<Chat>()
+            .HasMany(c => c.Users)
+            .WithMany(u => u.Chats)
+            .UsingEntity<Dictionary<string, object>>(
+            "ChatUser", 
+            j => j.HasOne<User>().WithMany().HasForeignKey("UserId"), 
+            j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"));
+    
+
+    // Posts relationships
+    modelBuilder.Entity<Post>()
+            .HasMany(x => x.Attachments)
+            .WithOne(p => p.Post)
+            .HasForeignKey(x=>x.PostId);
+
     }
 }
