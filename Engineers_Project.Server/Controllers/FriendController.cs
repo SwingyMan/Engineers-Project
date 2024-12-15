@@ -23,7 +23,11 @@ public class FriendController : Controller
     [HttpPost]
     public async Task<IActionResult> AddFriend(Guid friendId)
     {
-        return Ok(await _mediator.Send(new AddFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()), friendId)));
+       var friends = await _mediator.Send(
+            new AddFriendsCommand(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()),
+                friendId));
+       if (friends == null) return Conflict("You already sent friend request");
+        return Ok(friends);
     }
     [HttpDelete]
     public async Task<IActionResult> RemoveFriend(Guid friendId)
