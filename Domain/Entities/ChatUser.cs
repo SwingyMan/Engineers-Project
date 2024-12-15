@@ -14,6 +14,4 @@ public class ChatUser
     [JsonIgnore] public User User { get; set; }
 
     [JsonIgnore] public Chat Chat { get; set; }
-
-    [JsonIgnore] public Message Message { get; set; }
 }
