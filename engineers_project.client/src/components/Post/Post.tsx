@@ -41,7 +41,7 @@ export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,s
 
   return (
     <PostWrapper>
-      <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`, { state: props.postInfo }) }}>
+      <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`) }}>
         <HeaderInfo>
           <ImageDiv width={40} url={props.postInfo.avatarName ? getUserImg(props.postInfo.avatarName) : ""} />
           <div>

@@ -49,7 +49,8 @@ const Input = styled.input`
 
 const TextArea = styled.textarea`
   padding: 10px;
-  
+  font-family: inherit;
+  font-size: inherit;
   background-color: var(--whiteTransparent20);
   font-size: 1rem;
   border: 1px solid #ccc;
@@ -100,6 +101,7 @@ interface ModalProps {
 
 const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initData}) => {
     const initPost:NewPost = {...initData}
+    console.log(initPost)
     const [newPost, setNewPost] = useState(initPost);
    const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,6 +110,7 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log(newPost)
     setNewPost({
       ...newPost,
       [name]: name === 'availability' ? Number(value) : value,
@@ -117,13 +120,14 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
   if (!isOpen) return null;
 
   return (
-    <Overlay onClick={()=>{onClose()}}>
+    <Overlay onClick={()=>{onClose(),setNewPost(initPost)}}>
       <ModalContainer onClick={(e)=>{e.stopPropagation()}}>
         <Header>Create Post</Header>
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
             placeholder="Title"
+            name='title'
             value={newPost.title}
             onChange={handleChange}
             required
@@ -131,12 +135,14 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
           <TextArea
             placeholder="Content"
             value={newPost.body}
+            name='body'
             onChange={handleChange}
             required
           />
           <Select
             value={newPost.availability}
             onChange={handleChange}
+            name='availability'
           >
             <option value={0}>Public</option>
             <option value={1}>Private</option>

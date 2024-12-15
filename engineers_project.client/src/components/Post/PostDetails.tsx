@@ -7,6 +7,7 @@ import { Comment } from "./Comment";
 import { CreateComment } from "./CreateComment";
 import { getUserImg } from "../../API/API";
 import { useComments } from "../../API/hooks/useComments";
+import { PostDTO } from "../../API/DTO/PostDTO";
 
 const PostWrapper = styled.div`
   padding: 1em;
