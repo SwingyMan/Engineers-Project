@@ -7,12 +7,16 @@ namespace Application.Commands;
 
 public class UpdateGroupCommand : IRequest<Group>
 {
-    public GroupDTO entity { get; }
-    public Guid id { get; }
+    public string GroupName { get; set; }
+    public string GroupDescription { get; set; }
+    public Guid Groupid { get; }
+    public Guid UserId { get; set; }
 
-    public UpdateGroupCommand(GroupDTO entity, Guid id)
+    public UpdateGroupCommand(string groupName, string groupDescription, Guid groupid, Guid userId)
     {
-        this.entity = entity;
-        this.id = id;
+        GroupName = groupName;
+        GroupDescription = groupDescription;
+        Groupid = groupid;
+        UserId = userId;
     }
 }
