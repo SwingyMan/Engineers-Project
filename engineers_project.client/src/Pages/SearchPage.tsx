@@ -8,6 +8,8 @@ import { UUID } from "crypto";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useSearchUsers } from "../API/hooks/useSearchUsers";
 import { UserCard } from "../components/User/UserCard";
+import { useSearchGroups } from "../API/hooks/useSearchGroups";
+import { GroupCard } from "../components/Group/GroupCard";
 
 const SearchFeed = styled.div`
   flex: 1;
@@ -71,6 +73,8 @@ export function SearchPage() {
   const { user } = useAuth();
   const { data: PostData, isPending: isPostPending } = useSearchPosts(query!);
   const { data: UserData, isPending: isUserPending } = useSearchUsers(query!);
+  
+  const { data: GroupData, isPending: isGroupPending } = useSearchGroups(query!);
   return (
     <SearchFeed>
       <SearchResult> Search results for "{query}" </SearchResult>
@@ -120,32 +124,25 @@ export function SearchPage() {
       ) : (
         <SearchResult>No Posts Found</SearchResult>
       )}
-{/* //groups
-      {PostData && PostData?.length !== 0 ? (
+      {GroupData && GroupData?.length !== 0 ? (
         <GroupResult>
           <GroupResultHeader
-            onClick={() => dispatch({ type: "TOGGLE_POSTMENU" })}
+            onClick={() => dispatch({ type: "TOGGLE_GROUPMENU" })}
           >
-            Posts
-            {state.postMenu ? <IoIosArrowUp /> : <IoIosArrowDown />}
+            Groups
+            {state.groupMenu ? <IoIosArrowUp /> : <IoIosArrowDown />}
           </GroupResultHeader>
-          {state.postMenu ? (
+          {state.groupMenu ? (
             <GroupResultItems>
-              {PostData.map((post) => (
-                <Post
-                  key={post.id}
-                  postInfo={post}
-                  isMenu={post.userId === user?.id}
-                  isOpen={openMenu === post.id}
-                  setIsOpen={() => handleMenuOpen(post.id)}
-                />
+              {GroupData.map((group) => (
+                <GroupCard key={group.id} group={group} />
               ))}
             </GroupResultItems>
           ) : null}
         </GroupResult>
       ) : (
         <SearchResult>No Posts Found</SearchResult>
-      )} */}
+      )}
     </SearchFeed>
   );
 }

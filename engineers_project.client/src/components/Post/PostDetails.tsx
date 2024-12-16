@@ -8,7 +8,8 @@ import { CreateComment } from "./CreateComment";
 import { getUserImg } from "../../API/API";
 import { useComments } from "../../API/hooks/useComments";
 import { PostDTO } from "../../API/DTO/PostDTO";
-import { resolveAttachement } from "../../Utility/HandleOctetStream";
+import { ResolveAttachement } from "../../Utility/ResolveAttachement";
+
 
 const PostWrapper = styled.div`
   padding: 1em;
@@ -19,7 +20,7 @@ const PostWrapper = styled.div`
   border: 1px solid var(--darkGrey);
   height: min-content;
   min-width: 50%;
-  width: clamp(50%,60%,70%);
+  width: clamp(50%, 60%, 70%);
 `;
 const PostHeader = styled.div`
   display: flex;
@@ -37,16 +38,15 @@ const Title = styled.div`
   margin-bottom: 0.1em;
 `;
 
-export function PostDetails(props: { postInfo: PostDTO ;options:boolean, isOpen:boolean,setIsOpen:Function}) {
+export function PostDetails(props: {
+  postInfo: PostDTO;
+  options: boolean;
+  isOpen: boolean;
+  setIsOpen: Function;
+}) {
   const navigate = useNavigate();
-  const {data} =useComments(props.postInfo.id)
-   if(props.postInfo.attachments&&props.postInfo.attachments?.length!=0){
-      props.postInfo.attachments.map(
-        a=> {
-                  resolveAttachement("5403574c-488a-41eb-8885-056a2e70742e")
-        }
-      )
-    }
+  const { data } = useComments(props.postInfo.id);
+
   return (
     <PostWrapper>
       <PostHeader>
@@ -54,7 +54,9 @@ export function PostDetails(props: { postInfo: PostDTO ;options:boolean, isOpen:
           <ImageDiv
             width={40}
             url={
-              props.postInfo.avatarName ? getUserImg(props.postInfo.avatarName) : ""
+              props.postInfo.avatarName
+                ? getUserImg(props.postInfo.avatarName)
+                : ""
             }
           />
           <div>
@@ -69,20 +71,33 @@ export function PostDetails(props: { postInfo: PostDTO ;options:boolean, isOpen:
             <div>{TimeElapsed(props.postInfo.createdAt)}</div>
           </div>
         </HeaderInfo>
-        {props.options?<OptionMenu id={props.postInfo.id} isOpen={props.isOpen} setIsOpen={props.setIsOpen} />:null}
+        {props.options ? (
+          <OptionMenu
+            id={props.postInfo.id}
+            isOpen={props.isOpen}
+            setIsOpen={props.setIsOpen}
+          />
+        ) : null}
       </PostHeader>
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
+      {props.postInfo.attachments &&
+        props.postInfo.attachments.length !== 0 &&
+        props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.fileName} />
+        ))}
       <hr />
       <>
         <CreateComment id={props.postInfo.id} />
-        
-        {data?data.map((comments)=>(<Comment key={comments.id}comment={comments}/>)):props.postInfo.comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
+
+        {data
+          ? data.map((comments) => (
+              <Comment key={comments.id} comment={comments} />
+            ))
+          : props.postInfo.comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
       </>
-      
     </PostWrapper>
   );
 }

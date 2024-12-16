@@ -117,7 +117,7 @@ export const getGroupImg = (id:string) =>{
     const src = `${getHost()}Group/GetGroupImageById?groupId=${id}`
     return src
 }
-export const getAttachment = (id:string) =>{
-    const src = `${getHost()}Attachment/GetFile/${id}`
-    return src
+export const getAttachment = async (id:string) =>{
+    const response =await fetch( `${getHost()}Attachment/GetFile/${id}`)
+    return response
 }

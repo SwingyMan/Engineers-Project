@@ -5,7 +5,7 @@ import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { getUserImg } from "../../API/API";
 import { PostDTO } from "../../API/DTO/PostDTO";
-import { resolveAttachement } from "../../Utility/HandleOctetStream";
+import { ResolveAttachement } from "../../Utility/ResolveAttachement";
 
 
 const PostWrapper = styled.div`
@@ -38,13 +38,7 @@ const Title = styled.div`
 
 export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,setIsOpen:Function}) {
   const navigate = useNavigate();
-  if(props.postInfo.attachments&&props.postInfo.attachments?.length!=0){
-    props.postInfo.attachments.map(
-      a=> {
-                console.log(resolveAttachement("5403574c-488a-41eb-8885-056a2e70742e"))
-      }
-    )
-  }
+
   return (
     <PostWrapper>
       <PostHeader onClick={() => { navigate(`/post/${props.postInfo.id}`) }}>
@@ -62,6 +56,10 @@ export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,s
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
+            {props.postInfo.attachments &&
+              props.postInfo.attachments.length !== 0 &&
+              props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.fileName} />
+              ))}
 <hr />
      <div>
         Komentarze ({props.postInfo.comments.length})

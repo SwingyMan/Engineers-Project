@@ -10,6 +10,7 @@ import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
 import { usePosts } from "../API/hooks/usePosts";
 import { MdAdd } from "react-icons/md";
+import { useMyhGroups } from "../API/hooks/useMyGroups";
 
 const GroupCardWrapper = styled.div`
   padding: 1em;
@@ -47,30 +48,40 @@ const GroupFeed = styled.div`
   position: relative;
 `;
 const NewPostButton = styled.div`
-position: absolute;
-bottom:10px;
-right: 10px;
-border-radius: 50vh;
-background-color:#007aff;
-padding: 4px 16px;
-display: flex;
-align-items: center;
-cursor: pointer;
-`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 50vh;
+  background-color: #007aff;
+  padding: 4px 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+const UsersImgs = styled.div`
+  display: flex;
+  margin-left:15px ;
+  &>div{
+    margin-left: -15px;
+  }
+`;
 export function GroupPage() {
   const { id } = useParams();
-  const [openMenu,setOpenMenu] = useState<null|string>(null)
-  const handleMenuOpen=(id:string)=>{
-    console.log(id)
-    setOpenMenu(id)
-  }
+  const [openMenu, setOpenMenu] = useState<null | string>(null);
+  const handleMenuOpen = (id: string) => {
+    console.log(id);
+    setOpenMenu(id);
+  };
   const { handleAddPost } = usePosts();
-  const [isModalOpen,setOpenModal]=useState(false)
+  const [isModalOpen, setOpenModal] = useState(false);
   const { data: groupInfo } = useGroupDetails(id!);
-  const {data:groupPosts ,isError,error, isFetched} = useGroupPosts(id!);
+  const { data: groupPosts, isError, error, isFetched } = useGroupPosts(id!);
 
-  console.log(error)
-    const {user} = useAuth()
+  const { data, isFetching } = useMyhGroups();
+  console.log(error);
+  const { user } = useAuth();
+  
+
   return (
     <>
       <GroupFeed>
@@ -90,24 +101,49 @@ export function GroupPage() {
             </GroupheaderWrapper>
             <Users>
               users
-              {groupInfo.groupUsers.slice(0,5).map((user) => (
+              <UsersImgs>
+              {groupInfo.groupUsers.slice(0, 5).map((user) => (
                 <ImageDiv
                   key={user.user.id}
-                  width={30}
+                  width={40}
                   url={getUserImg(user.user.avatarFileName)}
                 />
-              ))}
+              ))}</UsersImgs>
               {groupInfo.groupUsers.length} Users
             </Users>
           </GroupCardWrapper>
         )}
-        { isFetched===false? <>loading</>:(isError===true?<></>:groupPosts?.length!==0?groupPosts?.map((post)=><Post key={post.id} postInfo={post}  isMenu={post.userId===user?.id} isOpen={openMenu===post.id} setIsOpen={()=>handleMenuOpen(post.id)}/>):<>noPosts</>)}
-                <NewPostButton onClick={()=>setOpenModal(true)}>
-                  <MdAdd /> Add Post
-                </NewPostButton>
+        {isFetched === false ? (
+          <>loading</>
+        ) : isError === true ? (
+          <></>
+        ) : groupPosts?.length !== 0 ? (
+          groupPosts?.map((post) => (
+            <Post
+              key={post.id}
+              postInfo={post}
+              isMenu={post.userId === user?.id}
+              isOpen={openMenu === post.id}
+              setIsOpen={() => handleMenuOpen(post.id)}
+            />
+          ))
+        ) : (
+          <>noPosts</>
+        )}
+        {data && data.find((mygroup) => mygroup.id == id!) && (
+          <NewPostButton onClick={() => setOpenModal(true)}>
+            <MdAdd /> Add Post
+          </NewPostButton>
+        )}
       </GroupFeed>
-      <NewPostModal isOpen={isModalOpen} onClose={()=>setOpenModal(false)} onSubmit={(data: {})=>{handleAddPost.mutate(data)}}initData={{title:"",body:"",availability:2, groupId:id}}/>
-
+      <NewPostModal
+        isOpen={isModalOpen}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(data: {}) => {
+          handleAddPost.mutate(data);
+        }}
+        initData={{ title: "", body: "", availability: 2, groupId: id }}
+      />
     </>
   );
 }

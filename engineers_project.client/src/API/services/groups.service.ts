@@ -40,3 +40,6 @@ export const getGroupRequests  =():Promise<Group[]>=>{
     return get(url +`GetGroupRequests`)
 }
 
+export const getRequestsToGroup  =():Promise<Group[]>=>{
+    return get(url +`GetRequestsToGroup`)
+}

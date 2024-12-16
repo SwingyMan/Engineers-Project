@@ -49,7 +49,7 @@ export function LeftNavBar() {
           <ButttonWrapper>Your Groups</ButttonWrapper>
         <GroupWrapper>
           {isFetching && <>loading</>}
-          {data!==null&&(data?.length!==0?data?.map((group)=>(<GroupCardSmall key={group.id} handleClick={async () => navigate(`/group/${group.id}`)} group={group} active={group.id===id}/>)): <>You are not a poart of any group</>)}
+          {data!==null&&(data?.length!==0?data?.map((group)=>(<GroupCardSmall key={group.id} handleClick={async () => navigate(`/group/${group.id}`)} group={group} active={group.id===id}/>)): <>You are not a part of any group</>)}
         </GroupWrapper>
       </div>
     </NavBarWrapper>
