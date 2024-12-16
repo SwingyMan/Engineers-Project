@@ -5,6 +5,7 @@ import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { getUserImg } from "../../API/API";
 import { PostDTO } from "../../API/DTO/PostDTO";
+import { getFile } from "../../API/services/attachment.service";
 
 
 const PostWrapper = styled.div`
@@ -56,6 +57,7 @@ export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,s
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
+      {props.postInfo.attachments&& props.postInfo.attachments.map((image)=><image href={image.id}/>)}
       <hr />
      <div>
         Komentarze ({props.postInfo.comments.length})

@@ -36,4 +36,7 @@ export const getGroupMembership=():Promise<Group[]>=>{
 export const getAllGroups = (): Promise<GroupDTO[]> => {
     return get(url + 'GetAll')
 }
+export const getGroupRequests  =():Promise<Group[]>=>{
+    return get(url +`GetGroupRequests`)
+}
 

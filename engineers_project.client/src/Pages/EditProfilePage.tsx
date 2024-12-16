@@ -86,6 +86,7 @@ export function EditProfilePage() {
             id="image"
             name="image"
             accept=".jpg, .jpeg, .png"
+            size={50}
             onChange={handleChange}
           />
         </EditImage>

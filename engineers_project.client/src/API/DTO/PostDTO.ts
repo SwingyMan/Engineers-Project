@@ -8,7 +8,7 @@ export interface PostDTO{
     status?: string,
     availability?: 1|0,
     createdAt: Date,
-    attachments?: string|null,
+    attachments?: AttachmentDTO[]|null,
     comments:CommentDTO[],
     userId:UUID,
     groupId?:string,
