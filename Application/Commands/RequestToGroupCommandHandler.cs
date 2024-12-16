@@ -15,8 +15,8 @@ public class RequestToGroupCommandHandler : IRequestHandler<RequestToGroupComman
     public async Task<GroupUser> Handle(RequestToGroupCommand request, CancellationToken cancellationToken)
     {
         var groupUser = new GroupUser(request.UserId, request.GroupId);
-        var check = _context.GroupUsers.Single(x=>x.GroupId == request.GroupId && x.UserId == request.UserId);
-        if (check != null)
+        var check = _context.GroupUsers.Where(x=>x.GroupId == request.GroupId && x.UserId == request.UserId);
+        if (check.Count() != 0)
         {
             return null;
         }

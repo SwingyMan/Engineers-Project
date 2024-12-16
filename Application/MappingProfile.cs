@@ -27,8 +27,7 @@ public class MappingProfile : Profile
             .ForMember(x=>x.Username,opt=>opt.MapFrom(src=>src.Username))
             .ForMember(x=>x.AvatarFileName,opt=>opt.MapFrom(src=>src.AvatarFileName));
         CreateMap<AttachmentDTO, Attachments>()
-            .ForMember(x=>x.Id,opt=>opt.MapFrom(src=>Guid.NewGuid()))
-            .ForMember(x=>x.Type,opt=>opt.MapFrom(src=>src.FileType));
+            .ForMember(x=>x.Id,opt=>opt.MapFrom(src=>Guid.NewGuid()));
 
         CreateMap<Chat, ChatResponseObject>()
             .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))
