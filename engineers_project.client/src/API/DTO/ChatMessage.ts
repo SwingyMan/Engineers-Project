@@ -1,5 +1,4 @@
 export interface ChatMessage{
-    Id:string;
-    ChatId:string;
-    MessageId:string;
+    chatId:string;
+    content:string;
 }

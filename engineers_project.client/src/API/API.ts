@@ -9,11 +9,11 @@ const getHost = () => {
     }
 };
 
-const getToken = (): string | null => {
+export const getToken = (): string | null => {
     return localStorage.getItem('polsl-social');
 };
 
-const getHeaders = (formdata?:boolean) => {
+ export const getHeaders = (formdata?:boolean) => {
     const token = getToken();
     if(formdata){
         return{
