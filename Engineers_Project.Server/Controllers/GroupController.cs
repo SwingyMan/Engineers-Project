@@ -57,10 +57,19 @@ public class GroupController : ControllerBase
     /// </summary>
     /// <param name="updateGroupCommand">Update command</param>
     /// <returns>The updated Group.</returns>
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch([FromBody] UpdateGroupCommand updateGroupCommand)
+    [HttpPatch]
+    public async Task<IActionResult> Patch([FromBody] GroupUpdateDTO group)
     {
-        return Ok(await _mediator.Send(updateGroupCommand));
+
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+        
+        return Ok(await _mediator.Send(new UpdateGroupCommand(group.GroupName,group.GroupDescription,group.GroupID,guid)));
     }
 
     /// <summary>
