@@ -30,7 +30,7 @@ public class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand,
         mappedEntity.FileName = $"{mappedEntity.Id}{Path.GetExtension(request.AttachmentDto.file.FileName)}";
         if (await CheckImage(request.AttachmentDto.file))
         {
-            await _blobInfrastructure.addBlob(request.AttachmentDto.file,mappedEntity.Id,"attachments");
+            await _blobInfrastructure.addBlob(request.AttachmentDto.file,mappedEntity.Id,mappedEntity.Type);
             var entity = await _attachmentRepository.Add(mappedEntity);
             return entity;
         }
