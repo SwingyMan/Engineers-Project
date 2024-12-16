@@ -26,7 +26,6 @@ const logMSG = (msg: Message) => {
 export function RightNavBar() {
   const { data, isFetching ,error} = useMyChats();
   const { user } = useAuth();
-  console.log(data,error)
   const navigate = useNavigate()
   return (
     <ChatFeed>

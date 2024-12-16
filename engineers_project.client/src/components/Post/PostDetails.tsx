@@ -8,6 +8,7 @@ import { CreateComment } from "./CreateComment";
 import { getUserImg } from "../../API/API";
 import { useComments } from "../../API/hooks/useComments";
 import { PostDTO } from "../../API/DTO/PostDTO";
+import { resolveAttachement } from "../../Utility/HandleOctetStream";
 
 const PostWrapper = styled.div`
   padding: 1em;
@@ -39,6 +40,13 @@ const Title = styled.div`
 export function PostDetails(props: { postInfo: PostDTO ;options:boolean, isOpen:boolean,setIsOpen:Function}) {
   const navigate = useNavigate();
   const {data} =useComments(props.postInfo.id)
+   if(props.postInfo.attachments&&props.postInfo.attachments?.length!=0){
+      props.postInfo.attachments.map(
+        a=> {
+                  resolveAttachement("5403574c-488a-41eb-8885-056a2e70742e")
+        }
+      )
+    }
   return (
     <PostWrapper>
       <PostHeader>

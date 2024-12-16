@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Post } from "../components/Post/Post";
-import { ChatBox } from "../components/RightNavBar/ChatBox";
-import { ChatFeed } from "../components/RightNavBar/ChatFeed";
 import { usePosts } from "../API/hooks/usePosts";
 import { useState } from "react";
 import { useAuth } from "../Router/AuthProvider";
@@ -31,6 +29,7 @@ const NewPostButton = styled.div`
 const FeedContainer = styled.div`
   display: flex;
   height: 100%;
+  flex: 1;
   position: relative;
 `;
 
@@ -70,7 +69,7 @@ export function FeedPage() {
       <NewPostModal
         isOpen={isModalOpen}
         onClose={() => setOpenModal(false)}
-        onSubmit={(data) => {
+        onSubmit={(data: {}) => {
           handleAddPost.mutate(data);
         }}
         initData={{ title: "", body: "", availability: 0 }}

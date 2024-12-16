@@ -106,7 +106,7 @@ export function GroupPage() {
                   <MdAdd /> Add Post
                 </NewPostButton>
       </GroupFeed>
-      <NewPostModal isOpen={isModalOpen} onClose={()=>setOpenModal(false)} onSubmit={(data)=>{handleAddPost.mutate(data)}}initData={{title:"",body:"",availability:2, groupId:id}}/>
+      <NewPostModal isOpen={isModalOpen} onClose={()=>setOpenModal(false)} onSubmit={(data: {})=>{handleAddPost.mutate(data)}}initData={{title:"",body:"",availability:2, groupId:id}}/>
 
     </>
   );

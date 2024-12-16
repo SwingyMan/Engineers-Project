@@ -5,4 +5,5 @@ export interface Message{
     content:string;
     creationDate:number;
     user:User
+    userId?:string;
 }

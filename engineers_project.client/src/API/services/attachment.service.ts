@@ -1,6 +1,7 @@
-import { get } from "../API"
+import { postAttachment } from "../API"
+
 
 const url = "Attachment/"
-export const getFile = (id: string) => {
-    return get(url + `GetFile/${id}`)
+export const postAttachments = (data:FormData) => {
+    return postAttachment(url + `Post`,data)
 }
