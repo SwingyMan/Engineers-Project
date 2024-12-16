@@ -10,6 +10,7 @@ import { SearchPage } from "../Pages/SearchPage";
 import validator from "validator";
 import { GroupPage } from "../Pages/GroupPage";
 import { EditProfilePage } from "../Pages/EditProfilePage";
+import { ChatPage } from "../Pages/ChatPage";
 
 export const validIdLoader = async ({ params }) => {
   const { id } = params;
@@ -60,6 +61,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       {
         path: "/EditProfile",
         element: (
@@ -82,6 +84,16 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <GroupPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/chat/:id",
+
+        loader: validIdLoader,
+        element: (
+          <PrivateRoute>
+            <ChatPage />
           </PrivateRoute>
         ),
       },

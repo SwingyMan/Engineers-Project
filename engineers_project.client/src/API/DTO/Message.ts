@@ -1,8 +1,8 @@
 import { User } from "./User";
 
 export interface Message{
-    Id:string;
-    Content:string;
-    CreationDate:string;
+    id:string;
+    content:string;
+    creationDate:number;
     user:User
 }

@@ -110,7 +110,7 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log(newPost)
+
     setNewPost({
       ...newPost,
       [name]: name === 'availability' ? Number(value) : value,

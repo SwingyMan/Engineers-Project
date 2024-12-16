@@ -15,6 +15,7 @@ const Content = styled.div`
   }
 `;
 interface ChatBox {
+  onClick:Function;
   ChatName: string;
   Sender: string;
   Message: string;
@@ -56,9 +57,11 @@ export function ChatBox({
   Message,
   ActivityDate,
   ChatImg,
+  onClick
 }: ChatBox) {
+
   return (
-    <StyledBox>
+    <StyledBox onClick={()=>onClick()}>
       <ImageDiv width={40} url={ChatImg} />
       <Content>
         <b>{ChatName}</b>

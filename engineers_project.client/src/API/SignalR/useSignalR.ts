@@ -5,11 +5,10 @@ import { getToken } from '../API';
 
 
 interface UseSignalRProps {
-  hubUrl: string;
   onMessageReceived: (message: Message) => void;
 }
-
-const useSignalR = ({ hubUrl, onMessageReceived }: UseSignalRProps) => {
+const hubUrl = "https://localhost:7290/chat"
+const useSignalR = ({ onMessageReceived }: UseSignalRProps) => {
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
 
   useEffect(() => {

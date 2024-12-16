@@ -110,9 +110,16 @@ public static class ApplicationService
         serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<Chat>, Chat>),
             typeof(GetChatByIdQueryHandler));
 
-        serviceCollection.AddTransient(typeof(IRequestHandler<CreateChatCommand, Chat>),
-            typeof(CreateChatCommandHandler));
-
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericAddCommand<ChatDTO, Chat>, Chat>),
+            typeof(GenericAddCommandHandler<ChatDTO, Chat>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetAllQuery<Chat>, IEnumerable<Chat>>),
+            typeof(GenericGetAllQueryHandler<Chat>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericGetByIdQuery<ChatDTO>, ChatDTO>),
+            typeof(GenericGetByIdQueryHandler<ChatDTO>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericUpdateCommand<ChatDTO, Chat>, Chat>),
+            typeof(GenericUpdateCommandHandler<ChatDTO, Chat>));
+        serviceCollection.AddTransient(typeof(IRequestHandler<GenericDeleteCommand<Chat>>),
+            typeof(GenericDeleteCommandHandler<Chat>));
         //serviceCollection.AddScoped<IAuthorizationHandler, ChatMemberHandler>();
         serviceCollection.AddAuthorization(options =>
         {

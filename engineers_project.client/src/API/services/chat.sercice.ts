@@ -8,6 +8,9 @@ const url = "Chat/"
 export const sendMessage=(Message:ChatMessage):Promise<Message>=>{
     return post(url+'SendMessage',Message)
 }
-export const getAll=():Promise<Chat[]>=>{
-    return get(url+'GetAll')
+export const getAllUserChats=():Promise<Chat[]>=>{
+    return get(url+'GetAllUserChats')
+}
+export const getOrCreateChat=(id:string)=>{
+    return post(url+"GetOrCreateChat" , {recepientId:id})
 }
