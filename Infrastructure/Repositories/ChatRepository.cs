@@ -31,4 +31,23 @@ public class ChatRepository(SocialPlatformDbContext _context) : IChatRepository
         await _context.SaveChangesAsync();
         return chat;
     }
+
+    public async Task<IEnumerable<Chat>> GetChatsByUserId(Guid userGuid)
+    {
+        return await _context.Chats
+            .Include(u => u.Users)
+            .Where(chat => chat.Users.Any(user => user.Id == userGuid))
+            .Select(chat => new Chat
+            {
+                Id = chat.Id,
+                Name = chat.Name,
+                Users = chat.Users,
+                Messages = chat.Messages
+                    .OrderByDescending(m => m.CreationDate)
+                    .Take(1)
+                    .ToList()
+            })
+            .ToListAsync();
+    }
+
 }

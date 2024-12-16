@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Security.Claims;
 
 namespace Engineers_Project.Server.Controllers;
@@ -47,6 +48,19 @@ public class ChatController : ControllerBase
         var chat = await _mediator.Send(new GenericGetByIdQuery<ChatDTO>(id));
         if (chat == null) return NotFound();
         return Ok(chat);
+    }
+
+    /// <summary>
+    /// Retrieves all chats that current user is a member of.
+    /// </summary>
+    /// <returns>Retrieved chats</returns>
+    [HttpGet()]
+    public async Task<IActionResult> GetAllUserChats()
+    {
+        Guid userGuid = Guid.Parse(User.FindFirstValue("id")!);
+        var getChatsByUserIdQuery = new GetChatsByUserIdQuery(userGuid);
+        var chats =  await _mediator.Send(getChatsByUserIdQuery);
+        return Ok(_mapper.Map<IEnumerable<ChatResponseObject>>(chats));
     }
 
     /// <summary>
@@ -94,10 +108,10 @@ public class ChatController : ControllerBase
         return Ok(messageResponseObject);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateGroupChat([FromBody] CreateGroupChatDTO createGroupChatDTO)
-    {
+    //[HttpPost]
+    //public async Task<IActionResult> CreateGroupChat([FromBody] CreateGroupChatDTO createGroupChatDTO)
+    //{
 
 
-    }
+    //}
 }
