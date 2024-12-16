@@ -45,7 +45,7 @@ public class ChatController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var chat = await _mediator.Send(new GenericGetByIdQuery<ChatDTO>(id));
+        var chat = await _mediator.Send(new GenericGetByIdQuery<Chat>(id));
         if (chat == null) return NotFound();
         return Ok(chat);
     }
