@@ -24,6 +24,6 @@ public class AttachmentFileQueryHandler : IRequestHandler<AttachmentFileQuery,Fi
 
 
         return new FileStreamResult(data.Content,data.ContentType)
-            {FileDownloadName = file.FileName};
+            {FileDownloadName = file.RealName};
     }
 }
