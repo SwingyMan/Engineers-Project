@@ -219,4 +219,24 @@ public class GroupController : ControllerBase
         var userId = Guid.Parse(userIdClaim.Value);
         return Ok(await _mediator.Send(new GroupRequestQuery(userId, groupId)));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetRequestsToGroup()
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        var groups = await _mediator.Send(new RequestedGroupsQuery(userId));
+        return Ok(groups.Select(g => new 
+        {
+            g.Id,
+            g.Name,
+            g.Description
+
+        }));
+    }
 }
