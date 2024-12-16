@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Application;
 using Infrastructure;
 using Infrastructure.Hubs;
@@ -9,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +70,7 @@ builder.Services.AddTransient<DbSeeder>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Open",
-        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().WithExposedHeaders(HeaderNames.ContentDisposition));
 });
 
 
