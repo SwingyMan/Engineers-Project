@@ -4,4 +4,5 @@ interface AttachmentDTO{
     postId: string;
     type:string;
     fileName:string;
+    realName:string;
 }
