@@ -8,6 +8,8 @@ import NewPostModal from "../components/Modal/Modal";
 import { useState } from "react";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
+import { usePosts } from "../API/hooks/usePosts";
+import { MdAdd } from "react-icons/md";
 
 const GroupCardWrapper = styled.div`
   padding: 1em;
@@ -42,7 +44,19 @@ const GroupFeed = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   color: var(--white);
+  position: relative;
 `;
+const NewPostButton = styled.div`
+position: absolute;
+bottom:10px;
+right: 10px;
+border-radius: 50vh;
+background-color:#007aff;
+padding: 4px 16px;
+display: flex;
+align-items: center;
+cursor: pointer;
+`
 export function GroupPage() {
   const { id } = useParams();
   const [openMenu,setOpenMenu] = useState<null|string>(null)
@@ -50,9 +64,11 @@ export function GroupPage() {
     console.log(id)
     setOpenMenu(id)
   }
+  const { handleAddPost } = usePosts();
+  const [isModalOpen,setOpenModal]=useState(false)
   const { data: groupInfo } = useGroupDetails(id!);
   const {data:groupPosts ,isError,error, isFetched} = useGroupPosts(id!);
-  const [isModalOpen,setModalOpen]=useState(true)
+
   console.log(error)
     const {user} = useAuth()
   return (
@@ -86,8 +102,12 @@ export function GroupPage() {
           </GroupCardWrapper>
         )}
         { isFetched===false? <>loading</>:(isError===true?<></>:groupPosts?.length!==0?groupPosts?.map((post)=><Post key={post.id} postInfo={post}  isMenu={post.userId===user?.id} isOpen={openMenu===post.id} setIsOpen={()=>handleMenuOpen(post.id)}/>):<>noPosts</>)}
+                <NewPostButton onClick={()=>setOpenModal(true)}>
+                  <MdAdd /> Add Post
+                </NewPostButton>
       </GroupFeed>
-      {/* <Modal isOpen={isModalOpen} onClose={()=>setModalOpen(false)}/> */}
+      <NewPostModal isOpen={isModalOpen} onClose={()=>setOpenModal(false)} onSubmit={(data)=>{handleAddPost.mutate(data)}}initData={{title:"",body:"",availability:2, groupId:id}}/>
+
     </>
   );
 }

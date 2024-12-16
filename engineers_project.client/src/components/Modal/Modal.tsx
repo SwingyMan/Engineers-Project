@@ -95,7 +95,7 @@ const Button = styled.button`
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-   onSubmit: (data: Partial<NewPost>) => void;
+   onSubmit: Function
    initData:NewPost
 }
 
@@ -105,7 +105,10 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
     const [newPost, setNewPost] = useState(initPost);
    const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(newPost!);
+    const NewPost = {
+      entity:newPost!
+    }
+    onSubmit(NewPost);
     onClose();
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -139,14 +142,17 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit ,initDat
             onChange={handleChange}
             required
           />
+          {initData.availability===2?
+        <></>:  
           <Select
-            value={newPost.availability}
-            onChange={handleChange}
-            name='availability'
+          value={newPost.availability}
+          onChange={handleChange}
+          name='availability'
           >
             <option value={0}>Public</option>
             <option value={1}>Private</option>
           </Select>
+          }
           <ButtonGroup>
             <Button type="button" onClick={onClose} color="secondary">
               Cancel

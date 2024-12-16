@@ -22,7 +22,7 @@ interface ChatBox {
   ActivityDate: number;
   ChatImg: string;
 }
-function formatDate(inputDate: Date) {
+export function formatDate(inputDate: Date) {
 
   const now = new Date();
   // Check if input date is today

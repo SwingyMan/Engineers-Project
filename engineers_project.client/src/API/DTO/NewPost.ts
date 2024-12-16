@@ -1,7 +1,7 @@
-export interface NewPost{
-    
+export interface NewPost {
+
         title: string,
         body: string,
-        availability: 0|1,
-        groupId?:string
+        availability: 0 | 1 |2,
+        groupId?: string
 }
