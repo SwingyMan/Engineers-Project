@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getGroupMembership } from "../services/groups.service";
 
-export const useMyhGroups = () => {
+export const useMyGroups = () => {
   const QueryKey = ["MyGroups"];
 
   const SearchGroupQuery = () => {

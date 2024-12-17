@@ -4,6 +4,7 @@ import { ImageDiv } from "../Utility/ImageDiv";
 import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
 import { getUserImg } from "../../API/API";
+import { useNavigate } from "react-router";
 
 const StyledTopBar = styled.div`
   background-color: var(--blue);
@@ -46,6 +47,7 @@ const LogoutButton = styled.button`
 
 
 export function TopNavBar() {
+  const navigate = useNavigate()
   const { logOut, user } = useAuth();
   return (
     <>
@@ -58,6 +60,7 @@ export function TopNavBar() {
           <LogoutButton
             onClick={() => {
               logOut();
+              setTimeout(()=>navigate(0))
             }}
           >
             {"Wyloguj "}

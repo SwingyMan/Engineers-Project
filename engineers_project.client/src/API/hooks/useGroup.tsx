@@ -4,7 +4,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import { editGroup, deleteGroup, getGroupById } from "../services/groups.service";
-import { GroupDTO } from "../DTO/GroupDTO";
+import { EditGroup, GroupDTO } from "../DTO/GroupDTO";
 
 export const useGroupDetails = (id: string) => {
   const QueryKey = [id];
@@ -24,7 +24,7 @@ export const useGroupDetails = (id: string) => {
   const { isError, isFetched, data, error, isPending } = GroupQuery();
 
   const handleEditGroup = useMutation({
-    mutationFn: async (editedGroup: Partial<GroupDTO>) => {
+    mutationFn: async (editedGroup:EditGroup) => {
       await editGroup(editedGroup);
     },
     onSuccess: () => {

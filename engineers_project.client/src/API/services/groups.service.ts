@@ -1,6 +1,6 @@
 import { del, get, patch, post } from "../API"
 import { Group } from "../DTO/Group"
-import { GroupDTO } from "../DTO/GroupDTO"
+import { EditGroup, GroupDTO } from "../DTO/GroupDTO"
 const url = 'Group/'
 
 export const getGroupById = (id: string): Promise<GroupDTO> => {
@@ -11,8 +11,8 @@ export const createGroup = (Group: Partial<GroupDTO>): Promise<GroupDTO> => {
     return post(url + 'Post', Group)
 }
 
-export const editGroup = (Group: Partial<GroupDTO>): Promise<GroupDTO> => {
-    return patch(url + 'Patch/' + Group.id, Group)
+export const editGroup = (Group: EditGroup): Promise<GroupDTO> => {
+    return patch(url + 'Patch', Group)
 }
 
 export const deleteGroup = (id: string): Promise<string> => {

@@ -8,6 +8,7 @@ import { fetchUserById } from "../API/services/user.service";
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
+  
   const storedUser =localStorage.getItem("user")!
   const [user, setUser] = useState<User| null>(
     JSON.parse(storedUser)

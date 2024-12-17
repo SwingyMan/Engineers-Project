@@ -58,7 +58,7 @@ export function Post(props: { postInfo: PostDTO,isMenu:boolean, isOpen:boolean,s
       <div>{props.postInfo.body}</div>
             {props.postInfo.attachments &&
               props.postInfo.attachments.length !== 0 &&
-              props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.realName} />
+              props.postInfo.attachments.map((att) => (<ResolveAttachement key={att.realName} url={att.id} fileName={att.realName} />
               ))}
 <hr />
      <div>

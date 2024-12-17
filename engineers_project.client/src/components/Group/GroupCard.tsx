@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { getGroupImg } from "../../API/API";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { Group } from "../../API/DTO/Group";
+import { useNavigate } from "react-router";
 
 const GroupResultHeader = styled.div`
   padding: 1em;
@@ -26,8 +27,9 @@ const HeaderInfo = styled.div`
   cursor: pointer;
 `;
 export function GroupCard(props: { group: Group }) {
+  const navigate = useNavigate()
   return (
-    <GroupResultHeader>
+    <GroupResultHeader onClick={()=>navigate(`/group/${props.group.id}`)}>
       <HeaderInfo>
         <ImageDiv
           width={40}

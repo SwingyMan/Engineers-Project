@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { getUserImg } from "../../API/API";
 import { ImageDiv } from "../Utility/ImageDiv";
 import { User } from "../../API/DTO/User";
+import { useNavigate } from "react-router";
 
 const GroupResultHeader = styled.div`
   padding: 1em;
@@ -22,8 +23,9 @@ const HeaderInfo = styled.div`
     cursor: pointer;
 `
 export function UserCard(props:{user:User}){
+    const navigate = useNavigate()
     return(
-        <GroupResultHeader>
+        <GroupResultHeader onClick={()=>navigate(`/profile/${props.user.id}`)}>
             <HeaderInfo>
             <ImageDiv width={40} url={props.user.avatarFileName ? getUserImg(props.user.avatarFileName) : ""} />
             {props.user.username}

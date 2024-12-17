@@ -1,7 +1,7 @@
 import { FaHome } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
-import { useMyhGroups } from "../../API/hooks/useMyGroups";
+import { useMyGroups } from "../../API/hooks/useMyGroups";
 import { GroupCardSmall } from "../Group/GroupCardSmall";
 
 const NavBarWrapper = styled.div`
@@ -35,7 +35,7 @@ const GroupWrapper = styled.div`
 export function LeftNavBar() {
     const navigate = useNavigate()
     const {id} =useParams()
-    const {data, isFetching} = useMyhGroups()
+    const {data, isFetching} = useMyGroups()
     
   return (
     <NavBarWrapper>

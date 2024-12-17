@@ -111,7 +111,7 @@ const NewPostModal: React.FC<ModalProps> = ({
   initData,
 }) => {
   const [files, setFiles] = useState<FileDetails[]>([]);
-  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 2MB
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -124,7 +124,7 @@ const NewPostModal: React.FC<ModalProps> = ({
           file,
           preview: !isFileTooLarge ? URL.createObjectURL(file) : "",
           error: isFileTooLarge
-            ? `File "${file.name}" exceeds the 2MB size limit.`
+            ? `File "${file.name}" exceeds the 50MB size limit.`
             : null,
         };
       }
@@ -141,7 +141,6 @@ const NewPostModal: React.FC<ModalProps> = ({
     });
   };
   const initPost: NewPost = { ...initData };
-  console.log(initPost);
   const [newPost, setNewPost] = useState(initPost);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,7 +152,7 @@ const NewPostModal: React.FC<ModalProps> = ({
   };
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement 
     >
   ) => {
     const { name, value } = e.target;

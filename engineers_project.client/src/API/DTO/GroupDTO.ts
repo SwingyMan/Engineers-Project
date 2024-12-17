@@ -11,3 +11,8 @@ export interface GroupDTO {
     }[]
 
 }
+export interface EditGroup{
+    groupId:string,
+    groupName:string,
+    groupDescription:string,
+}
