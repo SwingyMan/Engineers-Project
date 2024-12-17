@@ -91,7 +91,7 @@ public class ChatController : ControllerBase
     /// <summary>
     /// Sends private chat message via SignalR hub
     /// </summary>
-    /// <param name="message">MessageDTO of the message intended to be sent</param>
+    /// <param name="request">Request for adding new chat message</param>
     /// <returns>Sent message response DTO</returns>
     [HttpPost]
     public async Task<IActionResult> SendMessage([FromBody] AddChatMessageCommand request)
@@ -104,14 +104,18 @@ public class ChatController : ControllerBase
         string recipientId = chat.Users.First(user => user.Id != newMessage.UserId).Id.ToString();
 
         var messageResponseObject = _mapper.Map<ChatMessageResponseObject>(newMessage);
-        await _hubContext.Clients.User(recipientId).SendAsync("ReceiveMessage", messageResponseObject);
+        //await _hubContext.Clients.User(recipientId).SendAsync("ReceiveMessage", messageResponseObject);
+
+        await _hubContext.Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", messageResponseObject);
         return Ok(messageResponseObject);
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> CreateGroupChat([FromBody] CreateGroupChatDTO createGroupChatDTO)
-    //{
-
-
-    //}
+    [HttpPost]
+    public async Task<IActionResult> CreateGroupChat([FromBody] AddGroupChatCommand addGroupChatCommand)
+    {
+        Guid userGuid = Guid.Parse(User.FindFirstValue("id")!);
+        addGroupChatCommand.usersGuids.Add(userGuid);
+        await _mediator.Send(addGroupChatCommand);
+        return Ok();
+    }
 }

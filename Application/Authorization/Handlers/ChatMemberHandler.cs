@@ -51,16 +51,16 @@ namespace Application.Authorization.Handlers
             {
                 var routeData = httpContext.GetRouteData();
 
-                if (routeData.Values.TryGetValue("id", out var chatIdValue) && Guid.TryParse(chatIdValue?.ToString(), out var chatId))
-                {
-                    bool isMember = await _dbContext.ChatUsers.AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatId);
+                //if (routeData.Values.TryGetValue("id", out var chatIdValue) && Guid.TryParse(chatIdValue?.ToString(), out var chatId))
+                //{
+                //    bool isMember = await _dbContext.ChatUsers.AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatId);
 
-                    if (isMember)
-                    {
-                        context.Succeed(requirement);
-                        return;
-                    }
-                }
+                //    if (isMember)
+                //    {
+                //        context.Succeed(requirement);
+                //        return;
+                //    }
+                //}
             }
 
             context.Fail();
