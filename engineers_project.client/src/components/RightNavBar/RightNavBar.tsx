@@ -20,9 +20,7 @@ const ButttonWrapper = styled.div<{ avtive?: boolean }>`
   min-width: 0px;
   margin-bottom: 5px;
 `;
-const logMSG = (msg: Message) => {
-  console.log(msg);
-};
+
 export function RightNavBar() {
   const { data, isFetching ,error} = useMyChats();
   const { user } = useAuth();

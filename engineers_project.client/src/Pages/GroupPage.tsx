@@ -75,7 +75,8 @@ const LeaveGroup = styled.div`
   padding: 4px 8px;
   background: rgba(255, 136, 136, 0.75);
   width: fit-content;
-  border-radius: 4px;  margin:2px;
+  border-radius: 4px;
+  margin: 2px;
 `;
 const SendRequestButton = styled.div`
   display: flex;
@@ -83,7 +84,8 @@ const SendRequestButton = styled.div`
   width: fit-content;
   background-color: var(--blue);
   border-radius: 4px;
-  cursor: pointer;  margin:2px;
+  cursor: pointer;
+  margin: 2px;
 `;
 const AwaitAcceptance = styled.div`
   display: flex;
@@ -93,7 +95,7 @@ const AwaitAcceptance = styled.div`
   color: var(--offBlack);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  margin:2px;
+  margin: 2px;
 `;
 const MenageGroup = styled.div`
   display: flex;
@@ -122,14 +124,12 @@ export function GroupPage() {
   useEffect(() => {
     if (myGroups?.find((group) => group.id === id)) {
       setIsMember(true);
-      console.log(myGroups);
     }
     if (
       groupInfo?.groupUsers.find((gUser) => gUser.user.id === user?.id)
         ?.isOwner!
     ) {
       setOwner(true);
-      console.log(isMember, isOwner, isRequestSend);
     }
     if (
       groupInfo?.groupUsers.find((gUser) => gUser.user.id === user?.id)
@@ -145,7 +145,7 @@ export function GroupPage() {
     error,
     isFetched,
   } = useGroupPosts(id!, isMember);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <GroupFeed>
@@ -163,14 +163,25 @@ export function GroupPage() {
                     <span>{groupInfo.description}</span>
                   </GroupDescription>
                 </GroupHeaderInfo>
-                {isOwner && <MenageGroup onClick={()=>navigate(`/editGroup/${id}`)}><IoPencil size={17}/>Menage Group {`(${groupInfo.groupUsers.filter((user) => user.isAccepted===false).length})`}</MenageGroup>}
+                {isOwner && (
+                  <MenageGroup onClick={() => navigate(`/editGroup/${id}`)}>
+                    <IoPencil size={16} />
+                    Menage Group{" "}
+                    {`(${
+                      groupInfo.groupUsers.filter(
+                        (user) => user.isAccepted === false
+                      ).length
+                    })`}
+                  </MenageGroup>
+                )}
               </HeaderInfo>
-              {/* {
-                isMember?<MemberButton>you are a member of this group</MemberButton>:isRequestSend?<AwaitAcceptance>You send request</AwaitAcceptance>:<SendRequestButton>Send request to join</SendRequestButton>
-              } */}
-              <LeaveGroup>Leave Group</LeaveGroup>
-              <AwaitAcceptance>You sent request</AwaitAcceptance>
-              <SendRequestButton>Send request to join</SendRequestButton>
+              {isMember ? (
+                <LeaveGroup>Leave Group</LeaveGroup>
+              ) : isRequestSend ? (
+                <AwaitAcceptance>You send request</AwaitAcceptance>
+              ) : (
+                <SendRequestButton>Send request to join</SendRequestButton>
+              )}
             </GroupheaderWrapper>
             <Users>
               users
@@ -189,7 +200,8 @@ export function GroupPage() {
                     )
                   )}
               </UsersImgs>
-              {groupInfo.groupUsers.filter((user) => user.isAccepted).length} Users
+              {groupInfo.groupUsers.filter((user) => user.isAccepted).length}{" "}
+              Users
             </Users>
           </GroupCardWrapper>
         )}

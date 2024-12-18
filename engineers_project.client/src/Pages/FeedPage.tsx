@@ -39,7 +39,7 @@ export function FeedPage() {
   const [openMenu, setOpenMenu] = useState<null | string>(null);
   const [isModalOpen, setOpenModal] = useState(false);
   const handleMenuOpen = (id: string) => {
-    console.log(id);
+
     setOpenMenu(id);
   };
   const { user } = useAuth();

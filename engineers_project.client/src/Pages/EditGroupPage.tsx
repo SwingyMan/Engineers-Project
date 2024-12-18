@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getGroupImg, getUserImg, postAttachment } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 import { useGroupDetails } from "../API/hooks/useGroup";
-import {  useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
@@ -15,7 +15,7 @@ interface FormData {
   image: File | null;
   preview: string | null;
 }
-const StyledEditUser = styled.div`
+const StyledEditGroup = styled.div`
   color: var(--white);
   display: flex;
   width: 100%;
@@ -110,9 +110,9 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
 `;
 const GroupUsersWrapper = styled.div`
-display: flex;
-flex-direction: column;
-gap:5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   padding: 16px;
 `;
 const UserHeaders = styled.div`
@@ -121,13 +121,20 @@ const UserHeaders = styled.div`
   background-color: #6085afcc;
   border-radius: 10px;
 `;
-const UserHeader = styled.div<{isActive:boolean}>`
+const UserHeader = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${props=>props.isActive?"var(--whiteTransparent20)":"" };  
+  background-color: ${(props) =>
+    props.isActive ? "var(--whiteTransparent20)" : ""};
   width: 100%;
   padding: 16px;
+  &:first-of-type {
+    border-radius: 10px 0 0 10px;
+  }
+  &:last-of-type {
+    border-radius: 0 10px 10px 0;
+  }
 `;
 const UserItem = styled.div`
   padding: 1em;
@@ -142,10 +149,10 @@ const UserItem = styled.div`
   justify-content: space-between;
 `;
 const HeaderInfo = styled.div`
-    display: flex;
-    gap:4px;
-    cursor: pointer;
-`
+  display: flex;
+  gap: 4px;
+  cursor: pointer;
+`;
 export function EditGroupPage() {
   const { id } = useParams();
   console.log(id);
@@ -154,9 +161,7 @@ export function EditGroupPage() {
   const { data: groupData, handleEditGroup } = useGroupDetails(id!);
   useEffect(() => {
     if (groupData) {
-      console.log(groupData, user);
       if (user) {
-        console.log(user);
         if (
           groupData.groupUsers.find((guser) => guser.user.id === user.id)
             ?.isOwner
@@ -222,7 +227,7 @@ export function EditGroupPage() {
     <GroupEditWrapper>
       <GroupData>
         <StyledForm onSubmit={handleSubmit}>
-          <StyledEditUser>
+          <StyledEditGroup>
             <EditImage>
               <p>Image Preview:</p>
               <ImageDiv
@@ -270,12 +275,15 @@ export function EditGroupPage() {
                 <Button type="submit">Submit</Button>
               </ButtonWrapper>
             </TextInputsWrapper>
-          </StyledEditUser>
+          </StyledEditGroup>
         </StyledForm>
       </GroupData>
       <GroupUsersWrapper>
         <UserHeaders>
-          <UserHeader onClick={()=>setOpenUsers(!openUsers)} isActive={!openUsers}>
+          <UserHeader
+            onClick={() => setOpenUsers(!openUsers)}
+            isActive={!openUsers}
+          >
             Group Users
             {!openUsers ? (
               <IoIosArrowUp size={20} />
@@ -283,8 +291,14 @@ export function EditGroupPage() {
               <IoIosArrowDown size={20} />
             )}
           </UserHeader>
-          <UserHeader onClick={()=>setOpenUsers(!openUsers)} isActive={openUsers}>
-            Awaiting Users {`(${groupData?.groupUsers.filter(u=>u.isAccepted===false).length})`}
+          <UserHeader
+            onClick={() => setOpenUsers(!openUsers)}
+            isActive={openUsers}
+          >
+            Awaiting Users{" "}
+            {`(${
+              groupData?.groupUsers.filter((u) => u.isAccepted === false).length
+            })`}
             {openUsers ? (
               <IoIosArrowUp size={20} />
             ) : (
@@ -292,19 +306,46 @@ export function EditGroupPage() {
             )}
           </UserHeader>
         </UserHeaders>
-        {groupData&&(!openUsers?groupData.groupUsers.filter(u=>u.isAccepted).map(u=><UserItem>
-          <HeaderInfo>
-          <ImageDiv width={40} url={u.user.avatarFileName ? getUserImg(u.user.avatarFileName) : ""} />
-          {u.user.username}
-          </HeaderInfo>
-          {user?.id!==u.user.id&&<DeleteButton>Remove from group</DeleteButton>}
-        </UserItem> ):groupData.groupUsers.filter(u=>u.isAccepted===false).map(u=><UserItem>
-          <HeaderInfo>
-          <ImageDiv width={40} url={u.user.avatarFileName ? getUserImg(u.user.avatarFileName) : ""} />
-          {u.user.username}
-          </HeaderInfo>
-          <Button>Accept to Group</Button>
-        </UserItem> ))}
+        {groupData &&
+          (!openUsers
+            ? groupData.groupUsers
+                .filter((u) => u.isAccepted)
+                .map((u) => (
+                  <UserItem>
+                    <HeaderInfo>
+                      <ImageDiv
+                        width={40}
+                        url={
+                          u.user.avatarFileName
+                            ? getUserImg(u.user.avatarFileName)
+                            : ""
+                        }
+                      />
+                      {u.user.username}
+                    </HeaderInfo>
+                    {user?.id !== u.user.id && (
+                      <DeleteButton>Remove from group</DeleteButton>
+                    )}
+                  </UserItem>
+                ))
+            : groupData.groupUsers
+                .filter((u) => u.isAccepted === false)
+                .map((u) => (
+                  <UserItem>
+                    <HeaderInfo>
+                      <ImageDiv
+                        width={40}
+                        url={
+                          u.user.avatarFileName
+                            ? getUserImg(u.user.avatarFileName)
+                            : ""
+                        }
+                      />
+                      {u.user.username}
+                    </HeaderInfo>
+                    <Button>Accept to Group</Button>
+                  </UserItem>
+                )))}
       </GroupUsersWrapper>
     </GroupEditWrapper>
   );

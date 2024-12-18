@@ -31,6 +31,7 @@ const HeaderInfo = styled.div`
   display: flex;
   gap: 4px;
   cursor: pointer;
+
 `;
 const Title = styled.div`
   font-size: 1.2em;
@@ -84,7 +85,7 @@ export function PostDetails(props: {
       <div>{props.postInfo.body}</div>
       {props.postInfo.attachments &&
         props.postInfo.attachments.length !== 0 &&
-        props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.fileName} />
+        props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.realName} />
         ))}
       <hr />
       <>

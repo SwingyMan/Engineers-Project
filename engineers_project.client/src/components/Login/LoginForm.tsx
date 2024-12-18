@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Button } from "../Button/Button";
 import { useAuth } from "../../Router/AuthProvider";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
-import { useNavigate } from "react-router";
 
 const StyledForm = styled.form`
  width: 450px;

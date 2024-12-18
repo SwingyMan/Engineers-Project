@@ -12,6 +12,7 @@ import { GroupPage } from "../Pages/GroupPage";
 import { EditProfilePage } from "../Pages/EditProfilePage";
 import { ChatPage } from "../Pages/ChatPage";
 import { EditGroupPage } from "../Pages/EditGroupPage";
+import { CreateGroupPage } from "../Pages/CreateGroupPage";
 
 export const validIdLoader = async ({ params }) => {
   const { id } = params;
@@ -85,6 +86,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <GroupPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/newGroup",
+        element: (
+          <PrivateRoute>
+            <CreateGroupPage />
           </PrivateRoute>
         ),
       },

@@ -7,6 +7,7 @@ import { useUserPosts } from "../API/hooks/useUserPosts";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
 import { useState } from "react";
+import { IoPencil } from "react-icons/io5";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -16,15 +17,30 @@ const ProfileCard = styled.div`
   flex-direction: row;
   align-items: center;
   height: fit-content;
+  justify-content: space-between;
   background-color: var(--whiteTransparent20);
   margin: 10px;
   box-sizing: border-box;
+  padding-right:30px;
 `;
 const ProfileFeed = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 `;
+const MenageUser = styled.div`
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  background: gray;
+  height: fit-content;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+const UserInfo = styled.div`
+  display: flex;
+  align-items:center;
+`
 export function ProfilePage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -37,20 +53,20 @@ export function ProfilePage() {
     <>
       <ProfileFeed>
         <ProfileCard>
-          <ImageDiv
-            width={60}
-            url={userData ? getUserImg(userData?.avatarFileName) : ""}
-            margin={"25px"}
-          />
+          <UserInfo>
+            <ImageDiv
+              width={60}
+              url={userData ? getUserImg(userData?.avatarFileName) : ""}
+              margin={"25px"}
+            />
 
-          <ProfileHeader>
-            {userData ? userData.username : ""}
-            {id === user?.id && (
-              <button onClick={() => navigate("/editProfile")} value={"submit"}>
-                Edit Profile
-              </button>
-            )}
-          </ProfileHeader>
+            <ProfileHeader>{userData ? userData.username : ""}</ProfileHeader>
+          </UserInfo>
+          {id === user?.id && (
+            <MenageUser onClick={() => navigate("/editProfile")}>
+              <IoPencil size={16} /> Edit Profile
+            </MenageUser>
+          )}
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (

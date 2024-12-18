@@ -5,7 +5,7 @@ import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
 import { getUserImg } from "../../API/API";
 import { useNavigate } from "react-router";
-
+import logoPolitechnika from "../../../src/assets/logoPolitechnika.png"
 const StyledTopBar = styled.div`
   background-color: var(--blue);
   height: 50px;
@@ -53,7 +53,7 @@ export function TopNavBar() {
     <>
       <StyledTopBar>
         <Logo>
-          <img height={40} width={40} src="src/assets/logo-politechnika.png" />
+          <img height={40} width={40} src={logoPolitechnika} />
         </Logo>
         <SearchBar  />
         <Buttons>
