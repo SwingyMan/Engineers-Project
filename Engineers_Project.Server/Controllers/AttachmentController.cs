@@ -33,6 +33,8 @@ public class AttachmentController : ControllerBase
     }
 
     [HttpPost]
+    [RequestSizeLimit(50_000_000_000)]
+
     public async Task<IActionResult> Post([FromForm] AddAttachmentCommand attachmentCommand)
     {
         

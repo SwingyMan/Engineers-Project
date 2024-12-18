@@ -104,6 +104,8 @@ public class UserController : Controller
         return avatar;
     }
     [HttpPost]
+    [RequestSizeLimit(10_000_000_000)]
+
     public async Task<IActionResult> AddAvatar( IFormFile file)
     {
         var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
