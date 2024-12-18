@@ -26,5 +26,6 @@ public class RemoveGroupCommandHandler : IRequestHandler<RemoveGroupCommand>
         _context.RemoveRange(users);
         _context.RemoveRange(posts);
         _context.Remove(group);
+        await _context.SaveChangesAsync();
     }
 }
