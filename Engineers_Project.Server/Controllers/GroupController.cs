@@ -76,7 +76,7 @@ public class GroupController : ControllerBase
     ///     Deletes a Group.
     /// </summary>
     /// <param name="id">Group Guid</param>
-    [HttpDelete("{id}")]
+    [HttpDelete]
     public async Task<IActionResult> Delete(Guid groupId)
     {
         try
