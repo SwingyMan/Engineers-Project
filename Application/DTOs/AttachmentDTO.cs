@@ -7,5 +7,4 @@ public class AttachmentDTO
 {
     public IFormFile file { get; set; }
     public Guid PostID { get; set; }
-    public string FileType { get; set; }
 }

@@ -13,4 +13,11 @@ public class GroupPost
     [JsonIgnore] public Group Group { get; set; }
 
     [JsonIgnore] public Post Post { get; set; }
+
+    public GroupPost(Guid groupId, Guid postId)
+    {
+        Id = new Guid();
+        GroupId = groupId;
+        PostId = postId;
+    }
 }

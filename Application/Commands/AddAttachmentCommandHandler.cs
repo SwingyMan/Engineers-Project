@@ -28,9 +28,10 @@ public class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand,
     {
         var mappedEntity = _mapper.Map<Attachments>(request.AttachmentDto);
         mappedEntity.FileName = $"{mappedEntity.Id}{Path.GetExtension(request.AttachmentDto.file.FileName)}";
+        mappedEntity.RealName = request.AttachmentDto.file.FileName;
         if (await CheckImage(request.AttachmentDto.file))
         {
-            await _blobInfrastructure.addBlob(request.AttachmentDto.file,mappedEntity.Id,request.AttachmentDto.FileType);
+            await _blobInfrastructure.addBlob(request.AttachmentDto.file,mappedEntity.Id,mappedEntity.Type);
             var entity = await _attachmentRepository.Add(mappedEntity);
             return entity;
         }
@@ -40,16 +41,25 @@ public class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand,
 
     private async Task<bool> CheckImage(IFormFile formFile)
     {
-        var memoryStream = new MemoryStream();
-        formFile.CopyTo(memoryStream);
-        var image = new ContentSafetyImageData(BinaryData.FromBytes(memoryStream.ToArray()));
-        var request = new AnalyzeImageOptions(image);
-        var response = await _contentSafetyClient.AnalyzeImageAsync(request);
-        if (response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Hate)?.Severity > 0 ||
-            response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.SelfHarm)?.Severity > 0 ||
-            response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Sexual)?.Severity > 0 || 
-            response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Violence)?.Severity > 0)
-            return false; // Inappropriate content detected
-    return true; // Content is safe
+        if (Path.GetExtension(formFile.FileName) == ".jpg" || Path.GetExtension(formFile.FileName) == ".png" ||
+            Path.GetExtension(formFile.FileName) == ".gif")
+        {
+            var memoryStream = new MemoryStream();
+            formFile.CopyTo(memoryStream);
+            var image = new ContentSafetyImageData(BinaryData.FromBytes(memoryStream.ToArray()));
+            var request = new AnalyzeImageOptions(image);
+            var response = await _contentSafetyClient.AnalyzeImageAsync(request);
+            if (response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Hate)?.Severity > 0 ||
+                response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.SelfHarm)?.Severity >
+                0 ||
+                response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Sexual)?.Severity >
+                0 ||
+                response.Value.CategoriesAnalysis.FirstOrDefault(a => a.Category == ImageCategory.Violence)?.Severity >
+                0)
+                return false; // Inappropriate content detected
+            return true; // Content is safe
+        }
+
+        return true;
     }
 }

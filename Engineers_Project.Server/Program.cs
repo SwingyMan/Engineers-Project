@@ -1,19 +1,16 @@
+using System.Net.Mime;
 using Application;
-using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Hubs;
 using Infrastructure.Seeder;
-using Infrastructure.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +58,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Social Platform API",
+        Title = "Samurai API",
     });
 
 });
@@ -73,8 +70,9 @@ builder.Services.AddTransient<DbSeeder>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Open",
-        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().WithExposedHeaders(HeaderNames.ContentDisposition));
 });
+
 
 var app = builder.Build();
 app.UseDefaultFiles();
@@ -88,8 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigins");
-
+app.UseCors("Open");
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -104,14 +101,5 @@ using (var scope = app.Services.CreateScope())
 
 app.MapFallbackToFile("/index.html");
 app.MapHub<ChatHub>("/chat");
-
-//app.MapPost("chat/user", async (
-//    string userId,
-//    string content,
-//    IHubContext<ChatHub, IChatClient> context) =>
-//{
-//    await context.Clients.User(userId).ReceiveMessage(content);
-//    return Results.NoContent();
-//});
 
 app.Run();

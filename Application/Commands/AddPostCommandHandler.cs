@@ -32,6 +32,14 @@ public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Post>
         postEntity.User = user;
         if (await CheckText(postEntity.Body))
         {
+            if (postEntity.Availability == Availability.Group)
+            {
+                var post =await _genericRepository.Add(postEntity);
+                var groupPost = new GroupPost(request.entity.GroupId,post.Id );
+                _context.GroupPosts.Add(groupPost);
+                await _context.SaveChangesAsync(cancellationToken);
+                return post;
+            }
             return await _genericRepository.Add(postEntity);
 
         }

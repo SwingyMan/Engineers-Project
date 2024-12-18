@@ -85,7 +85,30 @@ public class SocialPlatformDbContext : DbContext
             .HasOne(m => m.User)
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.UserId);
+        modelBuilder.Entity<Friends>(entity =>
+        {
+            entity.HasKey(f => f.Id);
 
+            // Relationships
+            entity.HasOne<User>()
+                .WithMany(u => u.FriendsInitiated)
+                .HasForeignKey(f => f.UserId1)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne<User>()
+                .WithMany(u => u.FriendsSent)
+                .HasForeignKey(f => f.UserId2)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.ToTable("Friends");
+        });
+        modelBuilder.Entity<Post>().HasMany(x => x.Attachments).WithOne(p => p.Post).HasForeignKey(x=>x.PostId);
+        modelBuilder.Entity<Post>().Navigation(x => x.Attachments).AutoInclude();
+        modelBuilder.Entity<Post>().Navigation(x => x.User).AutoInclude();
+        modelBuilder.Entity<Post>().Navigation(x => x.Comments).AutoInclude();
+        modelBuilder.Entity<Comment>().Navigation(x=>x.User).AutoInclude();
+        modelBuilder.Entity<Group>().Navigation(x=>x.GroupPosts).AutoInclude();
+        modelBuilder.Entity<Group>().Navigation(x=>x.GroupUsers).AutoInclude();
+        modelBuilder.Entity<GroupUser>().Navigation(x=>x.User).AutoInclude();
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Chat)
             .WithMany(c => c.Messages)

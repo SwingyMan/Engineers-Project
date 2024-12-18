@@ -26,7 +26,7 @@ public class GroupController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var group = await _mediator.Send(new GenericGetByIdQuery<GroupDTO>(id));
+        var group = await _mediator.Send(new GenericGetByIdQuery<Group>(id));
         if (group == null) return NotFound();
         return Ok(group);
     }
@@ -37,9 +37,19 @@ public class GroupController : ControllerBase
     /// <param name="genericAddCommand">GroupDTO</param>
     /// <returns>The created Group.</returns>
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GenericAddCommand<GroupDTO, Group> genericAddCommand)
+    public async Task<IActionResult> Post([FromBody] GroupDTO group)
     {
-        return Ok(await _mediator.Send(genericAddCommand));
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new AddGroupCommand(guid,group)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
     }
 
     /// <summary>
@@ -47,10 +57,19 @@ public class GroupController : ControllerBase
     /// </summary>
     /// <param name="updateGroupCommand">Update command</param>
     /// <returns>The updated Group.</returns>
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch([FromBody] UpdateGroupCommand updateGroupCommand)
+    [HttpPatch]
+    public async Task<IActionResult> Patch([FromBody] GroupUpdateDTO group)
     {
-        return Ok(await _mediator.Send(updateGroupCommand));
+
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+        
+        return Ok(await _mediator.Send(new UpdateGroupCommand(group.GroupName,group.GroupDescription,group.GroupID,guid)));
     }
 
     /// <summary>
@@ -58,10 +77,20 @@ public class GroupController : ControllerBase
     /// </summary>
     /// <param name="id">Group Guid</param>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid groupId)
     {
-        await _mediator.Send(new GenericDeleteCommand<GroupDTO>(id));
-        return Ok();
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            await _mediator.Send(
+                new RemoveGroupCommand(groupId, guid));
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
     }
 
     /// <summary>
@@ -73,5 +102,141 @@ public class GroupController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Group>()));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupByName(string name)
+    {
+        return Ok(await _mediator.Send(new GroupQuery(name)));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> RequestToGroup(Guid groupId)
+    {
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new RequestToGroupCommand(groupId, guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> AcceptToGroup(Guid groupId, Guid userId)
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            return Ok(await _mediator.Send(
+                new AcceptToGroupCommand(guid,groupId,userId)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteFromGroup(Guid groupId, Guid userId)
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            await _mediator.Send(
+                new RemoveFromGroupCommand(guid, groupId, userId));
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupMembership()
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            var group = await _mediator.Send(
+                new GroupsUserQuery(guid));
+            return Ok(group.Select(g => new 
+            {
+                g.Id,
+                g.Name,
+                g.Description
+
+            }));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddImage([FromForm] AddGroupImageCommand addGroupImageCommand)
+    {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        addGroupImageCommand.UserId = guid;
+        return Ok(await _mediator.Send(addGroupImageCommand));
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> RemoveImageFromGroup(Guid groupId)
+    {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        await _mediator.Send(new RemoveGroupImageCommand(guid,groupId));
+        return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupImageById(Guid groupId)
+    {
+        
+        return await _mediator.Send(new GroupImageQuery(groupId));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetGroupRequests(Guid groupId)
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        return Ok(await _mediator.Send(new GroupRequestQuery(userId, groupId)));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetRequestsToGroup()
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        var groups = await _mediator.Send(new RequestedGroupsQuery(userId));
+        return Ok(groups.Select(g => new 
+        {
+            g.Id,
+            g.Name,
+            g.Description
+
+        }));
     }
 }

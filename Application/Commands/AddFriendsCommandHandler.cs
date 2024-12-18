@@ -18,6 +18,11 @@ public class AddFriendsCommandHandler : IRequestHandler<AddFriendsCommand,Friend
         var friends = new Friends();
         friends.UserId1 = request.UserId1;
         friends.UserId2 = request.UserId2;
+        var check = _context.Friends.SingleOrDefault(x=>(x.UserId1==request.UserId1 && x.UserId2==request.UserId2)|| (x.UserId1==request.UserId2 && x.UserId2==request.UserId1));
+        if (check != null)
+        {
+            return null;
+        }
         await _context.Friends.AddAsync(friends,cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return friends;

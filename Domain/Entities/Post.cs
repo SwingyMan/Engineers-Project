@@ -27,5 +27,5 @@ public class Post
 
 public enum Availability
 {
-    Public,Friends
+    Public,Friends,Group
 }

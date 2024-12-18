@@ -5,11 +5,13 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engineers_Project.Server.Controllers;
 
 [Route("api/v1/[controller]/[action]")]
+
 public class UserController : Controller
 {
     private readonly IMediator _mediator;
@@ -65,10 +67,7 @@ public class UserController : Controller
         }
 
         var userId = Guid.Parse(userIdClaim.Value);
-        if (userId != updateUserCommand.id)
-        {
-            return Forbid("Users can only update their own information.");
-        }
+        updateUserCommand.UserId = userId;
 
         return Ok(await _mediator.Send(updateUserCommand));
     }
@@ -105,13 +104,17 @@ public class UserController : Controller
         return avatar;
     }
     [HttpPost]
-    public async Task<IActionResult> AddAvatar([FromForm] AddAvatarCommand addAvatarCommand)
+    public async Task<IActionResult> AddAvatar( IFormFile file)
     {
-        return Ok(await _mediator.Send(addAvatarCommand));
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
+        return Ok(await _mediator.Send(new AddAvatarCommand(guid, file)));
     }
     [HttpDelete]
-    public async Task<IActionResult> DeleteAvatar(Guid guid)
+    public async Task<IActionResult> DeleteAvatar()
     {
+        var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+        var guid = Guid.Parse(callerId);
         await _mediator.Send(new RemoveAvatarCommand(guid));
         return Ok();
     }
@@ -125,5 +128,25 @@ public class UserController : Controller
         {
             token =token,
         });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUserByName(string userName)
+    {
+        return Ok(await _mediator.Send(new UserQuery(userName)));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetFriendsRequests()
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+
+        return Ok(await _mediator.Send(new FriendQuery(userId)));
     }
 }

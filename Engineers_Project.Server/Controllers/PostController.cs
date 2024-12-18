@@ -115,5 +115,51 @@ public class PostController : ControllerBase
     {
         return Ok(await _mediator.Send(new GenericGetAllQuery<Post>()));
     }
+    [HttpGet]
+    public async Task<IActionResult> FindPostByTitle(string title)
+    {
+        try
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(userId);
+            return Ok(await _mediator.Send(
+                new PostTitleQuery(title,guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }  }
 
+    [HttpGet]
+    public async Task<IActionResult> FindPostByUser(Guid userId)
+    {
+        try
+        {
+            var ownerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(ownerId);
+            return Ok(await _mediator.Send(
+                new PostUserQuery(userId,guid)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        } 
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> FindPostInGroup(Guid groupId)
+    {
+        try
+        {
+            var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
+            var guid = Guid.Parse(callerId);
+            
+            return Ok(await _mediator.Send(
+                new PostGroupQuery(guid,groupId)));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
 }
