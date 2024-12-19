@@ -3,7 +3,7 @@ export interface PostDTO{
     title: string,
     body: string,
     status?: string,
-    availability?: 1|0,
+    availability: 1|0|2,
     createdAt: Date,
     attachments?: AttachmentDTO[]|null,
     comments:CommentDTO[],

@@ -11,6 +11,7 @@ const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
         ? `${env.APPDATA}/ASP.NET/https`
         : `${env.HOME}/.aspnet/https`;
+fs.mkdirSync(baseFolder, { recursive: true });
 
 const certificateName = "engineers_project.client";
 const certFilePath = path.join(baseFolder, `${certificateName}.pem`);

@@ -48,7 +48,7 @@ export function FeedPage() {
   };
   const [isModalEditOpen, setModalEditOpen] = useState(false);
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event : any) => {
     
 
     // setPostToEdit(data?.pages.map((g,i)=>g.find(post=>post.id===id)[0]!);

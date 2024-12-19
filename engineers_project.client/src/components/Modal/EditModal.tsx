@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { NewPost } from "../../API/DTO/NewPost";
 import { PostDTO } from "../../API/DTO/PostDTO";
+import { getAttachment } from "../../API/API";
 
 // Styled components
 const Overlay = styled.div`
@@ -84,26 +85,31 @@ const Button = styled.button`
   border-radius: 4px;
   cursor: pointer;
   background-color: ${(props) =>
-    props.color === "primary" ? "#007BFF" : "#6c757d"};
+      props.color === "primary" ? "#007BFF" : "#6c757d"};
   color: var(--white);
   &:hover {
     background-color: ${(props) =>
-      props.color === "primary" ? "#0056b3" : "#5a6268"};
+        props.color === "primary" ? "#0056b3" : "#5a6268"};
   }
 `;
-
 
 interface FileDetails {
   file: File;
   preview: string;
   error: string | null;
 }
+interface FileData {
+  name: string; // File name
+  size: number; // File size
+  type: string; // MIME type
+}
 
-export function EditPostModal(props:{
-    isOpen: boolean;
-    onClose: () => void;
-    initData: PostDTO;
-  }){
+export function EditPostModal(props: {
+  isOpen: boolean;
+  onClose: () => void;
+  initData: PostDTO;
+}) {
+  if (!props.isOpen) return null;
   const [files, setFiles] = useState<FileDetails[]>([]);
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -112,16 +118,16 @@ export function EditPostModal(props:{
     if (!selectedFiles) return;
 
     const updatedFiles: FileDetails[] = Array.from(selectedFiles).map(
-      (file) => {
-        const isFileTooLarge = file.size > MAX_FILE_SIZE;
-        return {
-          file,
-          preview: !isFileTooLarge ? URL.createObjectURL(file) : "",
-          error: isFileTooLarge
-            ? `File "${file.name}" exceeds the 4MB size limit.`
-            : null,
-        };
-      }
+        (file) => {
+          const isFileTooLarge = file.size > MAX_FILE_SIZE;
+          return {
+            file,
+            preview: !isFileTooLarge ? URL.createObjectURL(file) : "",
+            error: isFileTooLarge
+                ? `File "${file.name}" exceeds the 4MB size limit.`
+                : null,
+          };
+        }
     );
 
     setFiles((prevFiles) => [...prevFiles, ...updatedFiles]);
@@ -134,131 +140,170 @@ export function EditPostModal(props:{
       return updatedFiles;
     });
   };
-  const initPost: NewPost = { ...props.initData };
-  const [newPost, setNewPost] = useState(initPost);
+  const initPost: NewPost = {
+    title: props.initData.title,
+    body: props.initData.body,
+    availability: props.initData.availability,
+    groupId: props.initData.groupId,
+  };
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        console.log(props.initData)
+        for (let i = 0; props.initData.attachments?.length; i++) {
+          const res = await getAttachment(props.initData.attachments[i].id);
+          if (!res.ok) {
+            throw new Error(`Error fetching files: ${res.statusText}`);
+          }
+          const blob = await res.blob();
+          const formData = new FormData();
+          formData.append("response", blob); // Simulate the FormData return
+
+          // Process FormData
+          const filesArray: FileData[] = [];
+          for (const [key, value] of formData.entries()) {
+            console.log(`Key: ${key}, Value: ${value}`);
+            if (value instanceof File) {
+              filesArray.push({
+                name: value.name,
+                size: value.size,
+                type: value.type,
+              });
+            } else {
+              console.log(`Key: ${key}, Value: ${value}`);
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    if (props.initData.attachments) {
+      fetchFiles();
+    }
+  },[props.initData]);
+
+  const [editedPost, setEditedPost] = useState(initPost);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const NewPost = {
-      entity: newPost!,
+    const editedPostData = {
+      entity: editedPost!,
     };
-    props.onSubmit(NewPost);
     props.onClose();
   };
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement 
-    >
+      e: React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
   ) => {
     const { name, value } = e.target;
 
-    setNewPost({
-      ...newPost,
+    setEditedPost({
+      ...editedPost,
       [name]: name === "availability" ? Number(value) : value,
     });
   };
 
-  if (!props.isOpen) return null;
-
   return (
-    <Overlay
-      onClick={() => {
-        props.onClose(), setNewPost(initPost);
-      }}
-    >
-      <ModalContainer
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
+      <Overlay
+          onClick={() => {
+            props.onClose(), setEditedPost(initPost);
+          }}
       >
-        <Header>Create Post</Header>
-        <Form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            placeholder="Title"
-            name="title"
-            value={newPost.title}
-            onChange={handleChange}
-            required
-          />
-          <TextArea
-            placeholder="Content"
-            value={newPost.body}
-            name="body"
-            onChange={handleChange}
-            required
-          />
-          {props.initData.availability === 2 ? (
-            <></>
-          ) : (
-            <Select
-              value={newPost.availability}
-              onChange={handleChange}
-              name="availability"
-            >
-              <option value={0}>Public</option>
-              <option value={1}>Private</option>
-            </Select>
-          )}
-          <div>
-            <form>
-              <label htmlFor="fileInput">
-                Upload files (Max size: 50MB each):
-              </label>
-              <input
-                type="file"
-                id="fileInput"
-                multiple
-                accept=".png,.jpg,.jpeg" // Restrict accepted file types
-                onChange={handleFileChange}
-              />
-            </form>
-
+        <ModalContainer
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+        >
+          <Header>Create Post</Header>
+          <Form onSubmit={handleSubmit}>
+            <Input
+                type="text"
+                placeholder="Title"
+                name="title"
+                value={editedPost.title}
+                onChange={handleChange}
+                required
+            />
+            <TextArea
+                placeholder="Content"
+                value={editedPost.body}
+                name="body"
+                onChange={handleChange}
+                required
+            />
+            {props.initData.availability === 2 ? (
+                <></>
+            ) : (
+                <Select
+                    value={editedPost.availability}
+                    onChange={handleChange}
+                    name="availability"
+                >
+                  <option value={0}>Public</option>
+                  <option value={1}>Private</option>
+                </Select>
+            )}
             <div>
-              <h3>Uploaded Files:</h3>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-                {files.map((fileDetail, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: "10px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {fileDetail.preview ? (
-                      <img
-                        src={fileDetail.preview}
-                        alt={fileDetail.file.name}
-                        style={{ maxWidth: "100px", maxHeight: "100px" }}
-                      />
-                    ) : (
-                      <p>No preview available</p>
-                    )}
-                    <p>{fileDetail.file.name}</p>
-                    {fileDetail.error && (
-                      <p style={{ color: "red" }}>{fileDetail.error}</p>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveFile(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
+              <form>
+                <label htmlFor="fileInput">
+                  Upload files (Max size: 4MB each):
+                </label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    multiple
+                    accept=".png,.jpg,.jpeg" // Restrict accepted file types
+                    onChange={handleFileChange}
+                />
+              </form>
+
+              <div>
+                <h3>Uploaded Files:</h3>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+                  {files.map((fileDetail, index) => (
+                      <div
+                          key={index}
+                          style={{
+                            border: "1px solid #ccc",
+                            padding: "10px",
+                            textAlign: "center",
+                          }}
+                      >
+                        {fileDetail.preview ? (
+                            <img
+                                src={fileDetail.preview}
+                                alt={fileDetail.file.name}
+                                style={{ maxWidth: "100px", maxHeight: "100px" }}
+                            />
+                        ) : (
+                            <p>No preview available</p>
+                        )}
+                        <p>{fileDetail.file.name}</p>
+                        {fileDetail.error && (
+                            <p style={{ color: "red" }}>{fileDetail.error}</p>
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveFile(index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <ButtonGroup>
-            <Button type="button" onClick={props.onClose} color="secondary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary">
-              Submit
-            </Button>
-          </ButtonGroup>
-        </Form>
-      </ModalContainer>
-    </Overlay>
+            <ButtonGroup>
+              <Button type="button" onClick={props.onClose} color="secondary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
+                Submit
+              </Button>
+            </ButtonGroup>
+          </Form>
+        </ModalContainer>
+      </Overlay>
   );
-};
+}
