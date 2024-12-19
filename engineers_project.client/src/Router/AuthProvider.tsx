@@ -37,7 +37,7 @@ const AuthProvider = ({ children }: Children) => {
     //TODO testy
 
     try {
-      const response = await fetch(`${getHost()}api/v1/User/Login`, {
+      const response = await fetch(`${getHost()}User/Login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

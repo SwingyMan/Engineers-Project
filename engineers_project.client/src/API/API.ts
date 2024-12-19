@@ -29,7 +29,7 @@ export const getToken = (): string | null => {
 
 export const get = async <T>(url: string): Promise<T> => {
 
-    const response = await fetch(`${getHost()}${url}`, {
+    const response = await fetch(`${getHost()}${url}api/v1/`, {
         method: 'GET',
         headers: getHeaders(),
     });
