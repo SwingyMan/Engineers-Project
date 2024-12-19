@@ -1,8 +1,5 @@
-import { UUID } from "crypto";
-
-
 export interface PostDTO{
-    id:UUID,
+    id:string,
     title: string,
     body: string,
     status?: string,
@@ -10,7 +7,7 @@ export interface PostDTO{
     createdAt: Date,
     attachments?: AttachmentDTO[]|null,
     comments:CommentDTO[],
-    userId:UUID,
+    userId:string,
     groupId?:string,
     username:string,
     avatarName:string

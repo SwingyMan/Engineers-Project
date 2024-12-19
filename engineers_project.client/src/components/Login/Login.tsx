@@ -5,7 +5,7 @@ import { useAuth } from "../../Router/AuthProvider";
 import {  useNavigate } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
-
+import logoPolitechnika from "../../assets/logoPolitechnika.png"
 const LoginDiv = styled.div`
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@ export function Login() {
           x="0"
           y="0"
           height={"100%"}
-          href={"src/assets/logo-politechnika.png"}
+          href={logoPolitechnika}
           width={"100%"}
         />
       </svg>

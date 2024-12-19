@@ -126,7 +126,7 @@ export function CreateGroupPage() {
       HTMLTextAreaElement;
     if (name === "image" && files) {
       const file = files[0];
-      setFormData({
+      setFormData({ 
         ...formData,
         image: file,
         preview: file ? URL.createObjectURL(file) : null,
@@ -156,7 +156,7 @@ export function CreateGroupPage() {
       };
       try{
         const res = await createGroup(newGroup) 
-        console.log(res)
+
         if (res){
 
           setFormData({...formData,groupID:res.id})

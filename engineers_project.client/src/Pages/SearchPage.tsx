@@ -122,7 +122,7 @@ export function SearchPage() {
           ) : null}
         </GroupResult>
       ) : (
-        <SearchResult>No Posts Found</SearchResult>
+        <SearchResult>No Users Found</SearchResult>
       )}
       {GroupData && GroupData?.length !== 0 ? (
         <GroupResult>
@@ -141,8 +141,9 @@ export function SearchPage() {
           ) : null}
         </GroupResult>
       ) : (
-        <SearchResult>No Posts Found</SearchResult>
+        <SearchResult>No Groups Found</SearchResult>
       )}
     </SearchFeed>
   );
 }
+ 

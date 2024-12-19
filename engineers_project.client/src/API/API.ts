@@ -61,6 +61,7 @@ export const postAttachment = async <T>(url:string, data: FormData):Promise<T>=>
         method: 'POST',
         headers: getHeaders(true),
         body: data,
+        
     })
     if (!response.ok){
         throw new Error(`Posting Attachment has failed: ${response.status}`)

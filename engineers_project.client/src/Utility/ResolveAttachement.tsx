@@ -25,7 +25,7 @@ export function ResolveAttachement  (props:{url: string, fileName: string}){
   return (
     <>
       {fileData ? (
-        <FileViewer
+        <FileViewer key={props.url}
           fileName={fileData.fileName}
           fileSize={fileData.fileSize}
           fileContent={fileData.fileContent}

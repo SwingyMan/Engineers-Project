@@ -5,6 +5,7 @@ import { getUserImg, postAttachment } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 import { editUserById } from "../API/services/user.service";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import { FaP } from "react-icons/fa6";
 
 interface FormData {
   Username: string;
@@ -89,7 +90,7 @@ const ButtonWrapper = styled.div`
 `;
 const TextInputsWrapper = styled.div`
   display: flex;
-  max-width:500px;
+  max-width: 500px;
   width: 100%;
   flex-direction: column;
   gap: 5px;
@@ -138,29 +139,32 @@ export function EditProfilePage() {
     }
   };
 
-  const editImage = () => {
+  const editImage = async () => {
     const data = new FormData();
     data.append("file", formData.image!);
-    postAttachment("User/AddAvatar", data);
+    
+    const res =await postAttachment("User/AddAvatar", data);
+    console.log(res)
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    if (formData.image !== null) {
-      editImage();
-    }
+    console.log(formData)
     if (
-      formData.Password.length === 0 ||
-      formData.Username !== user?.username
+      formData.Password.length !== 0 ||
+      (formData.Username !== user?.username && formData.Username.length !== 0)
     ) {
       const editedUser = {
         username: formData.Username,
         password: formData.Password,
       };
-
-      editUserById(editedUser);
+      
+      await editUserById(editedUser);
     }
-    refreshUser();
+    if (formData.image !== null) {
+       editImage();
+    }
+    setTimeout(()=>refreshUser());
   };
 
   const [visible, setVisible] = useState(false);
@@ -184,7 +188,6 @@ export function EditProfilePage() {
                 id="image"
                 name="image"
                 accept=".jpg, .jpeg, .png"
-                size={50}
                 onChange={handleChange}
               />
             </EditImage>

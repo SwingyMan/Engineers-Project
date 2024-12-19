@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { NewPost } from "../../API/DTO/NewPost";
-import { createPost } from "../../API/services/posts.service";
-import { postAttachment } from "../../API/API";
-import { useQueryClient } from "@tanstack/react-query";
+import { PostDTO } from "../../API/DTO/PostDTO";
 
 // Styled components
 const Overlay = styled.div`
@@ -93,60 +91,22 @@ const Button = styled.button`
       props.color === "primary" ? "#0056b3" : "#5a6268"};
   }
 `;
-const DeleteButton = styled.button`
-  background-color: #dd3d3d;
-  padding: 4px;
-  border-color: var(--whiteTransparent20);
-  border-radius: 4px;
-`;
-const FileWrapper = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
 
-  &::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
 
-  &::-webkit-scrollbar-track {
-    background: #f0f0f0;
-  }
-`;
-const FilePreview = styled.div`
-  border: 1px solid #ccc;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  word-break: break-all;
-  gap: 5px;
-  max-width: 150px;
-  text-overflow: clip;
-  text-align: center;
-  align-items: center;
-`;
-
-// Modal Component
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initData: NewPost;
-}
 interface FileDetails {
   file: File;
   preview: string;
   error: string | null;
 }
 
-const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
+export function EditPostModal(props:{
+    isOpen: boolean;
+    onClose: () => void;
+    initData: PostDTO;
+  }){
   const [files, setFiles] = useState<FileDetails[]>([]);
-  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
-  const queryClient = useQueryClient();
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (!selectedFiles) return;
@@ -174,42 +134,19 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
       return updatedFiles;
     });
   };
-  const initPost: NewPost = { ...initData };
-  const [postId, setPostId] = useState("");
+  const initPost: NewPost = { ...props.initData };
   const [newPost, setNewPost] = useState(initPost);
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const NewPost = {
       entity: newPost!,
     };
-    const res = await createPost(NewPost);
-    if (res) {
-      setPostId(res.id);
-      if (files.length !== 0) {
-        for (let i = 0; i < files.length; i++) {
-          if (!files[i].error) {
-            const formData = new FormData();
-            formData.append("AttachmentDto.file", files[i].file);
-            formData.append("AttachmentDto.PostID", postId);
-            try {
-              console.log(formData);
-              const res = await postAttachment("Attachment/Post", formData);
-              console.log(res);
-            } catch (e) {
-              console.log(e);
-            }
-          }
-        }
-      }
-    }
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ["Posts"] });
-      onClose();
-    });
+    props.onSubmit(NewPost);
+    props.onClose();
   };
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement 
     >
   ) => {
     const { name, value } = e.target;
@@ -220,14 +157,12 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
     });
   };
 
-  if (!isOpen) return null;
+  if (!props.isOpen) return null;
 
   return (
     <Overlay
       onClick={() => {
-        onClose();
-        setNewPost(initPost);
-        setFiles([]);
+        props.onClose(), setNewPost(initPost);
       }}
     >
       <ModalContainer
@@ -252,7 +187,7 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
             onChange={handleChange}
             required
           />
-          {initData.availability === 2 ? (
+          {props.initData.availability === 2 ? (
             <></>
           ) : (
             <Select
@@ -265,21 +200,31 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
             </Select>
           )}
           <div>
-            <label htmlFor="fileInput">
-              Upload files (Max size: 4MB each):
-            </label>
-            <input
-              type="file"
-              id="fileInput"
-              multiple
-              onChange={handleFileChange}
-            />
+            <form>
+              <label htmlFor="fileInput">
+                Upload files (Max size: 50MB each):
+              </label>
+              <input
+                type="file"
+                id="fileInput"
+                multiple
+                accept=".png,.jpg,.jpeg" // Restrict accepted file types
+                onChange={handleFileChange}
+              />
+            </form>
 
             <div>
               <h3>Uploaded Files:</h3>
-              <FileWrapper>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                 {files.map((fileDetail, index) => (
-                  <FilePreview key={index}>
+                  <div
+                    key={index}
+                    style={{
+                      border: "1px solid #ccc",
+                      padding: "10px",
+                      textAlign: "center",
+                    }}
+                  >
                     {fileDetail.preview ? (
                       <img
                         src={fileDetail.preview}
@@ -293,27 +238,19 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
                     {fileDetail.error && (
                       <p style={{ color: "red" }}>{fileDetail.error}</p>
                     )}
-                    <DeleteButton
+                    <button
                       type="button"
                       onClick={() => handleRemoveFile(index)}
                     >
                       Remove
-                    </DeleteButton>
-                  </FilePreview>
+                    </button>
+                  </div>
                 ))}
-              </FileWrapper>
+              </div>
             </div>
           </div>
           <ButtonGroup>
-            <Button
-              type="button"
-              onClick={() => {
-                onClose();
-                setNewPost(initPost);
-                setFiles([]);
-              }}
-              color="secondary"
-            >
+            <Button type="button" onClick={props.onClose} color="secondary">
               Cancel
             </Button>
             <Button type="submit" color="primary">
@@ -325,5 +262,3 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
     </Overlay>
   );
 };
-
-export default NewPostModal;
