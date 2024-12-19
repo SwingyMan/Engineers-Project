@@ -3,7 +3,7 @@
 export const getHost = () => {
     if (import.meta.env.PROD) {
         const url = new URL(window.location.href);
-        return `${url.protocol}//${url.host}/`;
+        return `${url.protocol}//${url.host}/api/v1/`;
     } else {
         return import.meta.env.VITE_HOST_DEV;
     }
@@ -29,7 +29,7 @@ export const getToken = (): string | null => {
 
 export const get = async <T>(url: string): Promise<T> => {
 
-    const response = await fetch(`${getHost()}${url}api/v1/`, {
+    const response = await fetch(`${getHost()}${url}`, {
         method: 'GET',
         headers: getHeaders(),
     });
