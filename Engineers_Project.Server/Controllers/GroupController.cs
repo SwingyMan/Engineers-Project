@@ -183,6 +183,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost]
+    [RequestSizeLimit(10_000_000_000)]
     public async Task<IActionResult> AddImage([FromForm] AddGroupImageCommand addGroupImageCommand)
     {
         var callerId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value.ToString();
