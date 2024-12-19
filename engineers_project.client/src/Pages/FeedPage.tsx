@@ -57,7 +57,7 @@ export function FeedPage() {
     }
     else{
       const action = event.target.getAttribute("data-action")
-      const
+      const id = event.target.getAttributes("data-id")
     }
   };
 
