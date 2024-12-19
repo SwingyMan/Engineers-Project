@@ -158,7 +158,7 @@ export function EditGroupPage() {
   console.log(id);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { data: groupData, handleEditGroup } = useGroupDetails(id!);
+  const { data: groupData, handleEditGroup,handleAddToGroup,handleDeleteFromGroup } = useGroupDetails(id!);
   useEffect(() => {
     if (groupData) {
       if (user) {
@@ -324,7 +324,7 @@ export function EditGroupPage() {
                       {u.user.username}
                     </HeaderInfo>
                     {user?.id !== u.user.id && (
-                      <DeleteButton>Remove from group</DeleteButton>
+                      <DeleteButton onClick={()=>{handleDeleteFromGroup.mutate(u.user.id)}}>Remove from group</DeleteButton>
                     )}
                   </UserItem>
                 ))
@@ -343,7 +343,7 @@ export function EditGroupPage() {
                       />
                       {u.user.username}
                     </HeaderInfo>
-                    <Button>Accept to Group</Button>
+                    <Button onClick={()=>{handleAddToGroup.mutate(u.user.id)}} >Accept to Group</Button>
                   </UserItem>
                 )))}
       </GroupUsersWrapper>

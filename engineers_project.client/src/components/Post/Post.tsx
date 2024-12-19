@@ -147,6 +147,7 @@ export function Post(props: {
                 {optionList.map((option) => (
                   <OptionList
                     key={option}
+                    data-id={props.postInfo.id}
                     data-action={option}
                   >
                     {option}

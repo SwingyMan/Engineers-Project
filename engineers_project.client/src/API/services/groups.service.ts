@@ -1,6 +1,7 @@
 import { del, get, patch, post } from "../API"
 import { Group } from "../DTO/Group"
 import { EditGroup, GroupDTO } from "../DTO/GroupDTO"
+import { GroupUser } from "../DTO/GroupUser"
 const url = 'Group/'
 
 export const getGroupById = (id: string): Promise<GroupDTO> => {
@@ -19,15 +20,15 @@ export const deleteGroup = (id: string): Promise<string> => {
     return del(url + `Delete/${id}`)
 }
 
-export const requestGroupAccess = (id: string) => {
+export const requestGroupAccess = (id: string) :Promise<GroupUser>=> {
     return get(url + 'RequestToGroup?groupId=' + id)
 }
 
-export const acceptGroupAccess = (id: string, userId: string) => {
+export const acceptGroupAccess = (id: string, userId: string) :Promise<GroupUser>=> {
     return get(url + 'AcceptToGroup?groupId=' + id + '?userId=' + userId)
 }
 
-export const delertFromGroup = (groupId:string, userId: string)=>{
+export const deleteFromGroup = (groupId:string, userId: string):Promise<null>=>{
     return del(url + `DeleteFromGroup?groupId=${groupId}&userId=${userId}`)
 }
 export const getGroupMembership=():Promise<Group[]>=>{

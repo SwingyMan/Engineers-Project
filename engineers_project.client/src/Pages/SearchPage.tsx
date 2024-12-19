@@ -60,7 +60,7 @@ function reducer(
 }
 export function SearchPage() {
   const { query } = useParams();
-  const handleMenuOpen = (id: UUID) => {
+  const handleMenuOpen = (id: string) => {
     setOpenMenu(id);
   };
   const [state, dispatch] = useReducer(reducer, {

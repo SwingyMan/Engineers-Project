@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getGroupImg, getUserImg } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 import { useGroupPosts } from "../API/hooks/useGroupPosts";
-import NewPostModal from "../components/Modal/Modal";
+import NewPostModal from "../components/Modal/NewPostModal";
 import { useEffect, useState } from "react";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
@@ -113,10 +113,9 @@ export function GroupPage() {
   const handleMenuOpen = (id: string) => {
     setOpenMenu(id);
   };
-  const { handleAddPost } = usePosts();
   const [isModalOpen, setOpenModal] = useState(false);
   const { data: groupInfo } = useGroupDetails(id!);
-  const { data: myGroups, isFetching } = useMyGroups();
+  const { data: myGroups,requestToGroup } = useMyGroups();
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setOwner] = useState(false);
   const [isRequestSend, setRequestSend] = useState(false);
@@ -180,7 +179,7 @@ export function GroupPage() {
               ) : isRequestSend ? (
                 <AwaitAcceptance>You send request</AwaitAcceptance>
               ) : (
-                <SendRequestButton>Send request to join</SendRequestButton>
+                <SendRequestButton onClick={()=>{requestToGroup.mutate(id!)}}>Send request to join</SendRequestButton>
               )}
             </GroupheaderWrapper>
             <Users>
@@ -235,9 +234,6 @@ export function GroupPage() {
       <NewPostModal
         isOpen={isModalOpen}
         onClose={() => setOpenModal(false)}
-        onSubmit={(data: {}) => {
-          handleAddPost.mutate(data);
-        }}
         initData={{ title: "", body: "", availability: 2, groupId: id }}
       />
     </>

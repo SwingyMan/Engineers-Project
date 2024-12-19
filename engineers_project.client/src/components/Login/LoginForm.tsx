@@ -51,8 +51,8 @@ const EyeIcon = styled.div`
 
 export function LoginForm() {
   const [input, setInput] = useState({
-    Email: "admin@example.com",
-    Password: "74]fKH#ayb",
+    Email: "",
+    Password: "",
   });
 
   const [visible, setVisible] = useState(false)
@@ -78,6 +78,7 @@ export function LoginForm() {
           placeholder="E-mail"
           onChange={handleInput}
           defaultValue={""}
+          required
           autoFocus={true}
         />
       </InputWraper>
@@ -87,6 +88,7 @@ export function LoginForm() {
           name="Password"
           placeholder="Password"
           defaultValue={""}
+          required
           onChange={handleInput}
         />
         <EyeIcon onClick={() => setVisible(!visible)}>

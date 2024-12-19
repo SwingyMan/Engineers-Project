@@ -26,7 +26,7 @@ export const usePostDetails = (id: string) => {
 
   const handleEditPost = useMutation({
     mutationFn: async (editedPost: Partial<PostDTO>) => {
-      await editPost(editedPost);
+      return await editPost(editedPost);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QueryKey })
@@ -34,7 +34,7 @@ export const usePostDetails = (id: string) => {
   });
   const handleDeletePost = useMutation({
     mutationFn: async (id: string) => {
-      await deletePost(id);
+     return  await deletePost(id);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey }),
   });

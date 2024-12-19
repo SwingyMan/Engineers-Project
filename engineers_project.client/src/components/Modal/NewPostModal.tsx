@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { NewPost } from "../../API/DTO/NewPost";
 import { createPost } from "../../API/services/posts.service";
 import { postAttachment } from "../../API/API";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePosts } from "../../API/hooks/usePosts";
 
 // Styled components
 const Overlay = styled.div`
@@ -142,11 +143,18 @@ interface FileDetails {
   error: string | null;
 }
 
+const useUploadAttachment = () => {
+  return useMutation({mutationFn:(formData: FormData) =>
+    postAttachment("Attachment/Post", formData)}
+  );
+};
 const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
   const [files, setFiles] = useState<FileDetails[]>([]);
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+  const uploadAttachmentMutation = useUploadAttachment();
 
   const queryClient = useQueryClient();
+  const { handleAddPost } = usePosts();
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (!selectedFiles) return;
@@ -175,36 +183,40 @@ const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
     });
   };
   const initPost: NewPost = { ...initData };
-  const [postId, setPostId] = useState("");
   const [newPost, setNewPost] = useState(initPost);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const NewPost = {
       entity: newPost!,
     };
-    const res = await createPost(NewPost);
-    if (res) {
-      setPostId(res.id);
-      if (files.length !== 0) {
-        for (let i = 0; i < files.length; i++) {
-          if (!files[i].error) {
+    handleAddPost.mutate(NewPost, {
+      onSuccess: async (res) => {
+        const newPostId =res.id;
+
+        // Prepare and send the file upload requests
+        const uploadPromises = files
+          .filter((file) => !file.error) // Only upload files without errors
+          .map((fileDetail) => {
             const formData = new FormData();
-            formData.append("AttachmentDto.file", files[i].file);
-            formData.append("AttachmentDto.PostID", postId);
-            try {
-              console.log(formData);
-              const res = await postAttachment("Attachment/Post", formData);
-              console.log(res);
-            } catch (e) {
-              console.log(e);
-            }
-          }
+            formData.append("AttachmentDto.file", fileDetail.file);
+            formData.append("AttachmentDto.PostID", newPostId);
+
+            return uploadAttachmentMutation.mutateAsync(formData);
+          });
+
+        try {
+          // Wait for all file uploads to complete
+          await Promise.all(uploadPromises);
+          // Invalidate the query to refetch the updated posts
+          queryClient.invalidateQueries({ queryKey: ["Posts"] });
+          onClose();
+        } catch (uploadError) {
+          console.error("File upload failed:", uploadError);
         }
-      }
-    }
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ["Posts"] });
-      onClose();
+      },
+      onError: (error) => {
+        console.error("Post creation failed:", error);
+      },
     });
   };
   const handleChange = (

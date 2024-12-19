@@ -4,9 +4,12 @@ import { usePosts } from "../API/hooks/usePosts";
 import { useEffect, useState } from "react";
 import { useAuth } from "../Router/AuthProvider";
 import { MdAdd } from "react-icons/md";
-import NewPostModal from "../components/Modal/Modal";
-import { EditPostModal } from "../components/Modal/EditModal";
+import NewPostModal from "../components/Modal/NewPostModal";
+import { EditPostModal } from "../components/Modal/EditPostModal";
 import { PostDTO } from "../API/DTO/PostDTO";
+import { useMutation } from "@tanstack/react-query";
+import { postAttachment } from "../API/API";
+import { createPost } from "../API/services/posts.service";
 
 const PostFeed = styled.div`
   flex: 1;
@@ -41,23 +44,30 @@ export function FeedPage() {
   const [openMenu, setOpenMenu] = useState<null | string>(null);
   const [isModalOpen, setOpenModal] = useState(false);
   const [postToEdit, setPostToEdit] = useState<PostDTO | null>(null);
+
   const handleDropdownClick = (id: string | null) => {
-    
-    console.log(id);
     setOpenMenu((prevId) => (prevId === id ? null : id));
   };
   const [isModalEditOpen, setModalEditOpen] = useState(false);
 
-  const handleClickOutside = (event) => {
-    
+  const handleClickOutside = async (event: any) => {
+    const action = event.target.getAttribute("data-action");
+    const id = event.target.getAttribute("data-id");
 
-    // setPostToEdit(data?.pages.map((g,i)=>g.find(post=>post.id===id)[0]!);
-    if (!event.target.closest(".dropdown-container")) {
+      if (!event.target.closest(".dropdown-container")) {
       setOpenMenu(null);
-    }
-    else{
-      const action = event.target.getAttribute("data-action")
-      const id = event.target.getAttributes("data-id")
+      setModalEditOpen(false);
+    } else {
+      console.log(id, action);
+      await setPostToEdit(
+        data?.pages.map((page, i) => page.find((post) => post.id === id))[0]!
+      );
+      if (action === "edit") {
+        console.log(postToEdit);
+        setTimeout(() => setModalEditOpen(true));
+      }
+      if (action == "delete") {
+      }
     }
   };
 
@@ -102,7 +112,7 @@ export function FeedPage() {
       <EditPostModal
         isOpen={isModalEditOpen}
         onClose={() => setModalEditOpen(false)}
-        initData={postToEdit!}
+        initData={openMenu}
       />
     </FeedContainer>
   );

@@ -3,7 +3,7 @@ import {
   useQuery,
   useMutation,
 } from "@tanstack/react-query";
-import { editGroup, deleteGroup, getGroupById } from "../services/groups.service";
+import { editGroup, deleteGroup, getGroupById, acceptGroupAccess, deleteFromGroup } from "../services/groups.service";
 import { EditGroup, GroupDTO } from "../DTO/GroupDTO";
 
 export const useGroupDetails = (id: string) => {
@@ -32,11 +32,21 @@ export const useGroupDetails = (id: string) => {
     },
   });
   const handleDeleteGroup = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async () => {
       await deleteGroup(id);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey }),
   });
+  const handleAddToGroup = useMutation({
+    mutationFn: async (userId:string)=>{
+      return acceptGroupAccess(id,userId)
+    },
+    onSuccess:()=>{queryClient.invalidateQueries({queryKey:QueryKey})}
+  })
+  const handleDeleteFromGroup  = useMutation({
+    mutationFn:async (userId:string)=>{ deleteFromGroup(id,userId)},
+    onSuccess:()=>{queryClient.invalidateQueries({queryKey:QueryKey})}
+  })
 
   return {
     data,
@@ -46,5 +56,7 @@ export const useGroupDetails = (id: string) => {
     isError,
     isFetched,
     isPending,
+    handleAddToGroup,
+    handleDeleteFromGroup
   };
 };

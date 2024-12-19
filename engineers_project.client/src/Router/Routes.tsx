@@ -14,7 +14,7 @@ import { ChatPage } from "../Pages/ChatPage";
 import { EditGroupPage } from "../Pages/EditGroupPage";
 import { CreateGroupPage } from "../Pages/CreateGroupPage";
 
-export const validIdLoader = async ({ params }) => {
+export const validIdLoader = async ({ params }:any) => {
   const { id } = params;
 
   // Validate UUID
