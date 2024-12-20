@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {getAllUserChats} from "../services/chat.sercice"
+import {getAllUserChats} from "../services/chat.service"
 
 export const useMyChats = () => {
   const QueryKey = ["MyChats"];

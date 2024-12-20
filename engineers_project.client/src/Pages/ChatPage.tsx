@@ -67,14 +67,15 @@ const ChatSpace = styled.div`
   overflow-y: scroll;
 `;
 const ChatHeader = styled.div`
-display:flex;
-padding: 10px;
-color: var(--white);
-gap:5px;
-`
+  display: flex;
+  padding: 10px;
+  color: var(--white);
+  gap: 5px;
+`;
 
 export function ChatPage() {
   const { id } = useParams();
+  if (!id) return null;
   const handleInput = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
     setMessage((prev) => ({
@@ -84,68 +85,86 @@ export function ChatPage() {
   };
   const { user } = useAuth();
   const [message, setMessage] = useState({ chatId: id, content: "" });
-  const { data, isFetching, error } = useChat(id!);
-  console.log(data, isFetching, error, user);
+  const { data, isFetching, isError, error, handleSendMessage } = useChat(id!);
+  console.log(data, user?.id);
+  if (isError) {
+    alert(error);
+  }
+  const handleMessage = async (e: { preventDefault: any; }) => {
+    e.preventDefault();
+    setMessage((p)=>({...p,content:""}))
+    handleSendMessage.mutate(message);
+  };
   return (
     <StyledChatContainer>
-      {/* header */}
-      <ChatHeader>
-      <ImageDiv
-          width={40}
-          url={getUserImg(
-            data?.users.find((fuser) => fuser.id !== user?.id!)
-              ?.avatarFileName!
-          )}/>
-          {data?.name}
-        {/* chatname */}
-        {/* options */}
-      </ChatHeader>
-      {/* chat */}
-      <ChatSpace>
-        {isFetching ? (
-          <>Loading</>
-        ) : data && data.messages.length === 0 ? (
-          <></>
-        ) : (
-          data &&
-          data.messages.map((message) =>
-            message.userId === user?.id ? (
-              <MessageSent
-                key={message.id}
-                message={message.content}
-                date={message.creationDate}
-                sender={data.users.find(fuser=>message.userId===fuser.id)?.username!}
-              />
-            ) : (
-              <MessageRecived
-                key={message.id}
-                message={message.content}
-                date={message.creationDate}
-                sender={data.users.find(fuser=>message.userId===fuser.id)?.username!}
-              />
-            )
-          )
-        )}
-      </ChatSpace>
-      <div>
-        <StyledForm>
-          <CreateMessageWrapper>
-            <StyledInput
-              type="text"
-              placeholder="New message"
-              name="content"
-              value={message.content}
-              onChange={handleInput}
+      {data && (
+        <>
+          <ChatHeader>
+            <ImageDiv
+              width={40}
+              url={getUserImg(
+                data?.users.find((fuser) => fuser.id !== user?.id!)
+                  ?.avatarFileName!
+              )}
             />
-          </CreateMessageWrapper>
-          <SendWrapper>
-            <SendIcon>
-              <IoSend size={20} />
-            </SendIcon>
-            <SendInput onClick={() => {}} />
-          </SendWrapper>
-        </StyledForm>
-      </div>
+            {data?.name}
+            {/* chatname */}
+            {/* options */}
+          </ChatHeader>
+          {/* chat */}
+          <ChatSpace>
+            {isFetching ? (
+              <>Loading</>
+            ) : data && data.messages.length === 0 ? (
+              <></>
+            ) : (
+              data &&
+              data.messages.map((message) =>
+                message.userId === user?.id ? (
+                  <MessageSent
+                    key={message.id}
+                    message={message.content}
+                    date={message.creationDate}
+                    sender={
+                      data.users.find((fuser) => message.userId === fuser.id)
+                        ?.username!
+                    }
+                  />
+                ) : (
+                  <MessageRecived
+                    key={message.id}
+                    message={message.content}
+                    date={message.creationDate}
+                    sender={
+                      data.users.find((fuser) => message.userId === fuser.id)
+                        ?.username!
+                    }
+                  />
+                )
+              )
+            )}
+          </ChatSpace>
+          <div>
+            <StyledForm onSubmit={handleMessage}>
+              <CreateMessageWrapper>
+                <StyledInput
+                  type="text"
+                  placeholder="New message"
+                  name="content"
+                  value={message.content}
+                  onChange={handleInput}
+                />
+              </CreateMessageWrapper>
+              <SendWrapper>
+                <SendIcon>
+                  <IoSend size={20} />
+                </SendIcon>
+                <SendInput />
+              </SendWrapper>
+            </StyledForm>
+          </div>
+        </>
+      )}
     </StyledChatContainer>
   );
 }
