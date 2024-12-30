@@ -240,4 +240,18 @@ public class GroupController : ControllerBase
 
         }));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> LeaveGroup(Guid groupId)
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token.");
+        }
+
+        var userId = Guid.Parse(userIdClaim.Value);
+         await _mediator.Send(new LeaveGroupCommand(groupId, userId));
+         return Ok();
+    }
 }
