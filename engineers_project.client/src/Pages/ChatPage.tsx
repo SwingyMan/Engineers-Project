@@ -34,6 +34,7 @@ const StyledInput = styled.input`
   color: inherit;
 `;
 const SendInput = styled.button`
+cursor: pointer;
   background-color: var(--blue);
   border: solid 1px var(--whiteTransparent20);
   border-radius: 15px;

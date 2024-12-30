@@ -17,11 +17,17 @@ const StyledTopBar = styled.div`
 const Logo = styled.div`
   margin: 5px;
   display: flex;
+  cursor: pointer;
   & > {
     width: 40px;
     height: 40px;
   }
 `;
+const ProfileWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  
+`
 
 const Buttons = styled.div`
   display: flex;
@@ -65,14 +71,14 @@ export function TopNavBar() {
             {"Wyloguj "}
             <IoExitOutline />
           </LogoutButton>
-          <div onClick={()=>{navigate(`/profile/${user?.id}`)}}>
+          <ProfileWrapper onClick={()=>{navigate(`/profile/${user?.id}`)}}>
             <ImageDiv
               width={40}
               url={
                 user?.avatarFileName ? `${getUserImg(user.avatarFileName)}` : ""
               }
             />
-          </div>
+          </ProfileWrapper>
         </Buttons>
       </StyledTopBar>
     </>

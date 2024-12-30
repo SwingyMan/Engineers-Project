@@ -11,7 +11,6 @@ import { PostDTO } from "../../API/DTO/PostDTO";
 import { ResolveAttachement } from "../../Utility/ResolveAttachement";
 import { imageExtensions, videoExtensions } from "../../interface/FileTypes";
 
-
 const PostWrapper = styled.div`
   padding: 1em;
   background-color: #6085afcc;
@@ -32,7 +31,6 @@ const HeaderInfo = styled.div`
   display: flex;
   gap: 4px;
   cursor: pointer;
-
 `;
 const Title = styled.div`
   font-size: 1.2em;
@@ -76,19 +74,27 @@ export function PostDetails(props: {
 }) {
   const navigate = useNavigate();
   const { data } = useComments(props.postInfo.id);
-const CheckAtachments = (fileName: string) => {
+  const CheckAtachments = (fileName: string) => {
     const ext = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
     if (imageExtensions.includes(ext)) return true;
     if (videoExtensions.includes(ext)) return true;
-    return false
+    return false;
   };
-  const ImageAttachments = props.postInfo.attachments?.filter(att=>CheckAtachments(att.realName))
-  const FileAttachments = props.postInfo.attachments?.filter(att=>CheckAtachments(att.realName)===false)
+  const ImageAttachments = props.postInfo.attachments?.filter((att) =>
+    CheckAtachments(att.realName)
+  );
+  const FileAttachments = props.postInfo.attachments?.filter(
+    (att) => CheckAtachments(att.realName) === false
+  );
 
   return (
     <PostWrapper>
       <PostHeader>
-        <HeaderInfo>
+        <HeaderInfo
+          onClick={(e) => {
+            e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`);
+          }}
+        >
           <ImageDiv
             width={40}
             url={
@@ -98,14 +104,7 @@ const CheckAtachments = (fileName: string) => {
             }
           />
           <div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation(),
-                  navigate(`/profile/${props.postInfo.userId}`);
-              }}
-            >
-              {props.postInfo.username}
-            </div>
+            <div>{props.postInfo.username}</div>
             <div>{TimeElapsed(props.postInfo.createdAt)}</div>
           </div>
         </HeaderInfo>
@@ -120,30 +119,28 @@ const CheckAtachments = (fileName: string) => {
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
-      {ImageAttachments &&
-        ImageAttachments.length !== 0 && (
-          <AttachmentContainer>
-            {ImageAttachments.map((att) => (
-              <ResolveAttachement
-                key={att.fileName}
-                url={att.id}
-                fileName={att.realName}
-              />
-            ))}
-          </AttachmentContainer>
-        )}
-        {FileAttachments &&
-        FileAttachments.length !== 0 && (
-          <FileContainer>
-            {FileAttachments.map((att) => (
-              <ResolveAttachement
-                key={att.fileName}
-                url={att.id}
-                fileName={att.realName}
-              />
-            ))}
-          </FileContainer>
-        )}
+      {ImageAttachments && ImageAttachments.length !== 0 && (
+        <AttachmentContainer>
+          {ImageAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.fileName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </AttachmentContainer>
+      )}
+      {FileAttachments && FileAttachments.length !== 0 && (
+        <FileContainer>
+          {FileAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.fileName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </FileContainer>
+      )}
       <hr />
       <>
         <CreateComment id={props.postInfo.id} />

@@ -54,11 +54,12 @@ const GroupFeed = styled.div`
 `;
 const NewPostButton = styled.div`
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 15px;
+  right: 15px;
   border-radius: 50vh;
+  border: 1px solid var(--white);
   background-color: #007aff;
-  padding: 4px 16px;
+  padding: 6px 18px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -115,7 +116,7 @@ export function GroupPage() {
   };
   const [isModalOpen, setOpenModal] = useState(false);
   const { data: groupInfo } = useGroupDetails(id!);
-  const { data: myGroups,requestToGroup } = useMyGroups();
+  const { data: myGroups, requestToGroup } = useMyGroups();
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setOwner] = useState(false);
   const [isRequestSend, setRequestSend] = useState(false);
@@ -165,7 +166,7 @@ export function GroupPage() {
                 {isOwner && (
                   <MenageGroup onClick={() => navigate(`/editGroup/${id}`)}>
                     <IoPencil size={16} />
-                    Menage Group{" "}
+                    Manage group{" "}
                     {`(${
                       groupInfo.groupUsers.filter(
                         (user) => user.isAccepted === false
@@ -179,7 +180,13 @@ export function GroupPage() {
               ) : isRequestSend ? (
                 <AwaitAcceptance>You send request</AwaitAcceptance>
               ) : (
-                <SendRequestButton onClick={()=>{requestToGroup.mutate(id!)}}>Send request to join</SendRequestButton>
+                <SendRequestButton
+                  onClick={() => {
+                    requestToGroup.mutate(id!);
+                  }}
+                >
+                  Send request to join
+                </SendRequestButton>
               )}
             </GroupheaderWrapper>
             <Users>
@@ -221,7 +228,7 @@ export function GroupPage() {
                 />
               ))
             ) : (
-              <>noPosts</>
+              <>There are no posts yet</>
             )}
             <NewPostButton onClick={() => setOpenModal(true)}>
               <MdAdd /> Add Post

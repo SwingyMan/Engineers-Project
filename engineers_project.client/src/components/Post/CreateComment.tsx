@@ -2,7 +2,6 @@ import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import styled from "styled-components";
 import { useComments } from "../../API/hooks/useComments";
-import { getUserImg } from "../../API/API";
 
 const CreateCommentWrapper = styled.div`
   display: flex;
@@ -24,6 +23,7 @@ const StyledInput = styled.input`
   color: inherit;
 `;
 const SendInput = styled.button`
+  cursor: pointer;
   background-color: var(--blue);
   border: solid 1px var(--whiteTransparent20);
   border-radius: 15px;
@@ -46,11 +46,9 @@ const SendIcon = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  pointer-events: none  ;
+  pointer-events: none;
 `;
 export function CreateComment({ id }: { id: string }) {
-  
-
   const [newComment, setNewComment] = useState({
     postId: id,
     content: "",
@@ -66,7 +64,7 @@ export function CreateComment({ id }: { id: string }) {
   const SubmitComment = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     handleAddComment.mutate(newComment);
-    setNewComment({...newComment, content:""})
+    setNewComment({ ...newComment, content: "" });
   };
   return (
     <StyledForm onSubmit={SubmitComment}>
@@ -83,7 +81,7 @@ export function CreateComment({ id }: { id: string }) {
         <SendIcon>
           <IoSend size={20} />
         </SendIcon>
-        <SendInput onClick={()=>{}}  />
+        <SendInput onClick={() => {}} />
       </SendWrapper>
     </StyledForm>
   );

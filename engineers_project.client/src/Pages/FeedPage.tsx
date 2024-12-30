@@ -7,9 +7,7 @@ import { MdAdd } from "react-icons/md";
 import NewPostModal from "../components/Modal/NewPostModal";
 import { EditPostModal } from "../components/Modal/EditPostModal";
 import { PostDTO } from "../API/DTO/PostDTO";
-import { useMutation } from "@tanstack/react-query";
-import { postAttachment } from "../API/API";
-import { createPost } from "../API/services/posts.service";
+
 
 const PostFeed = styled.div`
   flex: 1;
@@ -22,11 +20,12 @@ const PostFeed = styled.div`
 `;
 const NewPostButton = styled.div`
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 15px;
+  right: 15px;
   border-radius: 50vh;
+  border: 1px solid var(--white);
   background-color: #007aff;
-  padding: 4px 16px;
+  padding: 6px 18px;
   display: flex;
   align-items: center;
   cursor: pointer;

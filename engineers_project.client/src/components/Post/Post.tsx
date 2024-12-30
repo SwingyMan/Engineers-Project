@@ -1,7 +1,6 @@
 import { ImageDiv } from "../Utility/ImageDiv";
 import { TimeElapsed } from "../../Utility/TimeElapsed";
 import styled from "styled-components";
-import { OptionMenu } from "../Utility/OptionMenu";
 import { useNavigate } from "react-router";
 import { getUserImg } from "../../API/API";
 import { PostDTO } from "../../API/DTO/PostDTO";
@@ -100,20 +99,28 @@ export function Post(props: {
     const ext = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
     if (imageExtensions.includes(ext)) return true;
     if (videoExtensions.includes(ext)) return true;
-    return false
+    return false;
   };
-  const ImageAttachments = props.postInfo.attachments?.filter(att=>CheckAtachments(att.realName))
-  const FileAttachments = props.postInfo.attachments?.filter(att=>CheckAtachments(att.realName)===false)
+  const ImageAttachments = props.postInfo.attachments?.filter((att) =>
+    CheckAtachments(att.realName)
+  );
+  const FileAttachments = props.postInfo.attachments?.filter(
+    (att) => CheckAtachments(att.realName) === false
+  );
   const navigate = useNavigate();
   const optionList = ["edit", "delete"];
   return (
-    <PostWrapper>
-      <PostHeader
-        onClick={() => {
-          navigate(`/post/${props.postInfo.id}`);
-        }}
-      >
-        <HeaderInfo>
+    <PostWrapper
+      onClick={() => {
+        navigate(`/post/${props.postInfo.id}`);
+      }}
+    >
+      <PostHeader>
+        <HeaderInfo
+          onClick={(e) => {
+            e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`);
+          }}
+        >
           <ImageDiv
             width={40}
             url={
@@ -123,14 +130,7 @@ export function Post(props: {
             }
           />
           <div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation(),
-                  navigate(`/profile/${props.postInfo.userId}`);
-              }}
-            >
-              {props.postInfo.username}
-            </div>
+            <div>{props.postInfo.username}</div>
             <div>{TimeElapsed(props.postInfo.createdAt)}</div>
           </div>
         </HeaderInfo>
@@ -161,30 +161,28 @@ export function Post(props: {
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
-      {ImageAttachments &&
-        ImageAttachments.length !== 0 && (
-          <AttachmentContainer>
-            {ImageAttachments.map((att) => (
-              <ResolveAttachement
-                key={att.fileName}
-                url={att.id}
-                fileName={att.realName}
-              />
-            ))}
-          </AttachmentContainer>
-        )}
-        {FileAttachments &&
-        FileAttachments.length !== 0 && (
-          <FileContainer>
-            {FileAttachments.map((att) => (
-              <ResolveAttachement
-                key={att.fileName}
-                url={att.id}
-                fileName={att.realName}
-              />
-            ))}
-          </FileContainer>
-        )}
+      {ImageAttachments && ImageAttachments.length !== 0 && (
+        <AttachmentContainer>
+          {ImageAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.realName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </AttachmentContainer>
+      )}
+      {FileAttachments && FileAttachments.length !== 0 && (
+        <FileContainer>
+          {FileAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.fileName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </FileContainer>
+      )}
       <hr />
       <div>Komentarze ({props.postInfo.comments.length})</div>
     </PostWrapper>
