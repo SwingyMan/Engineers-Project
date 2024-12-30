@@ -1,9 +1,9 @@
 
 
-const getHost = () => {
+export const getHost = () => {
     if (import.meta.env.PROD) {
         const url = new URL(window.location.href);
-        return `${url.protocol}//${url.host}/`;
+        return `${url.protocol}//${url.host}/api/v1/`;
     } else {
         return import.meta.env.VITE_HOST_DEV;
     }

@@ -4,6 +4,7 @@ import { UserContextProps } from "../interface/UserContextProps";
 import { UserDTO } from "../API/DTO/UserDTO";
 import { User } from "../API/DTO/User";
 import { fetchUserById } from "../API/services/user.service";
+import {getHost} from "../API/API.ts";
 
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }: Children) => {
     //TODO testy
 
     try {
-      const response = await fetch("https://localhost:7290/api/v1/User/Login", {
+      const response = await fetch(`${getHost()}User/Login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
