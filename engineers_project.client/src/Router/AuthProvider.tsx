@@ -47,7 +47,6 @@ const AuthProvider = ({ children }: Children) => {
       });
 
       const text = await response.text();
-
       if (text) {
         const res = JSON.parse(text);
         const user1:User = {

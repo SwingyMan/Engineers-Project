@@ -62,11 +62,15 @@ export function ProfilePage() {
 
             <ProfileHeader>{userData ? userData.username : ""}</ProfileHeader>
           </UserInfo>
-          {id === user?.id && (
+          {id === user?.id ? (
             <MenageUser onClick={() => navigate("/editProfile")}>
               <IoPencil size={16} /> Edit Profile
             </MenageUser>
-          )}
+          ):<div>
+            {/* addfriend */}
+            {/* waiting */}
+            {/* friends */}
+            </div>}
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (

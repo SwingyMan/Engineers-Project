@@ -23,6 +23,12 @@ const StyledInput = styled.input`
   width: 100%;
   padding: 0 10px;
   color: inherit;
+  &:user-invalid {
+    border-radius: 10px;
+    border: 2px solid red;
+    box-shadow: 0px 0px 1px 1px red;
+  }
+
 `;
 
 const InputWraper = styled.div`
@@ -50,11 +56,15 @@ const EyeIcon = styled.div`
 `;
 const handleRegister = () => {
   return useMutation({
-    mutationFn: async (user:UserDTO) => {
+    mutationFn: async (user: UserDTO) => {
       return await register(user);
     },
-    onSuccess:()=>{alert("Activate accoun via e-mail")},
-    onError:(e)=>{alert(e)},
+    onSuccess: () => {
+      alert("Activate account via e-mail");
+    },
+    onError: (e) => {
+      alert(e);
+    },
   });
 };
 
@@ -64,7 +74,7 @@ export function RegisterForm() {
     Username: "",
     Password: "",
   });
-const register = handleRegister();
+  const register = handleRegister();
   const [visible, setVisible] = useState(false);
   const handleInput = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
@@ -75,15 +85,17 @@ const register = handleRegister();
   };
 
   const handleSubmitEvent = (e: { preventDefault: () => void }) => {
-    register.mutate(input)
+    register.mutate(input);
     e.preventDefault();
   };
   return (
     <StyledForm onSubmit={handleSubmitEvent}>
       <InputWraper>
         <StyledInput
-          type="text"
+          type="email"
           name="Email"
+          pattern="^[^\s@]+@(polsl\.pl|student\.polsl\.pl)$"
+          title="e-mail must be in a polsl.pl domain"
           placeholder="E-mail"
           onChange={handleInput}
           autoFocus={true}
@@ -94,6 +106,8 @@ const register = handleRegister();
         <StyledInput
           type="text"
           name="Username"
+          pattern="^(.*?[A-Za-z\d]){4,}.*$"
+          title="Username must be at least 4 characters long"
           required
           placeholder="Username"
           onChange={handleInput}
@@ -104,6 +118,8 @@ const register = handleRegister();
           type={visible ? "text" : "password"}
           name="Password"
           required
+          title="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
           placeholder="Password"
           onChange={handleInput}
         />

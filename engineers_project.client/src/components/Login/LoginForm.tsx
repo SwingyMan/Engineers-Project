@@ -53,7 +53,7 @@ export function LoginForm() {
   const [input, setInput] = useState({
     Email: "",
     Password: "",
-  });
+  }); 
 
   const [visible, setVisible] = useState(false)
   const handleInput = (e: { target: { name: string; value: string } }) => {

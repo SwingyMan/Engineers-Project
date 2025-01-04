@@ -142,14 +142,14 @@ export function EditProfilePage() {
   const editImage = async () => {
     const data = new FormData();
     data.append("file", formData.image!);
-    
-    const res =await postAttachment("User/AddAvatar", data);
-    console.log(res)
+
+    const res = await postAttachment("User/AddAvatar", data);
+    console.log(res);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     if (
       formData.Password.length !== 0 ||
       (formData.Username !== user?.username && formData.Username.length !== 0)
@@ -158,13 +158,13 @@ export function EditProfilePage() {
         username: formData.Username,
         password: formData.Password,
       };
-      
+
       await editUserById(editedUser);
     }
     if (formData.image !== null) {
-       editImage();
+      editImage();
     }
-    setTimeout(()=>refreshUser());
+    setTimeout(() => refreshUser());
   };
 
   const [visible, setVisible] = useState(false);
@@ -199,6 +199,8 @@ export function EditProfilePage() {
                   type="text"
                   id="Username"
                   name="Username"
+                  title="Username must be at least 4 characters long"
+                  pattern="^(.*?[A-Za-z\d]){4,}.*$"
                   value={formData.Username}
                   onChange={handleChange}
                   placeholder={user?.username}
@@ -210,6 +212,8 @@ export function EditProfilePage() {
                   type={visible ? "text" : "password"}
                   id="Password"
                   name="Password"
+                  title="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                   value={formData.Password}
                   onChange={handleChange}
                 />
