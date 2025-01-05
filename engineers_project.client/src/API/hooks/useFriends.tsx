@@ -48,7 +48,6 @@ export const useFriends = () => {
     const acceptedGroup: string[] = [];
 
     data.forEach((obj) => {
-      console.log(obj);
       if (obj.accepted) {
         acceptedGroup.push(obj.userId1===id?obj.userId2:obj.userId1);
       } else {

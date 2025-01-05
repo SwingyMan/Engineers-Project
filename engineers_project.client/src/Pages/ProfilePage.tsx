@@ -51,13 +51,6 @@ export function ProfilePage() {
   const [openMenu, setOpenMenu] = useState<null | string>(null);
   const { data: friendsData, groupObjects, isFetching } = useFriends();
 
-  if (!isFetching) {
-    console.log(friendsData);
-
-    if (friendsData) {
-      console.log(groupObjects(friendsData, user?.id!));
-    }
-  }
   return (
     <>
       <ProfileFeed>
