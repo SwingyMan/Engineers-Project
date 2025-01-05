@@ -55,6 +55,19 @@ export const post = async <T>(url: string, data: unknown): Promise<T> => {
 
     return response.json();
 };
+export const postEmpty = async <T>(url: string): Promise<T> => {
+
+    const response = await fetch(`${getHost()}${url}`, {
+        method: 'POST',
+        headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error(`POST request failed: ${response.status}`);
+    }
+
+    return response.json();
+};
 
 export const postAttachment = async <T>(url:string, data: FormData):Promise<T>=>{
     const response =await fetch(`${getHost()}${url}`, {

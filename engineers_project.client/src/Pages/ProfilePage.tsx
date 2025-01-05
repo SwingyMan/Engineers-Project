@@ -8,6 +8,7 @@ import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
 import { useState } from "react";
 import { IoPencil } from "react-icons/io5";
+import { useFriends } from "../API/hooks/useFriends";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -21,7 +22,7 @@ const ProfileCard = styled.div`
   background-color: var(--whiteTransparent20);
   margin: 10px;
   box-sizing: border-box;
-  padding-right:30px;
+  padding-right: 30px;
 `;
 const ProfileFeed = styled.div`
   display: flex;
@@ -39,8 +40,8 @@ const MenageUser = styled.div`
 `;
 const UserInfo = styled.div`
   display: flex;
-  align-items:center;
-`
+  align-items: center;
+`;
 export function ProfilePage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -48,7 +49,15 @@ export function ProfilePage() {
   const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
   const [openMenu, setOpenMenu] = useState<null | string>(null);
+  const { data: friendsData, groupObjects, isFetching } = useFriends();
 
+  if (!isFetching) {
+    console.log(friendsData);
+
+    if (friendsData) {
+      console.log(groupObjects(friendsData, user?.id!));
+    }
+  }
   return (
     <>
       <ProfileFeed>
@@ -66,11 +75,24 @@ export function ProfilePage() {
             <MenageUser onClick={() => navigate("/editProfile")}>
               <IoPencil size={16} /> Edit Profile
             </MenageUser>
-          ):<div>
-            {/* addfriend */}
-            {/* waiting */}
-            {/* friends */}
-            </div>}
+          ) : (
+            friendsData &&
+            (groupObjects(friendsData, user?.id!).accepted.find(
+              (a) => a === id
+            ) ? (
+              <>You are frends</>
+            ) : groupObjects(friendsData, user?.id!).send.find(
+                (a) => a === id
+              ) ? (
+              <>request send</>
+            ) : groupObjects(friendsData, user?.id!).recived.find(
+                (a) => a === id
+              ) ? (
+              <>accept friend request</>
+            ) : (
+              <>send friend request</>
+            ))
+          )}
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (

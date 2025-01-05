@@ -45,7 +45,10 @@ const AuthProvider = ({ children }: Children) => {
 
         body: JSON.stringify(data),
       });
-
+      if(response.status===404){
+        alert("invalid email or password")
+        return;
+      }
       const text = await response.text();
       if (text) {
         const res = JSON.parse(text);
@@ -65,7 +68,7 @@ const AuthProvider = ({ children }: Children) => {
         throw new Error(res.message);
       }
     } catch (err) {
-      console.error(err);
+      alert("invalid email or password")
     }
   };
   const logOut = () => {
