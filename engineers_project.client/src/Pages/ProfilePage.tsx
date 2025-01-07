@@ -9,6 +9,7 @@ import { useAuth } from "../Router/AuthProvider";
 import { useState } from "react";
 import { IoPencil } from "react-icons/io5";
 import { useFriends } from "../API/hooks/useFriends";
+import { getOrCreateChat } from "../API/services/chat.service";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -42,15 +43,27 @@ const UserInfo = styled.div`
   display: flex;
   align-items: center;
 `;
+const Controls = styled.div<{ color: string }>`
+  display: flex ;
+  background-color: ${(p) => p.color};
+  padding: 4px 8px;
+  align-items:center;
+  cursor: pointer;
+`
 export function ProfilePage() {
+
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: userData } = useUsers(id!);
   const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
   const [openMenu, setOpenMenu] = useState<null | string>(null);
-  const { data: friendsData, groupObjects, isFetching } = useFriends();
-
+  const { data: friendsData, groupObjects, isFetching, handlAcceptFriend,handleRequestFriend } = useFriends();
+  const handleOpenChat=async()=>{
+  getOrCreateChat(id!).then(
+  ()=>  navigate("/chat")
+  )
+  }
   return (
     <>
       <ProfileFeed>
@@ -73,17 +86,19 @@ export function ProfilePage() {
             (groupObjects(friendsData, user?.id!).accepted.find(
               (a) => a === id
             ) ? (
-              <>You are frends</>
+              <Controls color="var(--blue)" onClick={() => {handleOpenChat()}}>
+                Send message
+              </Controls >
             ) : groupObjects(friendsData, user?.id!).send.find(
-                (a) => a === id
-              ) ? (
-              <>request send</>
+              (a) => a === id
+            ) ? (
+              <Controls color="rgba(255, 255, 255, 0.6)" >Request send</Controls>
             ) : groupObjects(friendsData, user?.id!).recived.find(
-                (a) => a === id
-              ) ? (
-              <>accept friend request</>
+              (a) => a === id
+            ) ? (
+              <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!)}}>Accept friend request</Controls>
             ) : (
-              <>send friend request</>
+              <Controls color="var(--blue)" onClick={() => { handleRequestFriend.mutate(id!) }}>Send friend request</Controls>
             ))
           )}
         </ProfileCard>

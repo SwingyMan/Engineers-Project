@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { Message } from '../DTO/Message';
-import { getToken } from '../API';
+import { getHost, getToken } from '../API';
 
 
 interface UseSignalRProps {
   onMessageReceived: (message: Message) => void;
 }
-const hubUrl = "https://localhost:7290/chat"
+const hubUrl = `${getHost}/chat`
 const useSignalR = ({ onMessageReceived }: UseSignalRProps) => {
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
 
@@ -19,7 +19,6 @@ const useSignalR = ({ onMessageReceived }: UseSignalRProps) => {
 
     newConnection
       .start()
-      .then(() => console.log('SignalR Connected'))
       .catch((err) => console.error('SignalR Connection Error: ', err));
 
     // Listen for the SignalR event and handle it
