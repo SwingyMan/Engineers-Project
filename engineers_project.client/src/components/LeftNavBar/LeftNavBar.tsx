@@ -112,7 +112,7 @@ export function LeftNavBar() {
                   user={friend}
                 />)
             ) : FriendsData?.received.length !== 0 && friends === false ? (
-              FriendsData?.recived.map((friend) => <UserCard key={friend.id}
+              FriendsData?.received.map((friend) => <UserCard key={friend.id}
                 user={friend} />)
             ) : (
               <>You have no friends yet</>

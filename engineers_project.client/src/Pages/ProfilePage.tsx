@@ -62,9 +62,11 @@ export function ProfilePage() {
   const [openMenu, setOpenMenu] = useState<null | string>(null);
   const { data: friendsData, handlAcceptFriend, handleRequestFriend } = useFriends();
   const handleOpenChat = async () => {
-    getOrCreateChat(id!).then(
-      () => navigate("/chat")
-    )
+
+    const chat = getOrCreateChat(id!)
+    navigate(`/chat/${(await chat).id}`)
+
+
   }
   const findUser = (data: FriendList, id: string): string => {
     for (let state in data) {
