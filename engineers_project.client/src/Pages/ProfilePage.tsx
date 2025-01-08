@@ -10,6 +10,7 @@ import { useState } from "react";
 import { IoPencil } from "react-icons/io5";
 import { useFriends } from "../API/hooks/useFriends";
 import { getOrCreateChat } from "../API/services/chat.service";
+import { FriendList } from "../API/services/friends.service";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -50,6 +51,7 @@ const Controls = styled.div<{ color: string }>`
   align-items:center;
   cursor: pointer;
 `
+
 export function ProfilePage() {
 
   const navigate = useNavigate();
@@ -58,11 +60,22 @@ export function ProfilePage() {
   const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
   const [openMenu, setOpenMenu] = useState<null | string>(null);
-  const { data: friendsData, groupObjects, isFetching, handlAcceptFriend,handleRequestFriend } = useFriends();
-  const handleOpenChat=async()=>{
-  getOrCreateChat(id!).then(
-  ()=>  navigate("/chat")
-  )
+  const { data: friendsData, handlAcceptFriend, handleRequestFriend } = useFriends();
+  const handleOpenChat = async () => {
+    getOrCreateChat(id!).then(
+      () => navigate("/chat")
+    )
+  }
+  const findUser = (data: FriendList, id: string): string => {
+    for (let state in data) {
+      const user = data[state as keyof FriendList].find((user) => user.id === id)
+      if (user) {
+        return state
+      }
+
+    }
+    return "none"
+
   }
   return (
     <>
@@ -83,20 +96,14 @@ export function ProfilePage() {
             </MenageUser>
           ) : (
             friendsData &&
-            (groupObjects(friendsData, user?.id!).accepted.find(
-              (a) => a === id
-            ) ? (
-              <Controls color="var(--blue)" onClick={() => {handleOpenChat()}}>
+            (findUser(friendsData, user?.id!) == "friends" ? (
+              <Controls color="var(--blue)" onClick={() => { handleOpenChat() }}>
                 Send message
               </Controls >
-            ) : groupObjects(friendsData, user?.id!).send.find(
-              (a) => a === id
-            ) ? (
+            ) : findUser(friendsData, user?.id!) === "send" ? (
               <Controls color="rgba(255, 255, 255, 0.6)" >Request send</Controls>
-            ) : groupObjects(friendsData, user?.id!).recived.find(
-              (a) => a === id
-            ) ? (
-              <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!)}}>Accept friend request</Controls>
+            ) : findUser(friendsData, user?.id!) === "recived" ? (
+              <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!) }}>Accept friend request</Controls>
             ) : (
               <Controls color="var(--blue)" onClick={() => { handleRequestFriend.mutate(id!) }}>Send friend request</Controls>
             ))

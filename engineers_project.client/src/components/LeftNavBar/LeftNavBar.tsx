@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { useMyGroups } from "../../API/hooks/useMyGroups";
 import { GroupCardSmall } from "../Group/GroupCardSmall";
+import { useFriends } from "../../API/hooks/useFriends";
+import { useState } from "react";
+import { UserCard } from "../User/UserCard";
 
 const NavBarWrapper = styled.div`
   display: flex;
@@ -33,7 +36,7 @@ const GroupWrapper = styled.div`
   text-align: center;
 `;
 const Button = styled.div`
-  background-color: gray;
+  background-color: #808080;
   height: fit-content;
   display: flex;
   padding: 5px 10px;
@@ -42,6 +45,14 @@ const Button = styled.div`
   border-radius: 4px;
   cursor: pointer;
 `;
+const ControlWrapper = styled.div`
+  display: flex;
+`
+const Control = styled.div<{active:boolean}>`
+  display: flex;
+  background-color: ${(p)=>p.active===true?"gray":"#929292"};
+  border-radius: 4px 4px 0px 0px;
+`
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -50,8 +61,9 @@ const ButtonWrapper = styled.div`
 export function LeftNavBar() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data, isFetching } = useMyGroups();
-
+  const { data: GroupData, isFetching } = useMyGroups();
+  const { data: FriendsData, isFetching: fechingFriends } = useFriends()
+  const [friends, setFriends] = useState(true)
   return (
     <NavBarWrapper>
       <MainNavMenu>
@@ -63,9 +75,9 @@ export function LeftNavBar() {
         <ButttonWrapper>Your Groups</ButttonWrapper>
         <GroupWrapper>
           {isFetching && <>loading</>}
-          {data !== null &&
-            (data?.length !== 0 ? (
-              data?.map((group) => (
+          {GroupData !== null &&
+            (GroupData?.length !== 0 ? (
+              GroupData?.map((group) => (
                 <GroupCardSmall
                   key={group.id}
                   handleClick={async () => navigate(`/group/${group.id}`)}
@@ -77,9 +89,37 @@ export function LeftNavBar() {
               <>You are not a part of any group</>
             ))}
           <ButtonWrapper>
+            <Button onClick={() => navigate('/groups')}>Join Group</Button>
+            or
+            <Button onClick={() => navigate('/newGroup')}>Create Group</Button>
+          </ButtonWrapper>
+        </GroupWrapper>
+      </div>
+      <div>
+        <ButttonWrapper>Your Friends</ButttonWrapper>
+        <GroupWrapper>
+          {fechingFriends && <>loading</>}
+          <ControlWrapper>
+            <Control active={friends} onClick={()=>setFriends(true)}>friends</Control>
+            <Control active={!friends} onClick={()=>setFriends(false)}>requests</Control>
+          </ControlWrapper>
+          {FriendsData !== null &&
+            (FriendsData?.friends.length !== 0 && friends ? (
+              FriendsData?.friends.map((friend) =>
+                <UserCard
+                  key={friend.id}
+                  user={friend}
+                />)
+            ) : FriendsData?.recived.length !== 0 && friends === false ? (
+              FriendsData?.recived.map((friend) => <UserCard key={friend.id}
+                user={friend} />)
+            ) : (
+              <>You have no friends yet</>
+            ))}
+          <ButtonWrapper>
             <Button>Join Group</Button>
             or
-            <Button onClick={()=>navigate('/newGroup')}>Create Group</Button>
+            <Button onClick={() => navigate('/newGroup')}>Create Group</Button>
           </ButtonWrapper>
         </GroupWrapper>
       </div>

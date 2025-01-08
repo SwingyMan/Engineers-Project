@@ -1,13 +1,18 @@
 import { del, get, postEmpty } from "../API"
+import { User } from "../DTO/User"
 const url = 'Friend/'
-export interface Friend {
-    id: string
-    userId1: string
-    userId2: string
-    accepted: boolean
-
+export interface FriendList {
+    send:User[],
+    recived:User[],
+    friends:User[]
 }
-export const fetchFriends = (): Promise<Friend[]> => {
+interface Friend{
+    id:string,
+    userId1:string,
+    userId2:string,
+    accepted:boolean
+}
+export const fetchFriends = (): Promise<FriendList> => {
     return get(url + 'getFriends')
 }
 export const sendFriendRequest = (friendId: string): Promise<Friend> => {
