@@ -50,6 +50,7 @@ const ControlWrapper = styled.div`
 `
 const Control = styled.div<{active:boolean}>`
   display: flex;
+  width: 100%;
   background-color: ${(p)=>p.active===true?"gray":"#929292"};
   border-radius: 4px 4px 0px 0px;
 `
@@ -116,11 +117,7 @@ export function LeftNavBar() {
             ) : (
               <>You have no friends yet</>
             ))}
-          <ButtonWrapper>
-            <Button>Join Group</Button>
-            or
-            <Button onClick={() => navigate('/newGroup')}>Create Group</Button>
-          </ButtonWrapper>
+
         </GroupWrapper>
       </div>
     </NavBarWrapper>

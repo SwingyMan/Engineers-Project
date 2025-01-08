@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchGroupByName } from "../services/searchByName.service";
+import { getAllGroups } from "../services/groups.service";
 
 export const useGroups = () => {
   const QueryKey = ["Groups"];
@@ -7,12 +7,11 @@ export const useGroups = () => {
   const GroupQuery = () => {
     return useQuery({
       queryKey: QueryKey,
-      queryFn: () => fetchGroupByName(QueryKey[0]),
+      queryFn: () => getAllGroups(),
       staleTime: 60 * 1000,
-      initialDataUpdatedAt: 1000,
 
     });
   };
-  const {data,isError, isFetching,isPending, error} = GroupQuery();
-  return {data,isError, isFetching,isPending, error}
+  const {data,isError, isFetched,isPending, error} = GroupQuery();
+  return {data,isError, isFetched,isPending, error}
 };
