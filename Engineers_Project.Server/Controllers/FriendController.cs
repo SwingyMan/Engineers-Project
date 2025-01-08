@@ -18,7 +18,33 @@ public class FriendController : Controller
     [HttpGet]
     public async Task<IActionResult> GetFriends()
     {
-        return Ok(await _mediator.Send(new FriendQuery(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString()))));
+        var friends =
+            await _mediator.Send(
+                new FriendQuery(Guid.Parse(HttpContext.User.Claims.First(c => c.Type == "id").Value.ToString())));
+        return Ok(new
+        {
+            sent = friends.Sent.Select(x=>new
+            {
+                x.Id,
+                x.Username,
+                x.AvatarFileName
+            }),
+
+            received = friends.Received.Select(x=>new
+            {
+                
+                x.Id,
+                x.Username,
+                x.AvatarFileName
+            }),
+            
+            friends = friends.Friends.Select(x => new
+            {
+                x.Id,
+                x.Username,
+                x.AvatarFileName
+            })
+        });
     }
     [HttpPost]
     public async Task<IActionResult> AddFriend(Guid friendId)
