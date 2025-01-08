@@ -65,7 +65,6 @@ export function LeftNavBar() {
   const { data: GroupData, isFetching } = useMyGroups();
   const { data: FriendsData, isFetching: fechingFriends } = useFriends()
   const [friends, setFriends] = useState(true)
-  console.log(FriendsData)
   return (
     <NavBarWrapper>
       <MainNavMenu>

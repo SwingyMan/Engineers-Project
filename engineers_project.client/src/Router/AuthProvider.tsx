@@ -5,7 +5,7 @@ import { UserDTO } from "../API/DTO/UserDTO";
 import { User } from "../API/DTO/User";
 import { fetchUserById } from "../API/services/user.service";
 import {getHost} from "../API/API.ts";
-
+const jwt = require('jsonwebtoken');
 const AuthContext = createContext<UserContextProps>({} as UserContextProps);
 
 const AuthProvider = ({ children }: Children) => {
@@ -20,6 +20,12 @@ const AuthProvider = ({ children }: Children) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     token === null ? false : true
   );
+  const autoLogout = async ()=>{
+    if(token){
+      const decoded = jwt.decode()
+      setTimeout(()=>{logOut()},decoded.exp)
+    }
+  }
   const refreshUser =async()=>{
     try{
       const res = await fetchUserById(user?.id!)
@@ -81,7 +87,7 @@ const AuthProvider = ({ children }: Children) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, isAuthenticated,refreshUser, logIn, logOut }}
+      value={{ token, user, isAuthenticated,refreshUser, logIn, logOut,autoLogout }}
     >
       {children}
     </AuthContext.Provider>
