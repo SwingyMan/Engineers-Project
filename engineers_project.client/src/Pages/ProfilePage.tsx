@@ -102,7 +102,7 @@ export function ProfilePage() {
               </Controls >
             ) : findUser(friendsData, user?.id!) === "send" ? (
               <Controls color="rgba(255, 255, 255, 0.6)" >Request send</Controls>
-            ) : findUser(friendsData, user?.id!) === "recived" ? (
+            ) : findUser(friendsData, user?.id!) === "received" ? (
               <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!) }}>Accept friend request</Controls>
             ) : (
               <Controls color="var(--blue)" onClick={() => { handleRequestFriend.mutate(id!) }}>Send friend request</Controls>
