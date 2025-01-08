@@ -97,7 +97,6 @@ export function LeftNavBar() {
         </GroupWrapper>
       </div>
       <div>
-        <ButttonWrapper>Your Friends</ButttonWrapper>
         <GroupWrapper>
           {fechingFriends && <>loading</>}
           <ControlWrapper>
