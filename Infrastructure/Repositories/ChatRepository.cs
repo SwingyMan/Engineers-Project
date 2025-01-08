@@ -50,4 +50,11 @@ public class ChatRepository(SocialPlatformDbContext _context) : IChatRepository
             .ToListAsync();
     }
 
+    public async Task<Chat> Update(Guid guid, Chat chat)
+    {
+        _context.Set<Chat>().Find(guid);
+        _context.Entry(chat).CurrentValues.SetValues(chat);
+        await _context.SaveChangesAsync();
+        return chat;
+    }
 }

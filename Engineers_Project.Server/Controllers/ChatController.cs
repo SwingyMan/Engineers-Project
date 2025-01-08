@@ -89,17 +89,55 @@ public class ChatController : ControllerBase
     }
 
     /// <summary>
+    /// Removes user from a group chat
+    /// </summary>
+    /// <param name="command">Request for removing user</param>
+    /// <returns>Updated chat entity if request was successful</returns>
+    [HttpPost]
+    [Authorize(Policy = "ChatMemberOrAdmin")]
+    public async Task<IActionResult> RemoveUserFromGroupChat([FromBody] RemoveUserFromGroupChatCommand command)
+    {
+        Chat? result = await _mediator.Send(command);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Adds user from a group chat
+    /// </summary>
+    /// <param name="command">Request for adding user</param>
+    /// <returns>Updated chat entity if request was successful</returns>
+    [HttpPost]
+    [Authorize(Policy = "ChatMemberOrAdmin")]
+    public async Task<IActionResult> AddUserFromGroupChat([FromBody] AddUserFromGroupChatCommand command)
+    {
+        Chat? result = await _mediator.Send(command);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Sends private chat message via SignalR hub
     /// </summary>
     /// <param name="request">Request for adding new chat message</param>
     /// <returns>Sent message response DTO</returns>
     [HttpPost]
+    [Authorize(Policy = "ChatMemberOrAdmin")]
     public async Task<IActionResult> SendMessage([FromBody] AddChatMessageCommand request)
     {
+
         Message newMessage = await _mediator.Send(request);
 
         GenericGetByIdQuery<Chat> query = new GenericGetByIdQuery<Chat>(request.ChatId);
         Chat chat = await _mediator.Send(query);
+
+        
 
         string recipientId = chat.Users.First(user => user.Id != newMessage.UserId).Id.ToString();
 

@@ -94,7 +94,6 @@ public static class InfrastructureService
         serviceCollection.AddScoped(typeof(IMessageRepository), typeof(MessageRepository));
         serviceCollection.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
         serviceCollection.AddApplicationInsightsTelemetry(x => x.ConnectionString = insightskey);
-        serviceCollection.AddScoped(typeof(IChatRepository), typeof(ChatRepository));
         serviceCollection.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
         serviceCollection.AddApplicationInsightsTelemetry(x=>x.ConnectionString=insightskey);
         serviceCollection.AddServiceProfiler();
