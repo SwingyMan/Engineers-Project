@@ -65,6 +65,7 @@ export function LeftNavBar() {
   const { data: GroupData, isFetching } = useMyGroups();
   const { data: FriendsData, isFetching: fechingFriends } = useFriends()
   const [friends, setFriends] = useState(true)
+  console.log(FriendsData)
   return (
     <NavBarWrapper>
       <MainNavMenu>
@@ -110,7 +111,7 @@ export function LeftNavBar() {
                   key={friend.id}
                   user={friend}
                 />)
-            ) : FriendsData?.recived.length !== 0 && friends === false ? (
+            ) : FriendsData?.received.length !== 0 && friends === false ? (
               FriendsData?.recived.map((friend) => <UserCard key={friend.id}
                 user={friend} />)
             ) : (

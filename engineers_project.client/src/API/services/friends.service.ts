@@ -3,7 +3,7 @@ import { User } from "../DTO/User"
 const url = 'Friend/'
 export interface FriendList {
     send:User[],
-    recived:User[],
+    received:User[],
     friends:User[]
 }
 interface Friend{
