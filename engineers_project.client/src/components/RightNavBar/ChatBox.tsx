@@ -65,8 +65,7 @@ export function ChatBox({
       <ImageDiv width={40} url={ChatImg} />
       <Content>
         <b>{ChatName}</b>
-        {Sender}: {Message} {formatDate(new Date(ActivityDate))}
-      </Content>
+        {Sender}: {Message} {ActivityDate!==0?formatDate(new Date(ActivityDate)):""}      </Content>
     </StyledBox>
   );
 }
