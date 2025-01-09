@@ -20,7 +20,8 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
         {
             Users = request.Users,
             Messages = new List<Message>(),
-            Name = ""
+            Name = "",
+            IsGroupChat = false
         };
 
         return await _chatRepository.AddChatAsync(chat);
