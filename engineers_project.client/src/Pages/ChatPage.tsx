@@ -114,7 +114,7 @@ export function ChatPage() {
           </ChatHeader>
           {/* chat */}
           <ChatSpace>
-            {isFetched ? (
+            {!isFetched ? (
               <>Loading</>
             ) : data && data.messages.length === 0 ? (
               <></>

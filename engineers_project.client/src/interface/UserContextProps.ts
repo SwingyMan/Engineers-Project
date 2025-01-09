@@ -8,5 +8,5 @@ export interface UserContextProps {
 	logIn: (params: Partial<UserDTO>) => Promise<void>;
 	refreshUser:()=>void;
 	logOut: () => void;
-	autoLogout :()=>void;
+	// autoLogout :()=>void;
 }

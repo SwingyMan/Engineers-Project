@@ -25,6 +25,7 @@ export function RightNavBar() {
   const { data, isFetching ,error} = useMyChats();
   const { user } = useAuth();
   const navigate = useNavigate()
+  console.log(data)
   return (
     <ChatFeed>
       <ButttonWrapper>Chats</ButttonWrapper>
@@ -37,7 +38,7 @@ export function RightNavBar() {
           <ChatBox
           key={chat.id}
           onClick={()=>navigate(`/chat/${chat.id}`)}
-            ChatName={chat.users.find((it) => it.id !== user?.id!)?.username!}
+            ChatName={chat.name}
             Sender={chat.messages[0].user.username}
             ChatImg={getUserImg(chat.users.find((it) => it.id !== user?.id!)?.avatarFileName!)}
             Message={chat.messages[0].content}

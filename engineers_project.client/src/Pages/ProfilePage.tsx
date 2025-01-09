@@ -11,6 +11,7 @@ import { IoPencil } from "react-icons/io5";
 import { useFriends } from "../API/hooks/useFriends";
 import { getOrCreateChat } from "../API/services/chat.service";
 import { FriendList } from "../API/services/friends.service";
+import { stat } from "fs";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -70,7 +71,9 @@ export function ProfilePage() {
   }
   const findUser = (data: FriendList, id: string): string => {
     for (let state in data) {
+      console.log(state)
       const user = data[state as keyof FriendList].find((user) => user.id === id)
+      console.log(data[state as keyof FriendList], id)
       if (user) {
         return state
       }
@@ -98,13 +101,13 @@ export function ProfilePage() {
             </MenageUser>
           ) : (
             friendsData &&
-            (findUser(friendsData, user?.id!) == "friends" ? (
+            (findUser(friendsData, id!) === "friends" ? (
               <Controls color="var(--blue)" onClick={() => { handleOpenChat() }}>
                 Send message
               </Controls >
-            ) : findUser(friendsData, user?.id!) === "send" ? (
+            ) : findUser(friendsData, id!) === "sent" ? (
               <Controls color="rgba(255, 255, 255, 0.6)" >Request send</Controls>
-            ) : findUser(friendsData, user?.id!) === "received" ? (
+            ) : findUser(friendsData,id!) === "received" ? (
               <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!) }}>Accept friend request</Controls>
             ) : (
               <Controls color="var(--blue)" onClick={() => { handleRequestFriend.mutate(id!) }}>Send friend request</Controls>

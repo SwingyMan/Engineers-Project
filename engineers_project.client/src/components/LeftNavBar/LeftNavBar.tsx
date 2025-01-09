@@ -47,13 +47,19 @@ const Button = styled.div`
 `;
 const ControlWrapper = styled.div`
   display: flex;
+`;
+const FriendsWrapper = styled.div`
+  &>div{
+    margin:2px;
+  }
 `
-const Control = styled.div<{active:boolean}>`
+const Control = styled.div<{ active: boolean }>`
   display: flex;
   width: 100%;
-  background-color: ${(p)=>p.active===true?"gray":"#929292"};
+  padding: 4px;
+  background-color: ${(p) => (p.active === true ? "#929292" : "gray")};
   border-radius: 4px 4px 0px 0px;
-`
+`;
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -63,8 +69,9 @@ export function LeftNavBar() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: GroupData, isFetching } = useMyGroups();
-  const { data: FriendsData, isFetching: fechingFriends } = useFriends()
-  const [friends, setFriends] = useState(true)
+  const { data: FriendsData, isFetching: fechingFriends } = useFriends();
+  const [friends, setFriends] = useState(true);
+  console.log(FriendsData);
   return (
     <NavBarWrapper>
       <MainNavMenu>
@@ -90,9 +97,9 @@ export function LeftNavBar() {
               <>You are not a part of any group</>
             ))}
           <ButtonWrapper>
-            <Button onClick={() => navigate('/groups')}>Join Group</Button>
+            <Button onClick={() => navigate("/groups")}>Join Group</Button>
             or
-            <Button onClick={() => navigate('/newGroup')}>Create Group</Button>
+            <Button onClick={() => navigate("/newGroup")}>Create Group</Button>
           </ButtonWrapper>
         </GroupWrapper>
       </div>
@@ -100,23 +107,27 @@ export function LeftNavBar() {
         <GroupWrapper>
           {fechingFriends && <>loading</>}
           <ControlWrapper>
-            <Control active={friends} onClick={()=>setFriends(true)}>friends</Control>
-            <Control active={!friends} onClick={()=>setFriends(false)}>requests</Control>
+            <Control active={friends} onClick={() => setFriends(true)}>
+              Friends
+            </Control>
+            <Control active={!friends} onClick={() => setFriends(false)}>
+              Requests
+            </Control>
           </ControlWrapper>
-          {FriendsData !== null &&
-            (FriendsData?.friends.length !== 0 && friends ? (
-              FriendsData?.friends.map((friend) =>
-                <UserCard
-                  key={friend.id}
-                  user={friend}
-                />)
-            ) : FriendsData?.received.length !== 0 && friends === false ? (
-              FriendsData?.received.map((friend) => <UserCard key={friend.id}
-                user={friend} />)
-            ) : (
-              <>You have no friends yet</>
-            ))}
-
+          <FriendsWrapper>
+            {FriendsData !== null &&
+              (FriendsData?.friends.length !== 0 && friends ? (
+                FriendsData?.friends.map((friend) => (
+                  <UserCard key={friend.id} user={friend} />
+                ))
+              ) : FriendsData?.received.length !== 0 && friends === false ? (
+                FriendsData?.received.map((friend) => (
+                  <UserCard key={friend.id} user={friend} />
+                ))
+              ) : (
+                <>You have no friends yet</>
+              ))}
+          </FriendsWrapper>
         </GroupWrapper>
       </div>
     </NavBarWrapper>

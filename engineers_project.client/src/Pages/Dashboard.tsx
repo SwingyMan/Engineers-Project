@@ -13,8 +13,8 @@ const StyledPage = styled.div`
   overflow: auto;
 `;
 export default function Dashboard() {
-  const {autoLogout}=useAuth()
-  autoLogout()
+  // const {autoLogout}=useAuth()
+  // autoLogout()
   return (
     <>
         <TopNavBar />
