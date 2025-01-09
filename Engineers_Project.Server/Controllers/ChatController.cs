@@ -128,7 +128,6 @@ public class ChatController : ControllerBase
     /// <param name="request">Request for adding new chat message</param>
     /// <returns>Sent message response DTO</returns>
     [HttpPost]
-    [Authorize(Policy = "ChatMemberOrAdmin")]
     public async Task<IActionResult> SendMessage([FromBody] AddChatMessageCommand request)
     {
 

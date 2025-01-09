@@ -38,10 +38,10 @@ export function RightNavBar() {
           key={chat.id}
           onClick={()=>navigate(`/chat/${chat.id}`)}
             ChatName={chat.name}
-            Sender={chat.messages[0].user.username}
+            Sender={chat.messages.length!==0?chat.messages[0].user.username:"No messages yet"}
             ChatImg={getUserImg(chat.users.find((it) => it.id !== user?.id!)?.avatarFileName!)}
-            Message={chat.messages[0].content}
-            ActivityDate={chat.messages[0].creationDate}
+            Message={chat.messages.length!==0?chat.messages[0].content:""}
+            ActivityDate={chat.messages.length!==0?chat.messages[0].creationDate:""}
             
           />
         ))
