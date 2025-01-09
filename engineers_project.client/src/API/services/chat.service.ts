@@ -12,7 +12,7 @@ export const getAllUserChats=():Promise<Chat[]>=>{
     return get(url+'GetAllUserChats')
 }
 export const getOrCreateChat=(id:string):Promise<Chat>=>{
-    return post(url+"GetOrCreateChat" , {recepientId:id})
+    return post(url+"GetOrCreateChat" , {recipientGuid:id})
 }
 export const getChat=(id:string):Promise<Chat>=>{
     return get(url+`Get/${id}` )
