@@ -12,8 +12,10 @@ import { GroupPage } from "../Pages/GroupPage";
 import { EditProfilePage } from "../Pages/EditProfilePage";
 import { ChatPage } from "../Pages/ChatPage";
 import { EditGroupPage } from "../Pages/EditGroupPage";
+import { CreateGroupPage } from "../Pages/CreateGroupPage";
+import { GroupsPage } from "../Pages/GroupsPage";
 
-export const validIdLoader = async ({ params }) => {
+export const validIdLoader = async ({ params }:any) => {
   const { id } = params;
 
   // Validate UUID
@@ -85,6 +87,22 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <GroupPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/newGroup",
+        element: (
+          <PrivateRoute>
+            <CreateGroupPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/groups",
+        element: (
+          <PrivateRoute>
+            <GroupsPage />
           </PrivateRoute>
         ),
       },

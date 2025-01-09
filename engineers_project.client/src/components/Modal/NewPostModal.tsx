@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { NewPost } from "../../API/DTO/NewPost";
+import { createPost } from "../../API/services/posts.service";
+import { postAttachment } from "../../API/API";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePosts } from "../../API/hooks/usePosts";
 
 // Styled components
 const Overlay = styled.div`
@@ -90,12 +94,47 @@ const Button = styled.button`
       props.color === "primary" ? "#0056b3" : "#5a6268"};
   }
 `;
+const DeleteButton = styled.button`
+  background-color: #dd3d3d;
+  padding: 4px;
+  border-color: var(--whiteTransparent20);
+  border-radius: 4px;
+`;
+const FileWrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+`;
+const FilePreview = styled.div`
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  word-break: break-all;
+  gap: 5px;
+  max-width: 150px;
+  text-overflow: clip;
+  text-align: center;
+  align-items: center;
+`;
 
 // Modal Component
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: Function;
   initData: NewPost;
 }
 interface FileDetails {
@@ -104,15 +143,18 @@ interface FileDetails {
   error: string | null;
 }
 
-const NewPostModal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  initData,
-}) => {
+const useUploadAttachment = () => {
+  return useMutation({mutationFn:(formData: FormData) =>
+    postAttachment("Attachment/Post", formData)}
+  );
+};
+const NewPostModal: React.FC<ModalProps> = ({ isOpen, onClose, initData }) => {
   const [files, setFiles] = useState<FileDetails[]>([]);
-  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 2MB
+  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+  const uploadAttachmentMutation = useUploadAttachment();
 
+  const queryClient = useQueryClient();
+  const { handleAddPost } = usePosts();
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (!selectedFiles) return;
@@ -124,7 +166,7 @@ const NewPostModal: React.FC<ModalProps> = ({
           file,
           preview: !isFileTooLarge ? URL.createObjectURL(file) : "",
           error: isFileTooLarge
-            ? `File "${file.name}" exceeds the 50MB size limit.`
+            ? `File "${file.name}" exceeds the 4MB size limit.`
             : null,
         };
       }
@@ -142,17 +184,44 @@ const NewPostModal: React.FC<ModalProps> = ({
   };
   const initPost: NewPost = { ...initData };
   const [newPost, setNewPost] = useState(initPost);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const NewPost = {
       entity: newPost!,
     };
-    onSubmit(NewPost);
-    onClose();
+    handleAddPost.mutate(NewPost, {
+      onSuccess: async (res) => {
+        const newPostId =res.id;
+
+        // Prepare and send the file upload requests
+        const uploadPromises = files
+          .filter((file) => !file.error) // Only upload files without errors
+          .map((fileDetail) => {
+            const formData = new FormData();
+            formData.append("AttachmentDto.file", fileDetail.file);
+            formData.append("AttachmentDto.PostID", newPostId);
+
+            return uploadAttachmentMutation.mutateAsync(formData);
+          });
+
+        try {
+          // Wait for all file uploads to complete
+          await Promise.all(uploadPromises);
+          // Invalidate the query to refetch the updated posts
+          queryClient.invalidateQueries({ queryKey: ["Posts"] });
+          onClose();
+        } catch (uploadError) {
+          console.error("File upload failed:", uploadError);
+        }
+      },
+      onError: (error) => {
+        console.error("Post creation failed:", error);
+      },
+    });
   };
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement 
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     const { name, value } = e.target;
@@ -168,7 +237,9 @@ const NewPostModal: React.FC<ModalProps> = ({
   return (
     <Overlay
       onClick={() => {
-        onClose(), setNewPost(initPost);
+        onClose();
+        setNewPost(initPost);
+        setFiles([]);
       }}
     >
       <ModalContainer
@@ -206,31 +277,21 @@ const NewPostModal: React.FC<ModalProps> = ({
             </Select>
           )}
           <div>
-            <form>
-              <label htmlFor="fileInput">
-                Upload files (Max size: 50MB each):
-              </label>
-              <input
-                type="file"
-                id="fileInput"
-                multiple
-                accept=".png,.jpg,.jpeg" // Restrict accepted file types
-                onChange={handleFileChange}
-              />
-            </form>
+            <label htmlFor="fileInput">
+              Upload files (Max size: 4MB each):
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              multiple
+              onChange={handleFileChange}
+            />
 
             <div>
               <h3>Uploaded Files:</h3>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+              <FileWrapper>
                 {files.map((fileDetail, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: "10px",
-                      textAlign: "center",
-                    }}
-                  >
+                  <FilePreview key={index}>
                     {fileDetail.preview ? (
                       <img
                         src={fileDetail.preview}
@@ -244,19 +305,27 @@ const NewPostModal: React.FC<ModalProps> = ({
                     {fileDetail.error && (
                       <p style={{ color: "red" }}>{fileDetail.error}</p>
                     )}
-                    <button
+                    <DeleteButton
                       type="button"
                       onClick={() => handleRemoveFile(index)}
                     >
                       Remove
-                    </button>
-                  </div>
+                    </DeleteButton>
+                  </FilePreview>
                 ))}
-              </div>
+              </FileWrapper>
             </div>
           </div>
           <ButtonGroup>
-            <Button type="button" onClick={onClose} color="secondary">
+            <Button
+              type="button"
+              onClick={() => {
+                onClose();
+                setNewPost(initPost);
+                setFiles([]);
+              }}
+              color="secondary"
+            >
               Cancel
             </Button>
             <Button type="submit" color="primary">

@@ -7,6 +7,11 @@ import { useUserPosts } from "../API/hooks/useUserPosts";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
 import { useState } from "react";
+import { IoPencil } from "react-icons/io5";
+import { useFriends } from "../API/hooks/useFriends";
+import { getOrCreateChat } from "../API/services/chat.service";
+import { FriendList } from "../API/services/friends.service";
+import { stat } from "fs";
 
 const ProfileHeader = styled.h1`
   color: var(--white);
@@ -16,15 +21,38 @@ const ProfileCard = styled.div`
   flex-direction: row;
   align-items: center;
   height: fit-content;
+  justify-content: space-between;
   background-color: var(--whiteTransparent20);
   margin: 10px;
   box-sizing: border-box;
+  padding-right: 30px;
 `;
 const ProfileFeed = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 `;
+const MenageUser = styled.div`
+  display: flex;
+  padding: 4px 8px;
+  align-items: center;
+  background: gray;
+  height: fit-content;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const Controls = styled.div<{ color: string }>`
+  display: flex;
+  background-color: ${(p) => p.color};
+  padding: 4px 8px;
+  align-items: center;
+  cursor: pointer;
+`;
+
 export function ProfilePage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -32,25 +60,76 @@ export function ProfilePage() {
   const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
   const [openMenu, setOpenMenu] = useState<null | string>(null);
-
+  const {
+    data: friendsData,
+    handlAcceptFriend,
+    handleRequestFriend,
+  } = useFriends();
+  const handleOpenChat = async () => {
+    const chat = getOrCreateChat(id!);
+    navigate(`/chat/${(await chat).id}`);
+  };
+  const findUser = (data: FriendList, id: string): string => {
+    for (let state in data) {
+      const user = data[state as keyof FriendList].find(
+        (user) => user.id === id
+      );
+      if (user) {
+        return state;
+      }
+    }
+    return "none";
+  };
   return (
     <>
       <ProfileFeed>
         <ProfileCard>
-          <ImageDiv
-            width={60}
-            url={userData ? getUserImg(userData?.avatarFileName) : ""}
-            margin={"25px"}
-          />
+          <UserInfo>
+            <ImageDiv
+              width={60}
+              url={userData ? getUserImg(userData?.avatarFileName) : ""}
+              margin={"25px"}
+            />
 
-          <ProfileHeader>
-            {userData ? userData.username : ""}
-            {id === user?.id && (
-              <button onClick={() => navigate("/editProfile")} value={"submit"}>
-                Edit Profile
-              </button>
-            )}
-          </ProfileHeader>
+            <ProfileHeader>{userData ? userData.username : ""}</ProfileHeader>
+          </UserInfo>
+          {id === user?.id ? (
+            <MenageUser onClick={() => navigate("/editProfile")}>
+              <IoPencil size={16} /> Edit Profile
+            </MenageUser>
+          ) : (
+            friendsData &&
+            (findUser(friendsData, id!) === "friends" ? (
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handleOpenChat();
+                }}
+              >
+                Send message
+              </Controls>
+            ) : findUser(friendsData, id!) === "sent" ? (
+              <Controls color="rgba(255, 255, 255, 0.6)">Request send</Controls>
+            ) : findUser(friendsData, id!) === "received" ? (
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handlAcceptFriend.mutate(id!);
+                }}
+              >
+                Accept friend request
+              </Controls>
+            ) : (
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handleRequestFriend.mutate(id!);
+                }}
+              >
+                Send friend request
+              </Controls>
+            ))
+          )}
         </ProfileCard>
         {userPosts ? (
           userPosts?.map((post) => (

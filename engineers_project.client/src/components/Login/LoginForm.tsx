@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Button } from "../Button/Button";
 import { useAuth } from "../../Router/AuthProvider";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
-import { useNavigate } from "react-router";
 
 const StyledForm = styled.form`
  width: 450px;
@@ -52,9 +51,9 @@ const EyeIcon = styled.div`
 
 export function LoginForm() {
   const [input, setInput] = useState({
-    Email: "admin@example.com",
-    Password: "74]fKH#ayb",
-  });
+    Email: "",
+    Password: "",
+  }); 
 
   const [visible, setVisible] = useState(false)
   const handleInput = (e: { target: { name: string; value: string } }) => {
@@ -79,6 +78,7 @@ export function LoginForm() {
           placeholder="E-mail"
           onChange={handleInput}
           defaultValue={""}
+          required
           autoFocus={true}
         />
       </InputWraper>
@@ -88,6 +88,7 @@ export function LoginForm() {
           name="Password"
           placeholder="Password"
           defaultValue={""}
+          required
           onChange={handleInput}
         />
         <EyeIcon onClick={() => setVisible(!visible)}>

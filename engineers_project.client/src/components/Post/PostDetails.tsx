@@ -9,7 +9,7 @@ import { getUserImg } from "../../API/API";
 import { useComments } from "../../API/hooks/useComments";
 import { PostDTO } from "../../API/DTO/PostDTO";
 import { ResolveAttachement } from "../../Utility/ResolveAttachement";
-
+import { imageExtensions, videoExtensions } from "../../interface/FileTypes";
 
 const PostWrapper = styled.div`
   padding: 1em;
@@ -20,7 +20,7 @@ const PostWrapper = styled.div`
   border: 1px solid var(--darkGrey);
   height: min-content;
   min-width: 50%;
-  width: clamp(50%, 60%, 70%);
+  width: 75%;
 `;
 const PostHeader = styled.div`
   display: flex;
@@ -37,7 +37,35 @@ const Title = styled.div`
   font-weight: 400;
   margin-bottom: 0.1em;
 `;
+const AttachmentContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow-x: auto; /* Add horizontal scrolling */
+  gap: 16px; /* Add some spacing between attachments */
+  max-width: 100%; /* Limit width */
+  padding: 8px;
 
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+`;
+const FileContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap; /* Prevent wrapping */
+  overflow-x: auto; /* Add horizontal scrolling */
+  gap: 16px; /* Add some spacing between attachments */
+  max-width: 100%; /* Limit width */
+  padding: 8px;
+`;
 export function PostDetails(props: {
   postInfo: PostDTO;
   options: boolean;
@@ -46,11 +74,27 @@ export function PostDetails(props: {
 }) {
   const navigate = useNavigate();
   const { data } = useComments(props.postInfo.id);
+  const CheckAtachments = (fileName: string) => {
+    const ext = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
+    if (imageExtensions.includes(ext)) return true;
+    if (videoExtensions.includes(ext)) return true;
+    return false;
+  };
+  const ImageAttachments = props.postInfo.attachments?.filter((att) =>
+    CheckAtachments(att.realName)
+  );
+  const FileAttachments = props.postInfo.attachments?.filter(
+    (att) => CheckAtachments(att.realName) === false
+  );
 
   return (
     <PostWrapper>
       <PostHeader>
-        <HeaderInfo>
+        <HeaderInfo
+          onClick={(e) => {
+            e.stopPropagation(), navigate(`/profile/${props.postInfo.userId}`);
+          }}
+        >
           <ImageDiv
             width={40}
             url={
@@ -60,14 +104,7 @@ export function PostDetails(props: {
             }
           />
           <div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation(),
-                  navigate(`/profile/${props.postInfo.userId}`);
-              }}
-            >
-              {props.postInfo.username}
-            </div>
+            <div>{props.postInfo.username}</div>
             <div>{TimeElapsed(props.postInfo.createdAt)}</div>
           </div>
         </HeaderInfo>
@@ -82,10 +119,28 @@ export function PostDetails(props: {
       <hr />
       <Title>{props.postInfo.title}</Title>
       <div>{props.postInfo.body}</div>
-      {props.postInfo.attachments &&
-        props.postInfo.attachments.length !== 0 &&
-        props.postInfo.attachments.map((att) => (<ResolveAttachement url={att.id} fileName={att.fileName} />
-        ))}
+      {ImageAttachments && ImageAttachments.length !== 0 && (
+        <AttachmentContainer>
+          {ImageAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.fileName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </AttachmentContainer>
+      )}
+      {FileAttachments && FileAttachments.length !== 0 && (
+        <FileContainer>
+          {FileAttachments.map((att) => (
+            <ResolveAttachement
+              key={att.fileName}
+              url={att.id}
+              fileName={att.realName}
+            />
+          ))}
+        </FileContainer>
+      )}
       <hr />
       <>
         <CreateComment id={props.postInfo.id} />

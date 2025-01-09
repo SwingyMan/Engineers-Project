@@ -11,7 +11,7 @@ export const sendMessage=(Message:ChatMessage):Promise<Message>=>{
 export const getAllUserChats=():Promise<Chat[]>=>{
     return get(url+'GetAllUserChats')
 }
-export const getOrCreateChat=(id:string)=>{
+export const getOrCreateChat=(id:string):Promise<Chat>=>{
     return post(url+"GetOrCreateChat" , {recepientId:id})
 }
 export const getChat=(id:string):Promise<Chat>=>{

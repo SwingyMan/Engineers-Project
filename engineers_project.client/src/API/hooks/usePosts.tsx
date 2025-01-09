@@ -5,7 +5,7 @@ import {
 } from "../services/posts.service";
 
 export const usePosts = () => {
-  const QueryKey = ["post"];
+  const QueryKey = ["Posts"];
   
   const queryClient = useQueryClient();
   const PostQuery = () => {
@@ -25,9 +25,9 @@ export const usePosts = () => {
   };
   const handleAddPost = useMutation({
     mutationFn: async (newPost: {}) => {
-      await createPost(newPost);
+     return await createPost(newPost);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QueryKey }),
+    onSuccess: () =>{queryClient.invalidateQueries({ queryKey: QueryKey })},
     //onError
   });
   const {data, error, isError, isFetched,hasNextPage,fetchNextPage,  isPending } = PostQuery();

@@ -4,7 +4,6 @@ import { useSearchPosts } from "../API/hooks/useSearchPosts";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
 import { useReducer, useState } from "react";
-import { UUID } from "crypto";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useSearchUsers } from "../API/hooks/useSearchUsers";
 import { UserCard } from "../components/User/UserCard";
@@ -60,7 +59,7 @@ function reducer(
 }
 export function SearchPage() {
   const { query } = useParams();
-  const handleMenuOpen = (id: UUID) => {
+  const handleMenuOpen = (id: string) => {
     setOpenMenu(id);
   };
   const [state, dispatch] = useReducer(reducer, {
@@ -122,7 +121,7 @@ export function SearchPage() {
           ) : null}
         </GroupResult>
       ) : (
-        <SearchResult>No Posts Found</SearchResult>
+        <SearchResult>No Users Found</SearchResult>
       )}
       {GroupData && GroupData?.length !== 0 ? (
         <GroupResult>
@@ -141,8 +140,9 @@ export function SearchPage() {
           ) : null}
         </GroupResult>
       ) : (
-        <SearchResult>No Posts Found</SearchResult>
+        <SearchResult>No Groups Found</SearchResult>
       )}
     </SearchFeed>
   );
 }
+ 

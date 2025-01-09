@@ -5,7 +5,7 @@ import { useAuth } from "../../Router/AuthProvider";
 import { IoExitOutline } from "react-icons/io5";
 import { getUserImg } from "../../API/API";
 import { useNavigate } from "react-router";
-
+import logoPolitechnika from "../../../src/assets/logoPolitechnika.png";
 const StyledTopBar = styled.div`
   background-color: var(--blue);
   height: 50px;
@@ -17,11 +17,17 @@ const StyledTopBar = styled.div`
 const Logo = styled.div`
   margin: 5px;
   display: flex;
+  cursor: pointer;
   & > {
     width: 40px;
     height: 40px;
   }
 `;
+const ProfileWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  
+`
 
 const Buttons = styled.div`
   display: flex;
@@ -45,31 +51,34 @@ const LogoutButton = styled.button`
   }
 `;
 
-
 export function TopNavBar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { logOut, user } = useAuth();
   return (
     <>
       <StyledTopBar>
-        <Logo>
-          <img height={40} width={40} src="src/assets/logo-politechnika.png" />
+        <Logo onClick={() => navigate("/")}>
+          <img height={40} width={40} src={logoPolitechnika} />
         </Logo>
-        <SearchBar  />
+        <SearchBar />
         <Buttons>
           <LogoutButton
             onClick={() => {
               logOut();
-              setTimeout(()=>navigate(0))
+              setTimeout(() => navigate(0));
             }}
           >
             {"Wyloguj "}
             <IoExitOutline />
           </LogoutButton>
-          <ImageDiv
-            width={40}
-            url={user?.avatarFileName ? `${getUserImg(user.avatarFileName)}` : ""}
-          />
+          <ProfileWrapper onClick={()=>{navigate(`/profile/${user?.id}`)}}>
+            <ImageDiv
+              width={40}
+              url={
+                user?.avatarFileName ? `${getUserImg(user.avatarFileName)}` : ""
+              }
+            />
+          </ProfileWrapper>
         </Buttons>
       </StyledTopBar>
     </>

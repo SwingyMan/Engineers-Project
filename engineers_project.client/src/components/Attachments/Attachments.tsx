@@ -1,12 +1,30 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { imageExtensions, videoExtensions } from "../../interface/FileTypes";
 const StyledFile = styled.div`
-    border-radius: 4px;
-    border: 1px solid var(--white);
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 200px; /* Limit file block width */
+  word-wrap: break-word; /* Handle long file names */
+  padding: 4px;
+  border:1px solid var(--white) ;
 `
+const AttachmentItem = styled.div`
+  display: flex;
+  flex-shrink: 0; /* Prevent shrinking */
+  justify-content: center;
+  align-items: center;
+  max-width: 100%; /* Constrain max width */
+  max-height: 300px; /* Constrain max height */
+  overflow: hidden;
+
+  img, video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensure images and videos fit within bounds */
+  }
+`;
 export function FileViewer(props: {
     fileName:string, fileSize:number, fileContent:ArrayBuffer 
 }) {
@@ -29,8 +47,7 @@ export function FileViewer(props: {
     const ext = props.fileName
       .slice(props.fileName.lastIndexOf("."))
       .toLowerCase();
-    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg"];
-    const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
+    
 
     if (imageExtensions.includes(ext)) return "image";
     if (videoExtensions.includes(ext)) return "video";
@@ -40,7 +57,7 @@ export function FileViewer(props: {
   const fileType = getFileType();
 
   return (
-    <div>
+    <AttachmentItem>
       {fileType === "image" && (
         <img src={fileUrl} alt={props.fileName} style={{ maxWidth: "100%" }} />
       )}
@@ -60,6 +77,6 @@ export function FileViewer(props: {
           </a>
         </StyledFile>
       )}
-    </div>
+    </AttachmentItem>
   );
 }

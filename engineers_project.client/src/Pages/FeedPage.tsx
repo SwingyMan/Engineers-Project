@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import { Post } from "../components/Post/Post";
 import { usePosts } from "../API/hooks/usePosts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../Router/AuthProvider";
 import { MdAdd } from "react-icons/md";
-import NewPostModal from "../components/Modal/Modal";
+import NewPostModal from "../components/Modal/NewPostModal";
+import { EditPostModal } from "../components/Modal/EditPostModal";
+import { PostDTO } from "../API/DTO/PostDTO";
+
 
 const PostFeed = styled.div`
   flex: 1;
@@ -17,11 +20,12 @@ const PostFeed = styled.div`
 `;
 const NewPostButton = styled.div`
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 15px;
+  right: 15px;
   border-radius: 50vh;
+  border: 1px solid var(--white);
   background-color: #007aff;
-  padding: 4px 16px;
+  padding: 6px 18px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -38,10 +42,39 @@ export function FeedPage() {
 
   const [openMenu, setOpenMenu] = useState<null | string>(null);
   const [isModalOpen, setOpenModal] = useState(false);
-  const handleMenuOpen = (id: string) => {
-    console.log(id);
-    setOpenMenu(id);
+  const [postToEdit, setPostToEdit] = useState<PostDTO | null>(null);
+
+  const handleDropdownClick = (id: string | null) => {
+    setOpenMenu((prevId) => (prevId === id ? null : id));
   };
+  const [isModalEditOpen, setModalEditOpen] = useState(false);
+
+  const handleClickOutside = async (event: any) => {
+    const action = event.target.getAttribute("data-action");
+    const id = event.target.getAttribute("data-id");
+
+      if (!event.target.closest(".dropdown-container")) {
+      setOpenMenu(null);
+      setModalEditOpen(false);
+    } else {
+      console.log(id, action);
+      await setPostToEdit(
+        data?.pages.map((page, i) => page.find((post) => post.id === id))[0]!
+      );
+      if (action === "edit") {
+        setTimeout(() => setModalEditOpen(true));
+      }
+      if (action == "delete") {
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   const { user } = useAuth();
   return (
     <FeedContainer>
@@ -49,30 +82,35 @@ export function FeedPage() {
         <h3>hello, {user?.username}</h3>
         {isPending
           ? "Loading..."
-          : data &&
-            data.pages.map((group, i) =>
-              group.map((post) => (
-                <Post
-                  key={post.id}
-                  postInfo={post}
-                  isMenu={post.userId === user?.id}
-                  isOpen={openMenu === post.id}
-                  setIsOpen={() => handleMenuOpen(post.id)}
-                />
-              ))
+          : data && (
+              <>
+                {data.pages.map((group, i) =>
+                  group.map((post) => (
+                    <Post
+                      key={post.id}
+                      postInfo={post}
+                      isMenu={post.userId === user?.id}
+                      isOpen={openMenu === post.id}
+                      setIsOpen={() => handleDropdownClick(post.id)}
+                    />
+                  ))
+                )}
+              </>
             )}
       </PostFeed>
       <NewPostButton onClick={() => setOpenModal(true)}>
         <MdAdd /> Dodaj Post
       </NewPostButton>
-
+      {/*  */}
       <NewPostModal
         isOpen={isModalOpen}
         onClose={() => setOpenModal(false)}
-        onSubmit={(data: {}) => {
-          handleAddPost.mutate(data);
-        }}
         initData={{ title: "", body: "", availability: 0 }}
+      />
+      <EditPostModal
+        isOpen={isModalEditOpen}
+        onClose={() => setModalEditOpen(false)}
+        initData={openMenu}
       />
     </FeedContainer>
   );

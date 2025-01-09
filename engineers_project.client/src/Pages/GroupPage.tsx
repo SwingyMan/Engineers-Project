@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getGroupImg, getUserImg } from "../API/API";
 import { ImageDiv } from "../components/Utility/ImageDiv";
 import { useGroupPosts } from "../API/hooks/useGroupPosts";
-import NewPostModal from "../components/Modal/Modal";
+import NewPostModal from "../components/Modal/NewPostModal";
 import { useEffect, useState } from "react";
 import { Post } from "../components/Post/Post";
 import { useAuth } from "../Router/AuthProvider";
@@ -54,11 +54,12 @@ const GroupFeed = styled.div`
 `;
 const NewPostButton = styled.div`
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 15px;
+  right: 15px;
   border-radius: 50vh;
+  border: 1px solid var(--white);
   background-color: #007aff;
-  padding: 4px 16px;
+  padding: 6px 18px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -75,7 +76,8 @@ const LeaveGroup = styled.div`
   padding: 4px 8px;
   background: rgba(255, 136, 136, 0.75);
   width: fit-content;
-  border-radius: 4px;  margin:2px;
+  border-radius: 4px;
+  margin: 2px;
 `;
 const SendRequestButton = styled.div`
   display: flex;
@@ -83,7 +85,8 @@ const SendRequestButton = styled.div`
   width: fit-content;
   background-color: var(--blue);
   border-radius: 4px;
-  cursor: pointer;  margin:2px;
+  cursor: pointer;
+  margin: 2px;
 `;
 const AwaitAcceptance = styled.div`
   display: flex;
@@ -93,7 +96,7 @@ const AwaitAcceptance = styled.div`
   color: var(--offBlack);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  margin:2px;
+  margin: 2px;
 `;
 const MenageGroup = styled.div`
   display: flex;
@@ -111,10 +114,9 @@ export function GroupPage() {
   const handleMenuOpen = (id: string) => {
     setOpenMenu(id);
   };
-  const { handleAddPost } = usePosts();
   const [isModalOpen, setOpenModal] = useState(false);
   const { data: groupInfo } = useGroupDetails(id!);
-  const { data: myGroups, isFetching } = useMyGroups();
+  const { data: myGroups, requestToGroup } = useMyGroups();
   const [isMember, setIsMember] = useState(false);
   const [isOwner, setOwner] = useState(false);
   const [isRequestSend, setRequestSend] = useState(false);
@@ -122,14 +124,12 @@ export function GroupPage() {
   useEffect(() => {
     if (myGroups?.find((group) => group.id === id)) {
       setIsMember(true);
-      console.log(myGroups);
     }
     if (
       groupInfo?.groupUsers.find((gUser) => gUser.user.id === user?.id)
         ?.isOwner!
     ) {
       setOwner(true);
-      console.log(isMember, isOwner, isRequestSend);
     }
     if (
       groupInfo?.groupUsers.find((gUser) => gUser.user.id === user?.id)
@@ -145,7 +145,7 @@ export function GroupPage() {
     error,
     isFetched,
   } = useGroupPosts(id!, isMember);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <GroupFeed>
@@ -163,14 +163,31 @@ export function GroupPage() {
                     <span>{groupInfo.description}</span>
                   </GroupDescription>
                 </GroupHeaderInfo>
-                {isOwner && <MenageGroup onClick={()=>navigate(`/editGroup/${id}`)}><IoPencil size={17}/>Menage Group {`(${groupInfo.groupUsers.filter((user) => user.isAccepted===false).length})`}</MenageGroup>}
+                {isOwner && (
+                  <MenageGroup onClick={() => navigate(`/editGroup/${id}`)}>
+                    <IoPencil size={16} />
+                    Manage group{" "}
+                    {`(${
+                      groupInfo.groupUsers.filter(
+                        (user) => user.isAccepted === false
+                      ).length
+                    })`}
+                  </MenageGroup>
+                )}
               </HeaderInfo>
-              {/* {
-                isMember?<MemberButton>you are a member of this group</MemberButton>:isRequestSend?<AwaitAcceptance>You send request</AwaitAcceptance>:<SendRequestButton>Send request to join</SendRequestButton>
-              } */}
-              <LeaveGroup>Leave Group</LeaveGroup>
-              <AwaitAcceptance>You sent request</AwaitAcceptance>
-              <SendRequestButton>Send request to join</SendRequestButton>
+              {isMember ? (
+                <LeaveGroup>Leave Group</LeaveGroup>
+              ) : isRequestSend ? (
+                <AwaitAcceptance>You send request</AwaitAcceptance>
+              ) : (
+                <SendRequestButton
+                  onClick={() => {
+                    requestToGroup.mutate(id!);
+                  }}
+                >
+                  Send request to join
+                </SendRequestButton>
+              )}
             </GroupheaderWrapper>
             <Users>
               users
@@ -189,7 +206,8 @@ export function GroupPage() {
                     )
                   )}
               </UsersImgs>
-              {groupInfo.groupUsers.filter((user) => user.isAccepted).length} Users
+              {groupInfo.groupUsers.filter((user) => user.isAccepted).length}{" "}
+              Users
             </Users>
           </GroupCardWrapper>
         )}
@@ -210,7 +228,7 @@ export function GroupPage() {
                 />
               ))
             ) : (
-              <>noPosts</>
+              <>There are no posts yet</>
             )}
             <NewPostButton onClick={() => setOpenModal(true)}>
               <MdAdd /> Add Post
@@ -223,9 +241,6 @@ export function GroupPage() {
       <NewPostModal
         isOpen={isModalOpen}
         onClose={() => setOpenModal(false)}
-        onSubmit={(data: {}) => {
-          handleAddPost.mutate(data);
-        }}
         initData={{ title: "", body: "", availability: 2, groupId: id }}
       />
     </>
