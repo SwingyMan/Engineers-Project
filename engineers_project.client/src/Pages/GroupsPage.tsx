@@ -22,6 +22,7 @@ const GroupResult = styled.div`
 `;
 export function GroupsPage() {
     const { data, isFetched, isError } = useGroups()
+    console.log(data)
     return (
         <GroupsFeed>
             {isError?<>An error has occured</>:!isFetched ? <>Loading</> :

@@ -144,12 +144,11 @@ export function EditProfilePage() {
     data.append("file", formData.image!);
 
     const res = await postAttachment("User/AddAvatar", data);
-    console.log(res);
+
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(formData);
     if (
       formData.Password.length !== 0 ||
       (formData.Username !== user?.username && formData.Username.length !== 0)

@@ -62,7 +62,6 @@ export function FeedPage() {
         data?.pages.map((page, i) => page.find((post) => post.id === id))[0]!
       );
       if (action === "edit") {
-        console.log(postToEdit);
         setTimeout(() => setModalEditOpen(true));
       }
       if (action == "delete") {

@@ -155,7 +155,6 @@ const HeaderInfo = styled.div`
 `;
 export function EditGroupPage() {
   const { id } = useParams();
-  console.log(id);
   const { user } = useAuth();
   const navigate = useNavigate();
   const { data: groupData, handleEditGroup,handleAddToGroup,handleDeleteFromGroup } = useGroupDetails(id!);

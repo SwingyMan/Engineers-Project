@@ -87,7 +87,6 @@ export function ChatPage() {
   const { user } = useAuth();
   const [message, setMessage] = useState({ chatId: id, content: "" });
   const { data, isFetched, isError, error, handleSendMessage } = useChat(id!);
-  console.log(data, user?.id);
   if (isError) {
     alert(error);
   }

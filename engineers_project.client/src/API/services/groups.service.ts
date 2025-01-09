@@ -1,4 +1,4 @@
-import { del, get, patch, post } from "../API"
+import { del, get, patch, post, postEmpty } from "../API"
 import { Group } from "../DTO/Group"
 import { EditGroup, GroupDTO } from "../DTO/GroupDTO"
 import { GroupUser } from "../DTO/GroupUser"
@@ -35,7 +35,7 @@ export const getGroupMembership=():Promise<Group[]>=>{
     return get(url+`GetGroupMembership`)
 }
 export const getAllGroups = (): Promise<GroupDTO[]> => {
-    return get(url + 'GetAll')
+    return postEmpty(url + 'GetAll')
 }
 export const getGroupRequests  =():Promise<Group[]>=>{
     return get(url +`GetGroupRequests`)

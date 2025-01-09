@@ -25,7 +25,6 @@ export function RightNavBar() {
   const { data, isFetching ,error} = useMyChats();
   const { user } = useAuth();
   const navigate = useNavigate()
-  console.log(data)
   return (
     <ChatFeed>
       <ButttonWrapper>Chats</ButttonWrapper>

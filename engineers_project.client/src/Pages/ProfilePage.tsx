@@ -46,42 +46,40 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 const Controls = styled.div<{ color: string }>`
-  display: flex ;
+  display: flex;
   background-color: ${(p) => p.color};
   padding: 4px 8px;
-  align-items:center;
+  align-items: center;
   cursor: pointer;
-`
+`;
 
 export function ProfilePage() {
-
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: userData } = useUsers(id!);
   const { data: userPosts } = useUserPosts(id!);
   const { user } = useAuth();
   const [openMenu, setOpenMenu] = useState<null | string>(null);
-  const { data: friendsData, handlAcceptFriend, handleRequestFriend } = useFriends();
+  const {
+    data: friendsData,
+    handlAcceptFriend,
+    handleRequestFriend,
+  } = useFriends();
   const handleOpenChat = async () => {
-
-    const chat = getOrCreateChat(id!)
-    navigate(`/chat/${(await chat).id}`)
-
-
-  }
+    const chat = getOrCreateChat(id!);
+    navigate(`/chat/${(await chat).id}`);
+  };
   const findUser = (data: FriendList, id: string): string => {
     for (let state in data) {
-      console.log(state)
-      const user = data[state as keyof FriendList].find((user) => user.id === id)
-      console.log(data[state as keyof FriendList], id)
+      const user = data[state as keyof FriendList].find(
+        (user) => user.id === id
+      );
       if (user) {
-        return state
+        return state;
       }
-
     }
-    return "none"
-
-  }
+    return "none";
+  };
   return (
     <>
       <ProfileFeed>
@@ -102,15 +100,34 @@ export function ProfilePage() {
           ) : (
             friendsData &&
             (findUser(friendsData, id!) === "friends" ? (
-              <Controls color="var(--blue)" onClick={() => { handleOpenChat() }}>
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handleOpenChat();
+                }}
+              >
                 Send message
-              </Controls >
+              </Controls>
             ) : findUser(friendsData, id!) === "sent" ? (
-              <Controls color="rgba(255, 255, 255, 0.6)" >Request send</Controls>
-            ) : findUser(friendsData,id!) === "received" ? (
-              <Controls color="var(--blue)" onClick={() => { handlAcceptFriend.mutate(id!) }}>Accept friend request</Controls>
+              <Controls color="rgba(255, 255, 255, 0.6)">Request send</Controls>
+            ) : findUser(friendsData, id!) === "received" ? (
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handlAcceptFriend.mutate(id!);
+                }}
+              >
+                Accept friend request
+              </Controls>
             ) : (
-              <Controls color="var(--blue)" onClick={() => { handleRequestFriend.mutate(id!) }}>Send friend request</Controls>
+              <Controls
+                color="var(--blue)"
+                onClick={() => {
+                  handleRequestFriend.mutate(id!);
+                }}
+              >
+                Send friend request
+              </Controls>
             ))
           )}
         </ProfileCard>
