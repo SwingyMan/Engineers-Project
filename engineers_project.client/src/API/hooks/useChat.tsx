@@ -22,6 +22,6 @@ export const useChat = (id:string) => {
     onError:(e)=>{alert(e)}
   })
   const handleReciveMessage = useMutation({})
-  const {data,isError, isFetching,isPending, error} = SearchChatQuery();
-  return {data,isError, isFetching,isPending, error,handleSendMessage}
+  const {data,isError, isFetched,isPending, error} = SearchChatQuery();
+  return {data,isError, isFetched,isPending, error,handleSendMessage}
 };

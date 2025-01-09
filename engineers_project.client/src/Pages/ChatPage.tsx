@@ -86,7 +86,7 @@ export function ChatPage() {
   };
   const { user } = useAuth();
   const [message, setMessage] = useState({ chatId: id, content: "" });
-  const { data, isFetching, isError, error, handleSendMessage } = useChat(id!);
+  const { data, isFetched, isError, error, handleSendMessage } = useChat(id!);
   console.log(data, user?.id);
   if (isError) {
     alert(error);
@@ -114,7 +114,7 @@ export function ChatPage() {
           </ChatHeader>
           {/* chat */}
           <ChatSpace>
-            {isFetching ? (
+            {isFetched ? (
               <>Loading</>
             ) : data && data.messages.length === 0 ? (
               <></>
