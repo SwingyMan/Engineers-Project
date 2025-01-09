@@ -18,7 +18,7 @@ public class MappingProfile : Profile
         CreateMap<GroupUserDTO, GroupUser>();
         CreateMap<GroupPostDTO, GroupPost>();
         CreateMap<GroupDTO, Group>();
-        CreateMap<ChatUserDTO, ChatUser>();
+        //CreateMap<ChatUserDTO, ChatUser>();
         CreateMap<ChatMessageDTO, ChatMessage>();
         CreateMap<ChatDTO, Chat>();
         CreateMap<CommentDTO, Comment>()

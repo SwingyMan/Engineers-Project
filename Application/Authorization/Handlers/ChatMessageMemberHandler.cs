@@ -51,16 +51,16 @@ public class ChatMessageMemberHandler : AuthorizationHandler<ChatMessageMemberRe
             {
                 var chatMessage = await _dbContext.ChatMessages.FirstOrDefaultAsync(cm => cm.Id == chatMessageId);
 
-                if (chatMessage.ChatId != Guid.Empty)
-                {
-                    bool isMember = await _dbContext.ChatUsers.AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatMessage.ChatId);
+                //if (chatMessage.ChatId != Guid.Empty)
+                //{
+                //    bool isMember = await _dbContext.ChatUsers.AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatMessage.ChatId);
 
-                    if (isMember)
-                    {
-                        context.Succeed(requirement);
-                        return;
-                    }
-                }
+                //    if (isMember)
+                //    {
+                //        context.Succeed(requirement);
+                //        return;
+                //    }
+                //}
             }
         }
 

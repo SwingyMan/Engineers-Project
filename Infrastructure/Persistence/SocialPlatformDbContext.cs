@@ -26,7 +26,6 @@ public class SocialPlatformDbContext : DbContext
     public DbSet<GroupPost> GroupPosts { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<ChatUser> ChatUsers { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<Attachments> Attachments { get; set; }
     public DbSet<Friends> Friends { get; set; }
@@ -64,8 +63,8 @@ public class SocialPlatformDbContext : DbContext
             .WithMany(p => p.GroupPosts)
             .HasForeignKey(gp => gp.PostId);
 
-        // ChatUser relationships
-        //modelBuilder.Entity<ChatUser>() 
+        //ChatUser relationships
+        //modelBuilder.Entity<ChatUser>()
         //    .HasOne(cu => cu.User)
         //    .WithMany(u => u.ChatUsers)
         //    .HasForeignKey(cu => cu.UserId);
@@ -119,13 +118,15 @@ public class SocialPlatformDbContext : DbContext
             .HasMany(c => c.Users)
             .WithMany(u => u.Chats)
             .UsingEntity<Dictionary<string, object>>(
-            "ChatUser", 
-            j => j.HasOne<User>().WithMany().HasForeignKey("UserId"), 
+            "ChatUser",
+            j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
             j => j.HasOne<Chat>().WithMany().HasForeignKey("ChatId"));
-    
 
-    // Posts relationships
-    modelBuilder.Entity<Post>()
+
+
+
+        // Posts relationships
+        modelBuilder.Entity<Post>()
             .HasMany(x => x.Attachments)
             .WithOne(p => p.Post)
             .HasForeignKey(x=>x.PostId);

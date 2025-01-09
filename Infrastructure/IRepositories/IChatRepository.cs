@@ -8,4 +8,5 @@ public interface IChatRepository
     Task<Chat?> GetChatById(Guid chatId);
     Task<Chat> GetChatByUserIds(Guid[] userIds);
     Task<IEnumerable<Chat>> GetChatsByUserId(Guid userGuid);
-}
+    Task<Chat> Update(Guid guid, Chat chat);
+}   

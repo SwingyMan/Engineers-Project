@@ -23,4 +23,9 @@ public sealed class ChatHub : Hub<IChatClient>
     {
         return base.OnDisconnectedAsync(exception);
     }
+
+    public async Task JoinChat(Guid chatId)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
+    }
 }
