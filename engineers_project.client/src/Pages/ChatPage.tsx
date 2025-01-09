@@ -107,7 +107,7 @@ export function ChatPage() {
                   ?.avatarFileName!
               )}
             />
-            {data?.name}
+            {data?.name.length!==0? data.name:data?.users.find((fuser) => fuser.id !== user?.id!)?.username}
             {/* chatname */}
             {/* options */}
           </ChatHeader>
